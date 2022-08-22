@@ -1,0 +1,285 @@
+%% Template for a scientific paper by Samuel Pawel
+%% Last modification: 17. December 2020
+\documentclass[a4paper, 11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphics}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{amsmath, amssymb}
+\usepackage{textcomp}
+% \usepackage[sc]{mathpazo}
+\usepackage{times}
+\usepackage{doi} % automatic doi-links
+\usepackage[round]{natbib} % bibliography
+\usepackage{multirow} % multi rows and columns for tables
+\usepackage{longtable} % tables that span several pages
+\usepackage{booktabs} % nicer tables
+\usepackage[title]{appendix} % better appendices
+\usepackage{nameref} % reference appendices with names
+\usepackage[onehalfspacing]{setspace} % more space
+\usepackage[labelfont=bf,font=small]{caption} % smaller captions
+\usepackage{todonotes}
+\usetikzlibrary{positioning,shapes,fit}
+\definecolor{lightlightgray}{RGB}{211,211,211}
+
+%% margins
+%% ----------------------------------------------------------------------------
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  total={170mm,257mm},
+  left=25mm,
+  right=25mm,
+  top=20mm,
+  bottom=20mm,
+}
+
+%% title, authors, affiliations, mail
+%% ----------------------------------------------------------------------------
+\newcommand\longtitle{Bayesian Approaches to Designing Replication Studies}
+\newcommand\shorttitle{\longtitle} % if longtitle too long, change here
+% \newcommand\subtitle{Sample size determination for Bayesian estimation, 
+% Bayesian hypothesis-testing, and reverse-Bayes analysis strategies}
+\newcommand\subtitle{}
+\newcommand\longauthors{Samuel Pawel\textsuperscript{*}, Guido Consonni\textsuperscript{$\dagger$},
+  and Leonhard Held\textsuperscript{*}}
+\newcommand\shortauthors{S. Pawel, G. Consonni, L. Held} % if longauthors too long, change here
+\newcommand\affiliation{
+  * Department of Biostatistics, University of Zurich \\
+  $\dagger$ Dipartimento di Scienze Statistiche, Universita Cattolica del Sacro Cuore
+}
+\newcommand\mail{samuel.pawel@uzh.ch}
+\title{
+  \vspace{-2em}
+  \textbf{\longtitle} \\
+  \subtitle
+}
+\author{
+  \textbf{\longauthors} \\
+  \affiliation \\
+  E-mail: \href{mailto:\mail}{\mail}
+}
+\date{\today} % don't forget to hard-code date when submitting to arXiv!
+
+%% hyperref options
+%% ----------------------------------------------------------------------------
+\usepackage{hyperref}
+\hypersetup{
+  bookmarksopen=true,
+  breaklinks=true,
+  pdftitle={\shorttitle},
+  pdfauthor={\shortauthors},
+  pdfsubject={},
+  pdfkeywords={},
+  colorlinks=true,
+  linkcolor=blue,
+  anchorcolor=black,
+  citecolor=blue,
+  urlcolor=black,
+}
+
+%% Headers and footers
+%% ----------------------------------------------------------------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{\shorttitle}
+\rhead{\shortauthors}
+
+%% Definitions and macros
+%% -----------------------------------------------------------------------------
+\input{defs.tex}
+
+%% ----------------------------------------------------------------------------
+
+\begin{document}
+\maketitle
+
+%% Disclaimer that a preprint
+\begin{center}
+  {\color{red}This is a preprint which has not yet been peer reviewed.}
+\end{center}
+
+
+% knitr options
+% -----------------------------------------------------------------------------
+<< "main-setup", include = FALSE >>=
+library(knitr)
+opts_chunk$set(fig.height = 4,
+               echo = FALSE,
+               warning = FALSE,
+               message = FALSE,
+               cache = FALSE,
+               eval = TRUE)
+@
+
+% libraries, source files, data
+% ----------------------------------------------------------------------------
+
+<< "libraries-options" >>=
+## pkgs
+options(scipen = 5)
+library(BayesRep)
+library(ReplicationSuccess)
+library(biostatUZH)
+library(dplyr)
+library(ggplot2)
+source("helpers/BFee.R")
+source("helpers/multiFuns.R")
+@
+
+<< "load-clean-data" >>=
+protzko <- read.csv("../data/protzko2020.csv")
+protzkolong <- read.csv("../data/protzko2020long.csv")
+
+## compute sceptical BF, replication BF, sceptical p
+protzko$zo <- with(protzko, do/sqrt(vo))
+protzko$zr <- with(protzko, dr/sqrt(vr))
+protzko$c <- with(protzko, vo/vr)
+
+protzko$BFs <- with(protzko, BFs(zo = zo, zr = zr, c = c))
+protzko$BFr <- with(protzko, BFr(zo = zo, zr = zr, c = c, g = 0))
+protzko$ps <- with(protzko, pSceptical(zo = zo, zr = zr, c = c,
+                                       alternative = "one.sided",
+                                       type = "golden"))
+@
+
+
+% Abstract
+%% ----------------------------------------------------------------------------
+\begin{center}
+  \begin{minipage}{13cm} {\small
+      \rule{\textwidth}{0.5pt} \\
+      {\centering \textbf{Abstract} \\
+        In light of the ongoing replication crisis affecting various domains of
+        science, the statistical aspects of replication studies are of
+        considerable concern to the research community. While several methods
+        have been proposed for analysis of replication results, fewer
+        methodology exists for the determination of their sample size. In this
+        article, we show how Bayesian approaches can be used for this purpose. A
+        major advantage is the ability to incorporate the original data and
+        external knowledge into a design prior for the underlying effect size.
+        This is especially useful in the replication context since quantities
+        such as between-study heterogeneity variances cannot be inferred from a
+        single original study alone. Based on the design prior, predictions
+        about the replication data can be made, and the replication sample size
+        can be chosen such that the probability of replication success becomes
+        sufficiently high. We present how different design requirements can be
+        combined to meet distinct stakeholders, and to enable conclusive
+        inferences based on a variety of approaches to the analysis of
+        replication data. An application to data from a cross-laboratory
+        replication project illustrates how the approach helps to design
+        informative and cost-effective replication studies. }
+      \rule{\textwidth}{0.4pt} \\
+      \textit{Keywords}: Bayesian hypothesis testing, design prior, multisite
+      replication, sample size determination}
+  \end{minipage}
+\end{center}
+
+
+% Introduction
+%% ----------------------------------------------------------------------------
+
+\section*{Software and data}
+The data were were downloaded from \url{https://osf.io/42ef9/}. All analyses
+were conducted in the R programming language version
+\Sexpr{paste(version$major, version$minor, sep = ".")} \citep{R}. The code to
+reproduce this manuscript is available at \dots All methods are implemented in
+the R package \texttt{BayesRep} which is available at
+\url{https://gitlab.uzh.ch/samuel.pawel/BayesRep}. A snapshot of the Git
+repository at the time of writing this article is archived at \todo{implement
+software, data, etc.}
+
+\section*{Acknowledgments}
+This work was supported by the Swiss National Science Foundation(\#189295). We
+thank \citet{Protzko2020} for publicly sharing their data. We thank Charlotte
+Micheloud for helpful comments on drafts of the manuscript.
+% Our acknowledgement of these individuals does not imply their endorsement of this article.
+
+
+% Appendix
+% ------------------------------------------------------------------------------
+\begin{appendices}
+
+\section{Multisite Bayes factors}
+\label{app:multiBFr}
+To determine the multisite version of the replication and the sceptical Bayes
+factor we need to know the marginal density of the replication effect estimates
+$\hat{\theta}_r \given \theta \sim \Nor_{n}(\theta J_{n}, \text{diag}\left\{\sigma_r^2 + \tau^2_{r} J_{n}\right\})$
+under the null hypothesis $H_{0} \colon \theta = 0$, under the sceptical prior
+$\HS \colon \theta ~ \Nor(0, s \cdot \sigma^{2}_{o})$, and under the advocacy
+prior $\HA \colon \theta \sim \Nor(\hat{\theta}_{o}, \sigma^{2}_{o})$. % Under
+% $H_{0}$ the marginal density is simply
+% $\Nor_{n}(\hat{\theta}_{r}; 0 J_{n}, \text{diag}\left\{\sigma_r^2 + \tau^2_{r} J_{n}\right\})$
+Let $\Nor(x;m,v)$ denote the density function of an normal distribution with
+mean $m$ and variance $v$ evaluated at $x$. Define also
+$\hat{\theta}_{r*} = \left\{\sum_{i=1}^{n}\hat{\theta}_{ri}/(\sigma^{2}_{ri} + \tau^{2}_{r})\right\} \sigma^{2}_{r*}$
+and
+$\sigma^{2}_{r*} = 1/\left\{\sum_{i=1}^{n}1/(\sigma^{2}_{ri} + \tau^{2}_{r})\right\}$,
+\ie the weighted average of the replication effect estimates and its variance.
+The marginal density under the advocacy prior is then given by
+\begin{align*}
+  f(\hat{\theta}_{r} \given \HA)
+  &= \int f(\hat{\theta}_{r} \given \theta) f(\theta \given \HA)
+    \, \text{d}\theta \\
+  &= \int \frac{\exp\left\{-\frac{1}{2} \left[\sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \theta)^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}} +
+    \frac{(\theta - \hat{\theta}_{o})^{2}}{\sigma^{2}_{o}}\right] \right\}}{
+    \left(2\pi \sigma^{2}_{o} \prod_{i = 1}^{n} 2\pi \left[\sigma^{2}_{ri} + \tau^{2}_{r}\right]\right)^{1/2}}
+    \, \text{d}\theta \\
+  % \intertext{splitting the sum into
+  % $\sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \theta)^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}}
+  % = \sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \hat{\theta}_{r*})^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}} + \sum_{i=1}^{n} \frac{(\hat{\theta}_{r*} - \theta)^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}}$}
+  &= \int \frac{
+    \exp\left\{-\frac{1}{2} \left[\sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \hat{\theta}_{r*})^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}} +  \frac{(\hat{\theta}_{r*} - \theta)^{2}}{\sigma^{2}_{r*}} +
+    \frac{(\theta - \hat{\theta}_{o})^{2}}{\sigma^{2}_{o}}\right] \right\}}{
+    \left(2\pi \sigma^{2}_{o} \prod_{i = 1}^{n} 2\pi \left[\sigma^{2}_{ri} + \tau^{2}_{r}\right]\right)^{1/2}}
+    \, \text{d}\theta \\
+  &= \frac{\exp\left\{-\frac{1}{2} \left[\sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \hat{\theta}_{r*})^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}}\right] \right\}}{\left(2\pi \sigma^{2}_{o} \prod_{i = 1}^{n} 2\pi \left[\sigma^{2}_{ri} + \tau^{2}_{r}\right]\right)^{1/2}}
+    \underbrace{\int \exp\left\{-\frac{1}{2} \left[\frac{(\hat{\theta}_{r*} - \theta)^{2}}{\sigma^{2}_{r*}} +
+    \frac{(\theta - \hat{\theta}_{o})^{2}}{\sigma^{2}_{o}}\right] \right\} \text{d}\theta}_{= \Nor(\hat{\theta}_{r*}; \hat{\theta}_{o}, \sigma^{2}_{o} + \sigma^{2}_{r*}) 2\pi \sigma_{o} \sigma_{r*}} \\
+  &= \left\{(1 + \sigma^{2}_{o}/\sigma^{2}_{r*}) \prod_{i = 1}^{n} 2\pi \left[\sigma^{2}_{ri} + \tau^{2}_{r}\right]\right\}^{-1/2} \exp\left\{-\frac{1}{2}\left[
+    \sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \hat{\theta}_{r*})^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}} + \frac{(\hat{\theta}_{r*} - \hat{\theta}_{o})^{2}}{\sigma^{2}_{r*} + \sigma^{2}_{o}}\right]\right\}.
+\end{align*}
+Note that the marginal density under $\HS$ is a special case of the marginal
+density under $\HA$. It is obtained by setting $\hat{\theta}_{o} = 0$ and
+$\sigma^{2}_{o} = s \cdot \sigma^{2}_{o}$. The density under $H_{0}$ is then
+itself a special case of the density under $\HS$ with $s = 0$.
+% Note that also under $H_{0}$ the density can be decomposed
+% \begin{align*}
+%   f(\hat{\theta}_{r} \given H_{0})
+%   &= \left\{\prod_{i = 1}^{n} 2\pi \left[\sigma^{2}_{ri} + \tau^{2}_{r}\right]\right\}^{-1/2}
+%      \exp\biggl(-\frac{1}{2}
+%     \underbrace{\sum_{i=1}^{n} \frac{\hat{\theta}_{ri}^{2}}{\sigma^{2}_{ri}
+%     + \tau^{2}_{r}}}_{\sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \hat{\theta}_{r*})^{2}
+%     }{\sigma^{2}_{ri}    + \tau^{2}_{r}} + \frac{\hat{\theta}_{r*}^{2}}{\sigma^{2}_{r*}}}
+%     \biggr)
+% \end{align*}
+Taken together, this leads to the Bayes factor
+\begin{align*}
+  % \BFr
+  % &= \frac{f(\hat{\theta}_{r} \given H_{0})}{f(\hat{\theta}_{r} \given \HA)}
+  % = \sqrt{1 + \sigma^{2}_{o}/\sigma^{2}_{r*}} \cdot \exp\left\{-\frac{1}{2}\left[
+  %   \frac{\hat{\theta}_{r*}^{2}}{\sigma^{2}_{r*}} -
+  %   \frac{(\hat{\theta}_{r*} - \hat{\theta}_{o})^{2}}{\sigma^{2}_{r*} + \sigma^{2}_{o}}\right]\right\}
+  \BF_{\text{SA}}(\hat{\theta}_{r}; s)
+  &= \frac{f(\hat{\theta}_{r} \given \HS)}{f(\hat{\theta}_{r} \given \HA)}
+    = \sqrt{\frac{1 + \sigma^{2}_{o}/\sigma^{2}_{r*}}{1 +
+    s \sigma^{2}_{o}/\sigma^{2}_{r*}}} \cdot \exp\left\{-\frac{1}{2}\left[
+    \frac{\hat{\theta}_{r*}^{2}}{\sigma^{2}_{r*} + s \sigma^{2}_{o}} -
+    \frac{(\hat{\theta}_{r*} - \hat{\theta}_{o})^{2}}{\sigma^{2}_{r*} + \sigma^{2}_{o}}\right]\right\}
+\end{align*}
+which can be further simplified to~\eqref{eq:bfmulti}.
+
+
+\end{appendices}
+
+
+% Bibliography
+% ======================================================================
+\bibliographystyle{apalikedoiurl}
+\bibliography{bibliography}
+
+
+% \end{multicols}
+
+\end{document}
