@@ -37,3 +37,14 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# Emacs LaTeX files
+.auctex-auto/
+
+# some folders that should not be on github
+coverletter/
+old/
+poster/
+misc/
+submission/
+derivations/
