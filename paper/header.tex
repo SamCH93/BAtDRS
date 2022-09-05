@@ -1,9 +1,65 @@
-%% Useful commands
+%% margins
 %% ----------------------------------------------------------------------------
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  total={170mm,257mm},
+  left=25mm,
+  right=25mm,
+  top=20mm,
+  bottom=20mm,
+}
+
+%% title, authors, affiliations, mail
+%% ----------------------------------------------------------------------------
+\newcommand\longtitle{Bayesian approaches to designing replication studies}
+\newcommand\shorttitle{\longtitle} % if longtitle too long, change here
+\newcommand\longauthors{Samuel Pawel\textsuperscript{$\star$}, Guido
+  Consonni\textsuperscript{$\dagger$}, and Leonhard
+  Held\textsuperscript{$\star$}} \newcommand\shortauthors{S. Pawel, G. Consonni,
+  L. Held} % if longauthors too long, change here
+\newcommand\affiliation{
+  $\star$ Department of Biostatistics, University of Zurich \\
+  $\dagger$ Dipartimento di Scienze Statistiche, Universita Cattolica del Sacro
+  Cuore } \newcommand\mail{samuel.pawel@uzh.ch} \title{ \vspace{-2em}
+  \textbf{\longtitle} } \author{
+  \textbf{\longauthors} \\
+  \affiliation \\
+  E-mail: \href{mailto:\mail}{\mail} }
+\date{\today} % don't forget to hard-code date when submitting to arXiv!
+
+%% hyperref options
+%% ----------------------------------------------------------------------------
+\usepackage{hyperref}
+\hypersetup{
+  bookmarksopen=true,
+  breaklinks=true,
+  pdftitle={\shorttitle},
+  pdfauthor={\shortauthors},
+  pdfsubject={},
+  pdfkeywords={},
+  colorlinks=true,
+  linkcolor=blue,
+  anchorcolor=black,
+  citecolor=blue,
+  urlcolor=black,
+}
+
+%% Headers and footers
+%% ----------------------------------------------------------------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{\shorttitle}
+\rhead{\shortauthors}
+
+%% Definitions and macros
+%% -----------------------------------------------------------------------------
 %% Shortforms
-\newcommand{\eg}{\textit{e.\,g.\,}} % e.g.
-\newcommand{\ie}{\textit{i.\,e.\,}} % i.e.
-\newcommand{\cf}{\textit{cf\,}} % cf
+% \newcommand{\eg}{\textit{e.\,g.\,,}} % e.g.
+% \newcommand{\ie}{\textit{i.\,e.\,,}} % i.e.
+% \newcommand{\cf}{\textit{cf\,}} % cf
+\newcommand{\eg}{e.\,g.,} % e.g.
+\newcommand{\ie}{i.\,e.,} % i.e.
 %% Distributions
 \DeclareMathOperator{\Ber}{B} % Bernoulli
 \DeclareMathOperator{\Bin}{Bin} % Binomial Distribution
