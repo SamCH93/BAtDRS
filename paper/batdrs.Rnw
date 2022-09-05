@@ -34,6 +34,36 @@
   {\color{red}This is a preprint which has not yet been peer reviewed.}
 \end{center}
 
+\begin{center}
+  \begin{minipage}{13cm}
+    {\small
+      \rule{\textwidth}{0.4pt} \\
+      {\centering\textbf{Abstract}\\ Replication studies are essential to assess
+        the credibility of claims from original studies. A critical aspect of
+        designing a replication study is determining its sample size. Too small
+        sample sizes may lead to inconclusive replications, whereas too large
+        sample sizes may lead to suboptimal allocation of research resources.
+        Here we show how Bayesian approaches can be used to determine the
+        optimal replication sample size. The Bayesian framework allows both the
+        original study data and external knowledge, such as between-study
+        heterogeneity due to study population differences, to be incorporated
+        into a design prior for the underlying effect size. We study design
+        priors in the normal normal hierarchical model where analytical results
+        are available. Based on the design prior, predictions about the
+        replication data can then be made, and the replication sample size can
+        be chosen to ensure a sufficiently high probability of replication
+        success. Replication success may be defined through Bayesian or
+        non-Bayesian criteria, and different criteria may also be combined to
+        meet distinct stakeholders and allow conclusive inferences based on
+        multiple analysis approaches. An application to data from a multisite
+        replication project illustrates how the approach helps to design
+        informative and cost-effective replication studies. The methods are made
+        available in an R package. }
+      \rule{\textwidth}{0.4pt} \\
+      \textit{Keywords}: Bayesian hypothesis testing, design prior, multisite
+      replication, sample size determination }
+  \end{minipage}
+\end{center}
 
 % knitr options
 % -----------------------------------------------------------------------------
@@ -79,9 +109,34 @@ protzko$ps <- with(protzko, pSceptical(zo = zo, zr = zr, c = c,
                                        alternative = "one.sided",
                                        type = "golden"))
 @
-icance level in
-a two-sided test \citep{Camerer2018}.
 
+\section{Introduction}
+
+The replicability of research findings is a cornerstone of the credibility of
+science. Yet there is the growing awareness that the replicability of many
+scientific findings, particularly in the social and life sciences, is lower than
+expected \citep{Ioannidis2005}. This ``replication criss'' has led to several
+methodological reforms in various fields, an increased conduct of replication
+studies being one of them \citep[for example,][]{Opensc2015, Camerer2018,
+  Errington2021}.
+
+Various methods have been proposed for quantifying how ``successful'' a
+replication study was in replicating its original counterpart \citep[among
+others]{Bayarri2002, Verhagen2014, Simonsohn2015, Patil2016, Johnson2016,
+  Etz2016, vanAert2017, Ly2018, Harms2019, Hedges2019, Mathur2020, Held2020,
+  Pawel2020, Held2021, Pawel2022b}. However, as with ordinary studies,
+statistical methodology is, not only important for the analysis of the
+replication studies but also for their design in particular their \emph{sample
+  size determination} (SSD). Optimal SSD is important since too small sample
+sizes may lead to inconclusive studies, whereas too large sample sizes may lead
+to wasted resources that could have been allocated better in other research
+projects. There is a relatively small literature that focuses on replication SSD
+for selected analysis methods and data models. For instance, SSD for
+standardized mean difference effect sizes analyzed with Bayes factors
+\citep{Bayarri2002}, SSD for statistical significance assessment of the
+replication \citep{Goodman1992, Senn2002, Micheloud2020, vanZwet2022}, SSD for
+reverse-Bayes assessment of the replication \citep{Held2020, Pawel2022b}, or SSD
+for meta-analysis of replication studies \citep{Hedges2021}.
 
 \section*{Software and data}
 The data were were downloaded from \url{https://osf.io/42ef9/}. All analyses
