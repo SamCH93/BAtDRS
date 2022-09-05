@@ -1,4 +1,4 @@
-# Bayesian Approaches to Designing Replication Studies
+# Bayesian approaches to designing replication studies
 
 This repository contains code and data related to the preprint
 
