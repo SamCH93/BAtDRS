@@ -1,0 +1,126 @@
+  \begin{tikzpicture}[thick, node distance = 11em and 1em, font=\small
+    % , font=\sffamily
+    ]
+
+    % % nodes
+    % \node[rectangle, draw, rounded corners = 0.2em] (oData)
+    % {\begin{tabular}{l} \textbf{Original data} % \\
+    %     % {\scriptsize -- effect estimate $\hat{\theta}_{o}$} \\
+    %     % {\scriptsize -- standard error $\sigma_{o}$} \\
+    %  \end{tabular}};
+
+   % nodes
+    \node[rectangle, draw, rounded corners = 0.2em] (oData)
+    {\begin{tabular}{c} \textbf{Original data} \\
+        {\scriptsize $f(x_{o} \given \theta)$} \\
+        % {\scriptsize -- standard error $\sigma_{o}$} \\
+     \end{tabular}};
+
+   % \node (designPrior) [below right = 2.5em and 3.25em of oData]
+   % {\begin{tabular}{c} \textbf{Design prior for effect size} \\
+   %    {\scriptsize $\theta \sim f(\theta \,|\, \text{original data, external
+   %    knowledge})$}\\
+   %       \end{tabular}};
+   \node (designPrior) [below right = 2.5em and 3.25em of oData]
+   {\begin{tabular}{c} \textbf{Design prior for model parameters} \\
+      {\scriptsize $f(\theta \given x_{o}, \text{external
+      knowledge})$}\\
+    \end{tabular}};
+
+  % \node[rectangle, draw, rounded corners = 0.2em] (external) [right = 23em of oData]
+  % {\begin{tabular}{l} \textbf{External knowledge} \\
+  %    {\scriptsize -- between-study heterogeneity} \\
+  %    {\scriptsize -- scepticism} \\
+  %    {\scriptsize -- data from other studies} \\
+  %  {\scriptsize ~~ $\dots$} \end{tabular}};
+
+  \node[rectangle, draw, rounded corners = 0.2em] (external) [right = 22em of oData]
+  {\begin{tabular}{c} \textbf{Initial prior for model parameters} \\
+     {\scriptsize $f(\theta \given \text{external knowledge})$} \\
+     % % {\scriptsize -- between-study heterogeneity} \\
+     % % {\scriptsize -- scepticism} \\
+     % % {\scriptsize -- data from other studies} \\
+     % % {\scriptsize $\phantom{\rightarrow} \hdots$} \\
+     % {\scriptsize -- heterogeneity $\rightarrow$ hierarchical prior} \\
+     % {\scriptsize -- skepticism $\rightarrow$ shrinkage prior} \\
+     % {\scriptsize -- other data sets $\rightarrow$ optimistic prior} \\
+   \end{tabular}};
+
+ % \node (rData) [below = 2em of designPrior]
+ % {\begin{tabular}{c} \textbf{Predictive distribution of replication data} \\
+ %    {\scriptsize $X_{r} \sim f(x_{r} \,|\, \text{original, data, external
+ %    knowledge}, n_{r})$}
+ %  \end{tabular}};
+
+ \node (rData) [below = 3em of designPrior]
+ {\begin{tabular}{c} \textbf{Predictive distribution of replication data} \\
+    {\scriptsize $f(x_{r} \given n_{r}, x_{o}, \text{external
+    knowledge})$}
+  \end{tabular}};
+
+% \node[rectangle, draw, fill = lightlightgray] (nr) [below = 4em of external]
+% {\begin{tabular}{c} \textbf{Replication sample size $n_{r}$}
+%    \end{tabular}};
+\node[rectangle, draw, fill = lightlightgray] (nr) [below = 4em of external]
+{\begin{tabular}{c} \textbf{Replication sample size} \\
+   {\scriptsize $n_{r}$}
+ \end{tabular}};
+
+
+\node (PRS) [below = 3em of rData]
+{\begin{tabular}{c} \textbf{Probability of replication success} \\
+   {\scriptsize $\Pr(X_r \in S \given n_{r}, x_{o}, \text{external
+    knowledge})$}
+ \end{tabular}};
+
+% \node (analysisPrior) [below = 5em of oData]
+% {\begin{tabular}{l} \textbf{Analysis prior for effect size}
+%  \end{tabular}};
+
+% \node[rectangle, draw, rounded corners = 0.2em] (measureRS) [below = 12em of oData]
+% {\begin{tabular}{l} \textbf{Analysis method}%  \\
+%     % {\scriptsize -- Hypothesis testing} \\
+%     % {\scriptsize -- Parameter estimation \dots}
+     %    \end{tabular}};
+\node[rectangle, draw, rounded corners = 0.2em] (measureRS) [below = 11em of oData]
+{\begin{tabular}{c} \textbf{Analysis method}  \\
+    {\scriptsize success region $S$} \\
+    % {\scriptsize -- Parameter estimation \dots}
+ \end{tabular}};
+
+
+% \node[rectangle, draw, rounded corners = 0.2em] (sideCond) [below = 4em of nr]
+% {\begin{tabular}{l} \textbf{Design requirements} \\
+%    {\scriptsize -- error rate requirements} \\
+%    {\scriptsize -- evidential requirements } \\
+%    {\scriptsize -- precision requirements } \\
+%    {\scriptsize ~~ $\dots$}
+%    \end{tabular}};
+
+\node[rectangle, draw, rounded corners = 0.2em] (sideCond) [below = 2.5em of nr]
+{\begin{tabular}{l} \textbf{Side constraints} \\
+   {\scriptsize -- type-I error rate requirements} \\
+   {\scriptsize -- precision requirements} \\
+   {\scriptsize -- cost/availability limitations} \\
+   {\scriptsize $\phantom{\rightarrow} \hdots$} \\
+ \end{tabular}};
+
+
+% edges
+\draw [->] [bend left] (oData.east) to ([xshift=-1em]designPrior.north);
+\draw [->] [bend right, dashed] (external.west) to ([xshift=1em]designPrior.north);
+\draw [->] (designPrior) to (rData);
+\draw [->] (rData) to (PRS.north);
+\draw [->] [bend right] (nr.west) to ([xshift=1em]rData.north);
+% \draw [->] (measureRS) to (analysisPrior);
+\draw [->] [bend left] (measureRS.east) to ([xshift=-1em]PRS.north);
+\draw [->] [dashed] (oData) to (measureRS);
+\draw [->] [dashed] (sideCond) to (nr.south);
+
+% \draw [->] [bend left] [dashed] (sideCond) to ([xshift=2.2em]PRS.south);
+% \draw [->] [bend right] [dashed] (PRS) to (nr);
+% \draw [->] [bend left] (sideCond) to ([xshift=2.2em]PRS.south);
+% \draw [->] [bend right] (PRS) to (nr);
+% \draw [->] [bend right] (measureRS) to (sideCond);
+
+\end{tikzpicture}
