@@ -57,33 +57,31 @@
         size. % Too small
         % sample sizes may lead to inconclusive replications, whereas too large
         % sample sizes may lead to suboptimal allocation of resources.
-        Here we show how Bayesian approaches can be used to determine the
-        optimal replication sample size. The Bayesian framework allows both the
-        original study data and external knowledge to be incorporated into a
-        design prior for the underlying parameters. This is particularly useful
-        because external knowledge, such as expected between-study parameter
-        heterogeneity due to differences in the study population of original and
-        replication study, are common in the replication setting. We investigate
-        design priors in the normal normal hierarchical model where analytical
-        results are available. Based on a design prior, predictions about the
-        replication data can be made, and the replication sample size can be
-        chosen to ensure a sufficiently high probability of replication success.
-        Replication success may be defined through Bayesian or non-Bayesian
-        criteria, and different criteria may also be combined to meet distinct
-        stakeholders and allow conclusive inferences based on multiple analysis
-        approaches. An application to data from a multisite replication project
-        illustrates how the approach helps to design informative and
-        cost-effective replication studies. The methods are made available in an
-        R package. }
+        Here we show how Bayesian approaches can be used for this purpose. The
+        Bayesian framework allows both the original study data and external
+        knowledge to be incorporated into a design prior for the underlying
+        parameters. This is particularly useful because external knowledge, such
+        as expected heterogeneity between original and replication study due to
+        differences in study design and study population, are common in the
+        replication setting. We investigate design priors in the normal normal
+        hierarchical model where analytical results are available. Based on a
+        design prior, predictions about the replication data can be made, and
+        the replication sample size can be chosen to ensure a sufficiently high
+        probability of replication success. Replication success may be defined
+        through Bayesian or non-Bayesian criteria, and different criteria may
+        also be combined to meet distinct stakeholders and allow conclusive
+        inferences based on multiple analysis approaches. An application to data
+        from a multisite replication project illustrates how the approach helps
+        to design informative and cost-effective replication studies. The
+        methods are made available in an R package. }
       \rule{\textwidth}{0.4pt} \\
       \textit{Keywords}: Bayesian design, design prior, multisite replication,
       sample size determination}
   \end{minipage}
 \end{center}
 
-% knitr options
-% -----------------------------------------------------------------------------
 << "main-setup", echo = FALSE >>=
+##  knitr options
 library(knitr)
 opts_chunk$set(fig.height = 4,
                echo = FALSE,
@@ -93,8 +91,6 @@ opts_chunk$set(fig.height = 4,
                eval = TRUE)
 @
 
-% libraries and source files
-% ----------------------------------------------------------------------------
 << "libraries-options" >>=
 ## packages
 options(scipen = 5)
@@ -103,13 +99,10 @@ library(ReplicationSuccess)
 library(biostatUZH)
 library(dplyr)
 library(ggplot2)
-source("helpers/BFee.R")
-source("helpers/multiFuns.R")
 @
 
-% data and some computations
-% ----------------------------------------------------------------------------
 << "load-clean-data" >>=
+## data and some computations
 protzko <- read.csv("../data/protzko2020.csv")
 protzkolong <- read.csv("../data/protzko2020long.csv")
 
@@ -136,14 +129,14 @@ increased conduct of replication studies \citep{Munafo2017}. Statistical
 methodology plays a key role in the evaluation of replication studies, and
 various methods have been proposed for quantifying how ``successful'' a
 replication study was in replicating the original finding \citep[among
-others]{Bayarri2002, Verhagen2014, Simonsohn2015, Patil2016, Johnson2016,
-  Etz2016, vanAert2017, Ly2018, Harms2019, Hedges2019, Mathur2020, Held2020,
-  Pawel2020, Held2021, Pawel2022b}. Yet, as with ordinary studies, statistical
-methodology is not only important for analyzing replication studies but also for
-designing them, in particular for their \emph{sample size determination} (SSD).
-Optimal SSD is important since too small sample sizes may lead to inconclusive
-studies, whereas too large sample sizes may waste resources which could have
-been allocated better in other research projects.
+others]{Bayarri2002, Verhagen2014, Simonsohn2015, Anderson2016, Patil2016,
+  Johnson2016, Etz2016, vanAert2017, Ly2018, Harms2019, Hedges2019, Mathur2020,
+  Held2020, Pawel2020, Held2021, Pawel2022b}. Yet, as with ordinary studies,
+statistical methodology is not only important for analyzing replication studies
+but also for designing them, in particular for their \emph{sample size
+  determination} (SSD). Optimal SSD is important since too small sample sizes
+may lead to inconclusive studies, whereas too large sample sizes may waste
+resources which could have been allocated better in other research projects.
 
 SSD for replication studies comes with unique opportunities and challenges; the
 data from the original study can be used to inform SSD, at the same time the
@@ -155,54 +148,24 @@ analyzed with Bayes factors \citep{Bayarri2002}, SSD for statistical
 significance assessment of the replication \citep{Goodman1992, Senn2002,
   Micheloud2020, vanZwet2022}, SSD for reverse-Bayes assessment of the
 replication \citep{Held2020, Pawel2022b}, or SSD for meta-analysis of
-replication studies \citep{Hedges2021}.
-% However, in practice replication
-% projects have mostly used ad hoc SSD approaches. For instance, it is common to
-% conduct a standard sample size calculation for achieving statistical
-% significance in the replication study. Usually, it is assumed that the effect
-% estimate from the original study corresponds to the unknown effect size, thereby
-% ignoring the uncertainty of the estimate \citep{Micheloud2020, Anderson2017}.
-% The procedure is sometimes also modified by using a shrunken version of the
-% original effect estimate, to counteract a possible overestimation of the effect
-% size in the original study. For example, the sample size of the replication
-% studies from the \emph{Social Sciences Replication Project} were chosen to have
-% 90\% power for detecting 75\% of the original effect estimate at the 5\%
-% significance level in a two-sided test \citep{Camerer2018}.
-The aim of this paper is to unify these methods under a general framework. Our
-proposed framework applies to any kind of data model and analysis method, and is
-based on principles from Bayesian design analysis \citep{Spiegelhalter1986,
-  Spiegelhalter1986b, Spiegelhalter1986c, Weiss1997, OHagan2001b, DeSantis2004,
-  Spiegelhalter2004, Schoenbrodt2017}. The design of replication studies is a
-natural candidate for Bayesian knowledge updating. Specifically, the Bayesian
-framework allows to combine uncertain information from different sources --for
-instance, the data from the original study and/or expert knowledge-- in a so-called
-\emph{design prior} for the underlying model parameters
-\citep{OHagan2001b}. % A design prior thus represents researcher's best
-% bet on the outcome of the replication study. In contrast, the so-called
-% \emph{analysis prior} used in a Bayesian analysis of the replication data is
-% usually desired to be, in some sense, objective or uninformative. However,
-% Bayesian design analysis can also be used if the planned analysis itself is not
-% Bayesian.
-Based on the design prior, predictions about the replication data can be made,
-and the sample size can be chosen such that the probability of replication
-success becomes sufficiently high. Importantly, Bayesian design analysis can
-also be used if the planned analysis of the replication study is not Bayesian,
-which is the more common situation in practice.
-% and such that also other design
-% requirements are met.
+replication studies \citep{Hedges2021}. The aim of this paper is to unify these
+methods under a general framework. The proposed framework (schematically
+illustrated in Figure~\ref{fig:SSDschema}) applies to any kind of data model and
+analysis method, and is based on principles from Bayesian design analysis
+\citep{Spiegelhalter1986, Spiegelhalter1986b, Spiegelhalter1986c, Weiss1997,
+  OHagan2001b, DeSantis2004, Spiegelhalter2004, Schoenbrodt2017, Grieve2022}.
+The design of replication studies is a natural candidate for Bayesian knowledge
+updating. Specifically, the Bayesian framework allows to combine uncertain
+information from different sources --for instance, the data from the original
+study and/or expert knowledge-- in a so-called \emph{design prior} for the
+underlying model parameters \citep{OHagan2001b}. Based on the design prior,
+predictions about the replication data can be made, and the sample size can be
+chosen such that the probability of replication success becomes sufficiently
+high. Importantly, Bayesian design analysis can also be used if the planned
+analysis of the replication study is non-Bayesian, which is the more common
+situation in practice.
 
-This paper is structured as follows: We start with presenting a general
-framework for Bayesian SSD of replication studies (Section~\ref{sec:GFW}). %  We
-% then discuss considerations regarding the choice of the design prior (Section
-% \ref{sec:DP}) and design requirement.
-We then investigate design priors and sample size determination in the normal
-normal hierarchical model and for several Bayesian and non-Bayesian analysis methods
-(Section~\ref{sec:SS}). As a running example, we use data from a
-cross-laboratory replication project \citep{Protzko2020}. Finally, the paper
-ends with concluding remarks and practical recommendations (Section
-\ref{sec:discussion}).
-
-\begin{figure}[!htb]
+\begin{figure}[!tb]
   \centering
   {\small \input{tikzcode.tex} }
   \caption{Schematic illustration of the process of Bayesian sample size
@@ -219,13 +182,20 @@ ends with concluding remarks and practical recommendations (Section
 \label{fig:SSDschema}
 \end{figure}
 
-
+This paper is structured as follows: We start with presenting a general
+framework for Bayesian SSD of replication studies (Section~\ref{sec:GFW}). We
+then investigate design priors and sample size determination in the normal
+normal hierarchical model and for several Bayesian and non-Bayesian analysis
+methods (Section~\ref{sec:SS}). As a running example, we use data from a
+cross-laboratory replication project \citep{Protzko2020}. Finally, the paper
+ends with concluding remarks and practical recommendations (Section
+\ref{sec:discussion}).
 
 
 \section{General framework} \label{sec:GFW}
 
-Figure~\ref{fig:SSDschema} schematically illustrates the process of Bayesian SSD
-for replication studies, which we will explain in more detail in the following.
+% Figure~\ref{fig:SSDschema} schematically illustrates the process of Bayesian SSD
+% for replication studies, which we will explain in more detail in the following.
 Suppose an original study has been conducted and resulted in a data set $x_{o}$.
 These data are assumed to come from a distribution characterized by an unknown
 parameter $\theta$ and with density function $f(x_{o} \given \theta)$. To assess
@@ -269,9 +239,9 @@ distribution for the replication data
 After completion of the replication, the observed data $x_r$ will be analyzed in
 some way to quantify how much the original result could be replicated. The
 analysis may involve the original data (for example, a meta-analysis of the two
-data sets) or it may only use the replication data. In many cases, there will be
-a \emph{success region} $S$ which implies that if the replication data fall
-within it ($x_r \in S$), the replication is successful. The \emph{probability of
+data sets) or it may only use the replication data. Typically, there will be a
+\emph{success region} $S$ which implies that if the replication data fall within
+it ($x_r \in S$), the replication is successful. The \emph{probability of
   replication success} can thus be computed by integrating the predictive
 density~\eqref{eq:ftr} over $S$. To ensure a sufficiently conclusive replication
 design, the sample size $n_{r}$ is determined such that the probability of
@@ -285,23 +255,23 @@ SSD). The required sample size $n_r^*$ is then given by
 \end{align}
 
 Often, replication studies are analyzed using several methods which quantify
-different aspects of replicability, and which consequently have different
-success regions (\eg{} one method for quantifying parameter compatibility and
-another for quantifying evidence against a null hypothesis). In this case, the
-sample size may be chosen such that the probability of replication success is as
-large as desired for all planned analysis methods.
+different aspects of replicability, and which typically have different success
+regions (\eg{} one method for quantifying parameter compatibility and another
+for quantifying evidence against a null hypothesis). In this case, the sample
+size may be chosen such that the probability of replication success is as large
+as desired for all planned analysis methods.
 
 There may sometimes also be side constraints which the replication sample size
 needs to satisfy. For instance, funders and regulators may require from a method
 to be \emph{calibrated} \citep{Grieve2016}, that is, to have appropriate type I
 error rate control. A possible side constraint may thus be that the sample size
-$n_{r}$ has to be chosen such that the probability of replication success under
-a null hypothesis is not larger than some desired level. Similarly, it may be
-reasonable to have \emph{precision} constraints, \eg{} to require that a
-confidence interval for the replication effect estimate has to be at least as
-tight as the confidence interval estimated in the original study. Finally, in
-most cases there is an upper limit on the possible sample size due to limited
-resources and/or availability of samples.
+$n_{r}^{*}$ has to be determined such that the probability of replication
+success under a null hypothesis is not larger than some desired level.
+Similarly, it may be reasonable to have \emph{precision} constraints, \eg{} to
+require that a confidence interval for the replication effect estimate has to be
+at least as tight as the confidence interval estimated in the original study.
+Finally, in most cases there is an upper limit on the possible sample size due
+to limited resources and/or availability of samples.
 
 
 
@@ -312,31 +282,33 @@ resources and/or availability of samples.
 
 To conduct SSD for replication studies it is pragmatic to adopt a meta-analytic
 perspective and use only study level summary statistics instead of the raw study
-data as the raw data from the original study are not always available to the
-replicators. Typically, the
-underlying parameter $\theta$ is a univariate effect size quantifying the effect
-of an independent variable on the outcome variable (\eg{} a mean difference, a log
-odds ratio, or a log hazard ratio). The original and replication study can then
-be summarized through an effect estimate $\that$, possibly the maximum
-likelihood estimate, and a corresponding standard error $\sigma$, \ie{}
-$x_{o} = \{\that_{o}, \sigma_{o}\}$ and $x_{r} = \{\that_{r}, \sigma_{r}\}$. In
-the conventional meta-analytic framework it is then further assumed that for
-study $k \in \{o, r\}$ the (suitably transformed) effect estimate
-$\hat{\theta}_k$ is approximately normally distributed around a study specific
-effect size $\theta_k$ and with variance equal to its squared standard error
-$\sigma_k^2$, here and henceforth denoted by
+data since the raw data from the original study are not always available to the
+replicators. Typically, the underlying parameter $\theta$ is a univariate effect
+size quantifying the effect of an independent variable on the outcome variable
+(\eg{} a mean difference, a log odds ratio, or a log hazard ratio). The original
+and replication study can then be summarized through an effect estimate $\that$,
+possibly the maximum likelihood estimate, and a corresponding standard error
+$\sigma$, \ie{} $x_{o} = \{\that_{o}, \sigma_{o}\}$ and
+$x_{r} = \{\that_{r}, \sigma_{r}\}$. Effect estimates and standard errors are
+routinely reported in research articles or can, under some assumptions, be
+computed from $p$-values and confidence intervals. As in the conventional
+meta-analytic framework, we further assume that for study $k \in \{o, r\}$ the
+(suitably transformed) effect estimate $\hat{\theta}_k$ is approximately
+normally distributed around a study specific effect size $\theta_k$ and with
+(known) variance equal to its squared standard error $\sigma_k^2$, here and
+henceforth denoted by
 $\hat{\theta}_k \given \theta_k \sim \Nor(\theta_k, \sigma_k^2)$. The standard
-error $\sigma_k$ is typically inversely proportional to the square root of the
-sample size $n_k$, \ie{} $\sigma_k = \lambda/\sqrt{n_k}$ with $\lambda^{2}$ some
-unit variance. The ratio of the original to the replication variance is thus the
-ratio of the replication to the original sample size
+error $\sigma_k$ is typically of the form $\sigma_k = \lambda/\sqrt{n_k}$ with
+$\lambda^{2}$ some unit variance and $n_{k}$ the sample size. The ratio of the
+original to the replication variance is thus the ratio of the replication to the
+original sample size
 \begin{align*}
   c = \sigma^2_o/\sigma^2_r = n_r/n_o,
 \end{align*}
 which is often the main focus of SSD as it quantifies how much the replication
-sample size needs to be changed compared to the original study. Depending on the
-effect size type, this framework might require slight modifications \citep[see
-\eg{}][Chapter 2.4]{Spiegelhalter2004}.
+sample $n_{r}$ size needs to be changed compared to the original sample size
+$n_{o}$. Depending on the effect size type, this framework might require slight
+modifications \citep[see \eg{}][Chapter 2.4]{Spiegelhalter2004}.
 
 Assuming a normal sampling model for the effect
 estimates~\eqref{eq:hat_theta_k}, as described previously, and specifying an
@@ -349,81 +321,169 @@ sizes~\eqref{eq:theta_k} and the effect size~\eqref{eq:theta}, leads then to the
   \hat{\theta}_k \given \mspace{-1mu} \theta_k &\sim \Nor(\theta_k, \sigma_k^2)
   \label{eq:hat_theta_k} \\
   \theta_k \given \theta \,\,  &\sim \Nor(\theta, \tau^2) \label{eq:theta_k} \\
-  \theta \,\, &\sim \Nor(\mu_{\scriptscriptstyle{\theta}},
-  \sigma^2_{\scriptscriptstyle{\theta}}). \label{eq:theta}
+  \theta \,\, &\sim \Nor(\mutheta,
+  \sigmatheta^2). \label{eq:theta}
 \end{align}
 \end{subequations}
-By marginalizing over the study specific effects sizes, the model can
-alternatively be expressed as
+By marginalizing over the study specific effects sizes, the
+model~\eqref{eq:hierarch-model} can alternatively be expressed as
 \begin{subequations}
 \label{eq:hierarch-model2}
 \begin{align}
   \hat{\theta}_k \given \mspace{-1mu} \theta &\sim \Nor(\theta, \sigma_k^2 + \tau^{2})
   \label{eq:hat_theta_k2} \\
-  \theta  &\sim \Nor(\mu_{\scriptscriptstyle{\theta}},
-  \sigma^2_{\scriptscriptstyle{\theta}}) \label{eq:theta2}
+  \theta  &\sim \Nor(\mutheta,
+  \sigmatheta^2) \label{eq:theta2}
 \end{align}
 \end{subequations}
 which is often more useful for derivations and computations. In the following we
-will explain how this model
+will explain how the normal normal hierarchical model can be used
 % is similar to the random effects model typically used in meta-analysis, and
-provides great flexibility for incorporating the original data and external
-knowledge into SSD of replication studies.
+% to incorporate the original data and external knowledge into
+for SSD of the replication study.
 
-\subsection{Specification of the initial prior}
-The between-study heterogeneity variance $\tau^{2}$, the effect size mean
-$\mu_{\scriptscriptstyle \theta}$, and the effect size variance
-$\sigma^2_{\scriptscriptstyle{\theta}}$ of the initial prior provide a means for
-incorporating external knowledge in SSD of the replication study.
+\subsection{Design prior and predictive distribution}
 
-A replication study typically tries to follow the original study as closely as
-possible, yet in practice there will always be deviations from the original
-protocol. Other factors such as different laboratory equipment or different
-populations of participants may also increase the dissimilarity between original
-and replication study. As a result, the effect sizes underlying both studies may
-differ and one may want to the expected degree of between-study heterogeneity
-can be incorporated in the design via the heterogeneity variance $\tau^2$
-in~\eqref{eq:theta_k}. With smaller heterogeneity variance $\tau^{2}$, the study
-specific effect sizes become more similar, whereas for increasing $\tau^{2}$
-they become increasingly unrelated. It is also possible to specify an initial
-prior for $\tau^2$ \citep[see the literature from meta-analysis on this issue
-\eg{}][]{Rover2021}. Here, we consider it as fixed and its value could be
-informed by external knowledge, for example, by estimates from the literature
-\citep[\eg{}][]{VanErp2017}. This approach leads to closed-form expressions for
-the probability of replication success in many cases, which in turn helps to
-better understand the effects of the design prior on the resulting replication
-sample size.
+The observed original data $x_{o} = \{\that_{o}, \sigma_{o}\}$ can be combined
+with the initial prior by Bayes' theorem~\eqref{eq:dp} to obtain a posterior
+distribution for the effect size $\theta$
+\begin{align}
+  \label{eq:dpnormal}
+  \theta \given \hat{\theta}_o, \sigma^2_o
+  \sim
+  \Nor\left(
+  \frac{\hat{\theta}_o}{1 + 1/g} + \frac{\mutheta}{1 + g},
+  \frac{\sigma^2_o + \tau^2}{1 + 1/g} \right)
+\end{align}
+where $g = \sigmatheta^2/(\sigma^2_o + \tau^2)$ is the \emph{relative prior
+  variance}. This posterior serves then as the design prior for predicting the
+replication data. Specifically, assuming a replication standard error
+$\sigma_{r}$ and integrating the marginal likelihood of the replication effect
+estimate~\eqref{eq:hat_theta_k2} with respect to the design
+prior~\eqref{eq:dpnormal} leads then to the predictive distribution
+\begin{align}
+  \label{eq:fthetar}
+  \hat{\theta}_r \given \hat{\theta}_o, \sigma^2_o, \sigma^2_r
+  \sim
+  \Nor\left(\muthatr =
+  \frac{\hat{\theta}_o}{1 + 1/g} + \frac{\mutheta}{1 + g}, \sigmathatr^{2} =
+  \, \sigma^2_r + \tau^2 + \frac{\sigma^2_o + \tau^2}{1 + 1/g}\right).
+\end{align}
+For some analysis methods, replication success is more naturally defined via the
+replication $z$-value $z_{r} = \that_{r}/\sigma_{r}$. In these cases, it is
+typically more convenient to use the associated predictive distribution of
+$z_{r}$
+\begin{align}
+  \label{eq:zr}
+  z_r \given z_o, c%,  z_{\scriptscriptstyle{\theta}},h, g
+  \sim
+  \Nor\left(\muzr =
+  \frac{z_o \sqrt{c}}{1 + 1/g} +
+  \frac{z_{\scriptscriptstyle{\theta}} \sqrt{c  g  (1 + h)}}{1 + g},
+  \sigmazr^{2} =
+  \, 1 + c  h + \frac{c  \left(1 + h\right)}{1 + 1/g}  \right)
+\end{align}
+which only depends on relative parameters, \ie{} the variance ratio
+$c = \sigma^{2}_{o}/\sigma^{2}_{r}$, the original $z$-value
+$z_{o} = \that_{o}/\sigma_{o}$, the prior
+$z$-value $z_{\scriptscriptstyle{\theta}} = \mutheta/\sigma_{\scriptscriptstyle{\theta}}$,
+and the relative heterogeneity $h = \tau^{2}/\sigma^{2}_{o}$. Both the design
+prior~\eqref{eq:dp} and the predictive distributions~\eqref{eq:fthetar}
+and~\eqref{eq:zr} depend on the parameters of the initial prior ($\tau^{2}$,
+$\mutheta$, $\sigmatheta^{2}$). In the following, we will explain how these
+parameters can be specified based on external knowledge.
 
+\subsection{Incorporating external knowledge in the initial prior}
+\label{sec:initialPrior}
 
-The initial prior of the overall effect size~\eqref{eq:theta}, is centered
-around $\mu_{\scriptscriptstyle{\theta}}$ with variance
-$\sigma^2_{\scriptscriptstyle{\theta}}$. An uninformative initial prior can be
-obtained by choosing an infinitely large variance
-($\sigma^2_{\scriptscriptstyle{\theta}} \to \infty$), while for finite variances
-the design prior will be pulled towards the initial prior mean. If the
-replicators trust the result from the original study and have no further
-external knowledge available, they can thus specify an uninformative prior and
-``let the data speak for themselves''. For example, this might be appropriate if
-the original study was a rigorously conducted confirmatory study with a
-preregistered study protocol, blinding, large sample sizes, etc. Optimists may
-even specify $\mu_{\scriptscriptstyle{\theta}}$ and
-$\sigma^2_{\scriptscriptstyle{\theta}}$ of the initial prior based on a
-meta-analysis of related studies or based on expert elicitation so that the
-resulting design prior contains more information than what provided by the
-original data alone . In contrast, if the replicators are more sceptical about
-the original study, an alternative option is to choose
-$\mu_{\scriptscriptstyle{\theta}} = 0$ to obtain a shrinkage prior which shrinks
-the design prior towards less impressive effect sizes than the observed one. The
-amount of shrinkage is then determined via the variance
-$\sigma^2_{\scriptscriptstyle{\theta}}$. Specifying a diffuse prior
-($\sigma^2_{\scriptscriptstyle{\theta}} \to \infty$) will lead to no shrinkage,
-while specifying a highly concentrated prior
-($\sigma^2_{\scriptscriptstyle{\theta}} \downarrow 0$) will completely shrink
-the design prior to a point mass. In practice,
-% $\sigma^2_{\scriptscriptstyle{\theta}}$ is hard to choose and
-a pragmatic option with good predictive properties is to use the empirical Bayes
-estimate based on the original data
-$\hat{\sigma}^2_{\scriptscriptstyle{\theta}} = \max\{(\that_{o} - \mu_{\scriptscriptstyle \theta})^{2} - \tau^{2} - \sigma^{2}_{o}, 0\}$.
+At least three common types of external knowledge can be distinguished in the
+replication setting: (i) expected heterogeneity between original and replication
+study due to differences in study design, execution, and population, (ii) prior
+knowledge about the effect size either from theory or from related studies,
+(iii) scepticism regarding the original study due to the possibility of
+exaggerated results. % The between-study heterogeneity variance $\tau^{2}$, the
+% effect size mean $\mutheta$, and the effect size variance
+% $\sigmatheta^2$ provide a means for incorporating these
+% information in SSD of the replication study.
+
+<< "prior-eliciation-values", fig.height = 3.5 >>=
+## absolute approach
+drange <- 0.2
+tauAbs <- drange/(2*qnorm(p = 0.975))
+tau <- tauAbs
+@
+
+\subsubsection{Between-study heterogeneity}
+\label{sec:heterogeneity}
+The expected degree of between-study heterogeneity can be incorporated via the
+heterogeneity variance $\tau^2$ in~\eqref{eq:theta_k}. With smaller
+heterogeneity variance $\tau^{2}$, the study specific effect sizes become more
+similar, whereas for increasing $\tau^{2}$ they become more unrelated. If the
+replicators do not expect any heterogeneity they can thus set $\tau^{2} = 0$
+which will lead to the model collapsing to a fixed effects model.
+
+If heterogeneity is expected, there are different approaches for specifying
+$\tau^{2}$; A domain expert may subjectively assess how much heterogeneity is to
+be expected due to the change in laboratory, study population, and other
+factors. An alternative is to take an estimate from the literature, \eg{} from
+multisite replication projects or from systematic reviews. Finally, one can also
+specify an upper limit of ``tolerable heterogeneity''. This approach is similar
+to specifying a minimal clinically relevant difference in classical power
+analysis in the sense that a true replication effect size which is intolerably
+heterogeneous from the original effect size is not relevant to be detected. An
+absolute \citep[Chapter 5.7.3]{Spiegelhalter2004} and a relative approach
+\citep{Held2020c} can be considered. In the absolute approach, a value of
+$\tau^{2}$ is chosen such that a suitable range (\eg{} the IQR or the range from
+2.5\% to 97.5\% of the distribution~\eqref{eq:theta_k}) of study-specific effect
+sizes is not larger than an effect size difference considered negligible. For
+example, when 95\% of the effect sizes should not vary more than a small effect
+size \eg{} $d = \Sexpr{round(drange, 2)}$ on standardized mean difference scale
+based on the \citet{Cohen1992} effect size classification, this would lead to
+$\tau = d/(2 \cdot 1.96) \approx \Sexpr{round(tauAbs, 2)}$. In the relative
+approach, $\tau^{2}$ is specified relative to the variance of the original
+estimate $\sigma^{2}_{o}$ using field conventions for tolerable relative
+heterogeneity. For example, in the Cochrane guidelines for systematic reviews
+\citep{Deeks2019} a value of
+$I^{2} = \tau^{2}/(\tau^{2} + \sigma^{2}_{o}) = 40\%$ is classified as
+``negligible'', which translates to
+$\tau^{2} = \sigma^{2}_{o}/(1/I^{2} - 1) = (2\sigma^{2}_{o})/3$.
+
+We note that in principle it is also possible to assign a prior distribution to
+$\tau^2$ \citep[see the literature from meta-analysis on this issue
+\eg{}][]{Rover2021}. However, for interpretability reasons we will not consider
+such an approach here as there are no closed-form expressions anymore for the
+predictive distribution and the probability of replication success.
+
+\subsubsection{Knowledge about the effect size}
+Prior knowledge about the effect size $\theta$ can be incorporated via the prior
+mean $\mutheta$ and prior variance $\sigmatheta^2$ in~\eqref{eq:theta}. For
+instance, the parameters may be specified based on a meta-analysis of related
+studies or based on expert elicitation. The resulting design prior will then
+contain more information than what was provided by the original data alone,
+leading to potentially more efficient designs. If there is no prior knowledge
+available, one can specify an uninformative initial prior by letting the
+variance go to infinity ($\sigmatheta^2 \to \infty$). The resulting design prior
+will then only contain the information from the original study.
+
+\subsubsection{Exaggerated original results}
+\label{sec:shrinkage}
+Potentially exaggerated original results can be counteracted by setting
+$\mutheta = 0$ to obtain a shrinkage prior which shrinks the design prior
+towards less impressive effect sizes than the observed one. For instance,
+Replicators could believe that the results from the original study are
+exaggerated because there is no pre-registered study protocol available. Even
+without such beliefs, weakly informative shrinkage priors may also be motivated
+from a ``regularization'' point of view as they will block physically impossible
+parameter values from taking over the posterior in settings with uninformative
+data \citep{Gelman2009}.
+
+The amount of shrinkage is determined via the prior variance $\sigmatheta^2$. A
+a diffuse prior ($\sigmatheta^2 \to \infty$) will lead to no shrinkage, while a
+highly concentrated prior ($\sigmatheta^2 \downarrow 0$) will completely shrink
+the design prior to a point mass. In practice, a pragmatic option with good
+predictive properties is to use the empirical Bayes estimate based on the
+original data
+$\hat{\sigma}^2_{\scriptscriptstyle{\theta}} = \max\{(\that_{o} - \mutheta)^{2} - \tau^{2} - \sigma^{2}_{o}, 0\}$.
 This choice will lead to adaptive shrinkage \citep{Pawel2020} in the sense that
 shrinkage is large for unconvincing original studies (those with small effect
 estimates $\that_{o}$ and/or large standard errors $\sigma_{o}$), but disappears
@@ -432,71 +492,299 @@ and/or smaller standard errors $\sigma_{o}$). Another option is to use an
 estimate from a corpus of related studies \citep[\eg{} the Cochrane library of
 systematic reviews as in][]{vanZwet2021}.
 
-\subsection{Design prior and predictive distribution}
-Once an initial prior has been specified via the parameters $\tau^{2}$,
-$\mu_{\scriptscriptstyle \theta}$, and $\sigma^2_{\scriptscriptstyle{\theta}}$,
-it can be combined with the data from the original study to obtain a design
-prior for the effect size $\theta$. Straightforward application of Bayes
-theorem~\eqref{eq:dp} leads then to the design prior
-\begin{align}
-  \label{eq:dpnormal}
-  \theta \given \hat{\theta}_o, \sigma^2_o %, \tau^{2}, \mu_{\scriptscriptstyle{\theta}}, g
-  \sim
-  \Nor\left(
-  \frac{\hat{\theta}_o}{1 + 1/g} + \frac{\mu_{\scriptscriptstyle{\theta}}}{1 + g},
-  \frac{\sigma^2_o + \tau^2}{1 + 1/g} \right)
-\end{align}
-with \emph{relative prior variance}
-$g = \sigma^2_{\scriptscriptstyle{\theta}}/(\sigma^2_o + \tau^2)$.
-With~\eqref{eq:marglik}, we obtain the predictive
-% where $\sigma^2_k, \tau^2, \mu_{\scriptscriptstyle{\theta}},
-% \sigma^2_{\scriptscriptstyle{\theta}}$ are fixed and $k \in \{o, r\}$
-% Application of \eqref{eq:dp} and \eqref{eq:marglik} leads to the predictive
-distribution of the replication effect estimate
-% based on the original study
-\begin{align}
-  \label{eq:fthetar}
-  \hat{\theta}_r \given \hat{\theta}_o, \sigma^2_o, \sigma^2_r%, \tau^{2}, \mu_{\scriptscriptstyle{\theta}}, g
-  \sim
-  \Nor\left(\mu_{\scriptscriptstyle \hat{\theta}_{r}} =
-  % \frac{\sigma^2_{\scriptscriptstyle{\theta}}}{\sigma^2_{\scriptscriptstyle{\theta}}
-  % + \sigma^2_o + \tau^2}  \hat{\theta}_o +
-  % \frac{\sigma^2_o + \tau^2}{\sigma^2_{\scriptscriptstyle{\theta}} + \sigma^2_o
-  % + \tau^2}  \theta_{\scriptscriptstyle{\theta}},
-  % \sigma^2_r + \tau^2 + \frac{\sigma^2_{\scriptscriptstyle{\theta}}(\sigma^2_o
-  % + \tau^2)}{\sigma^2_{\scriptscriptstyle{\theta}} + \sigma^2_o + \tau^2}
-  % \frac{g  \hat{\theta}_o}{g + 1} +
-  % \frac{\theta_{\scriptscriptstyle{\theta}}}{g + 1},
-  \frac{\hat{\theta}_o}{1 + 1/g} + \frac{\mu_{\scriptscriptstyle{\theta}}}{1 + g}, \sigma^{2}_{\scriptscriptstyle \hat{\theta}_{r}} =
-  \, \sigma^2_r + \tau^2 + \frac{\sigma^2_o + \tau^2}{1 + 1/g}\right).
-\end{align}
-Sometimes it
-is more convenient to work with the associated predictive distribution of the
-replication $z$-value $z_{r} = \that_{r}/\sigma_{r}$, which is given by
-\begin{align}
-  \label{eq:zr}
-  z_r \given z_o, c%,  z_{\scriptscriptstyle{\theta}},h, g
-  \sim
-  \Nor\left(\mu_{\scriptscriptstyle z_{r}} =
-  \frac{z_o \sqrt{c}}{1 + 1/g} +
-  \frac{z_{\scriptscriptstyle{\theta}} \sqrt{c  g  (1 + h)}}{1 + g},
-  \sigma^{2}_{\scriptscriptstyle z_{r}} =
-  \, 1 + c  h + \frac{c  \left(1 + h\right)}{1 + 1/g}  \right)
-\end{align}
-where $z_{o} = \that_{o}/\sigma_{o}$ is the original $z$-value,
-$z_{\scriptscriptstyle{\theta}} = \mu_{\scriptscriptstyle{\theta}}/\sigma_{\scriptscriptstyle{\theta}}$
-is the prior $z$-value, and $h = \tau^{2}/\sigma^{2}_{o}$ is the relative
-heterogeneity. In the following, we will give several examples for how to
-specify normal design priors.
 
 
-\subsection{Probability of replication success}
+\subsection{Example: Cross-laboratory replication project}
+\label{sec:example}
+We will now illustrate the construction of design priors based on data from a
+recently conducted replication project \citep{Protzko2020}, see
+Figure~\ref{fig:data} for a summary. The data were collected in four
+laboratories. Each of them conducted four original studies and for each original
+study a replication study was carried out within the same lab but also by the
+other three labs. % This unique design allows to
+% dissentangle between-lab heterogeneity from within-lab variability of effect
+% sizes.
+
+\begin{figure}[!tb]
+<< "analyse-protzko", fig.height = 9.65 >>=
+
+## compute heterogeneity estimates for external replications
+MAerDF <- lapply(X = unique(protzko$Study), FUN = function(study) {
+    dat <- subset(protzko, Study == study & Type == "Replication")
+    n <- nrow(dat) ## number of external replications
+    w <- 1/dat$vr ## fixed effects weights
+    dFE <- sum(dat$dr*w)/sum(w) ## fixed effects estimate
+    dFEse <- sqrt(1/sum(w)) ## standard error
+    Q <- sum(w*(dat$dr - dFE)^2) ## Q-statistic
+    tau2DL <- pmax(0, (Q - (n - 1))/(sum(w) - (sum(w^2)/sum(w))))
+    tauDL <- sqrt(tau2DL) ## DL estimate
+    data.frame(Study = study, dFE = dFE, dFEse = dFEse, tauDL = tauDL)
+}) %>%
+    bind_rows()
+
+## compute fixed effects MA
+protzko$dma <- with(protzko, (dr/vr + do/vo)/(1/vr + 1/vo))
+protzko$sma <- with(protzko, sqrt(1/(1/vr + 1/vo)))
+protzko$pma <- with(protzko, pnorm(q = dma/sma,
+                                   lower.tail = ifelse(do > 0, FALSE, TRUE)))
+protzko$pmaF <- with(protzko, paste(ifelse(pma < 0.0001, "italic(p['m'])",
+                                          "italic(p['m']) =="),
+                                   formatPval(x = pma)))
+
+## compute BFee
+## tauMT <- 0.05
+## protzko$BFee <- with(protzko, BFee(to = do, tr = dr, so = sqrt(protzko$vo),
+##                                    sr = sqrt(protzko$vr), tau = tauMT))
+
+## format to display in plot
+pr <- with(protzko, pnorm(q = dr/sqrt(vr),
+                          lower.tail = ifelse(do > 0, FALSE, TRUE)))
+protzko$prF <- with(protzko, paste(ifelse(pr < 0.0001, "italic(p['r'])",
+                                          "italic(p['r']) =="),
+                                   formatPval(x = pr)))
+## protzko$BFeeF <- with(protzko,
+##                       ifelse(is.na(BFee), "BF['E'] ~ 'undefined'",
+##                              paste(ifelse(BFee < 1/1000, "BF['E']", "BF['E'] =="),
+##                                    formatBF(BF = BFee))))
+protzko$BFsF <- with(protzko,
+                     ifelse(is.na(BFs), "BF['S'] ~ 'undefined'",
+                                  paste(ifelse(BFs < 1/1000, "BF['S']", "BF['S'] =="),
+                                        formatBF(BF = BFs))))
+protzko$BFrF <- with(protzko, paste(ifelse(BFr < 1/1000, "BF['R']", "BF['R'] =="),
+                                    formatBF(BF = BFr)))
+protzko$psF <- with(protzko, paste(ifelse(ps < 0.0001, "italic(p)['S']",
+                                          "italic(p)['S'] =="),
+                                   formatPval(x = ps)))
+protzko$cF <- with(protzko, paste("italic(c) ==", round(c, 1)))
+
+protzkolong$Studyord <- factor(protzkolong$Study,
+                               levels = unique(protzko$Study)[
+                                   order(abs(unique(protzko$zo)))])
+protzko$Studyord <- factor(protzko$Study,
+                           levels = unique(protzko$Study)[
+                               order(abs(unique(protzko$zo)))])
+
+## plot effect estimates stratified by experiment and lab
+library(ggplot2)
+protzkolong %>%
+    mutate(Type = case_when(Type == "Original" ~ "original study",
+                            Type == "Replication" ~ "external-replication",
+                            Type == "Self-Replication" ~ "self-replication"),
+           Type = factor(Type, levels = c("original study", "external-replication",
+                                          "self-replication"))) %>%
+  ggplot(aes(x = dr, y = Rlab)) +
+    geom_hline(yintercept = c(1.4, 2.4, 3.4), alpha = 0.1, size = 0.3) +
+    geom_vline(xintercept = 0, lty = 2, alpha = 0.3, size = 0.5) +
+    ## geom_text(data = protzko, aes(x = 0.63+0.12, label = BFsF), parse = TRUE,
+    ##           size = 2.2, nudge_y = 0.22, hjust = 0) +
+    geom_text(data = protzko, aes(x = 0.63+0.12, label = BFrF), parse = TRUE,
+              size = 2.2, nudge_y = -0.44, hjust = 0) +
+    ## geom_text(data = protzko, aes(x = 0.63+0.12, label = BFeeF), parse = TRUE,
+    ##           size = 2.2, nudge_y = -0.22, hjust = 0) +
+    geom_text(data = protzko, aes(x = 0.63+0.16, label = pmaF), parse = TRUE,
+              size = 2.2, nudge_y = -0.22, hjust = 0) +
+    geom_text(data = protzko, aes(x = 0.63+0.18, label = prF), parse = TRUE,
+              size = 2.2, nudge_y = 0, hjust = 0) +
+    geom_text(data = protzko, aes(x = 0.63+0.19, label = cF), parse = TRUE,
+              size = 2.2, nudge_y = 0.22, hjust = 0) +
+    geom_pointrange(aes(xmin = dr - 1.96*sqrt(vr), xmax = dr + 1.96*sqrt(vr),
+                        col = Type),
+                    position = position_dodge(width = 0.5), fatten = 2,
+                    key_glyph = "point") +
+    scale_x_continuous(breaks = seq(0, 0.6, 0.3), minor_breaks = NULL) +
+    coord_cartesian(xlim = c(-0.15, 1.2)) +
+    scale_color_brewer(palette = "Dark2") +
+    facet_wrap(~ Studyord) +
+    labs(y = "Laboratory", x = "SMD effect estimate with 95% CI", color = "") +
+    theme_bw() +
+    theme(panel.grid.major.y = element_blank(),
+          panel.grid.minor.y = element_blank(),
+          legend.position = "top")
+@
+\caption{Data from cross-laboratory replication project by \citet{Protzko2020}.
+  Shown are standardized mean difference (SMD) effect estimates with 95\%
+  confidence intervals stratified by experiment and laboratory. For each
+  replication study, the relative sample size $c = n_{r}/n_{o}$, the one-sided
+  replication $p$-value $p_{r}$, the one-sided meta-analytic $p$-value $p_{m}$,
+  and the replication Bayes factor $\BFr$ are shown. Experiments are ordered by
+  the magnitude of their original $z$-value
+  $z_{o} = \hat{\theta}_{o}/\sigma_{o}$.}
+\label{fig:data}
+\end{figure}
+
+
+Most studies used simple between-subject designs with two groups and a
+continuous outcome so that for a study $i \in \{o, r\}$ the standardized mean
+difference (SMD) effect estimate $\that_{i}$ can be computed from the group
+means $\bar{y}_{i1}, \bar{y}_{i2}$, group standard deviations $s_{i1}, s_{i2}$,
+and group sample sizes $n_{i1}, n_{i2}$ by
+\begin{align*}
+  \that_{i} = \frac{\bar{y}_{i1} - \bar{y}_{i2}}{s_{i}}
+\end{align*}
+with
+$s^{2}_{i} = \{(n_{i1} - 1)s_{i1}^{2} + (n_{i2} - 1)s_{i2}^{2}\}/(n_{i1} + n_{i2} - 2)$
+the pooled sample variance. Under a normal likelihood and assuming equal
+variances in both groups, the approximate variance of $\that_{i}$ is
+\begin{align}
+  \sigma^{2}_{i} = \frac{n_{i1} + n_{i2}}{n_{i1}n_{i2}} + \frac{\that_{i}^{2}}{2(n_{i1} + n_{i2})}
+  \label{eq:varSMD}
+\end{align}
+\citep{Hedges1981}. A cruder, but for SSD more useful, approximation
+$\sigma^{2}_{i} \approx 4/n_{i}$ is obtained by assuming the same sample size in
+both groups $n_{i1} = n_{i2} = n_{i}/2$, with $n_{i}$ the total sample size, and
+neglecting the second term in~\eqref{eq:varSMD} which will be close to zero for
+small effect estimates and/or large sample sizes \citep{Hedges2021}. We thus
+have the approximate unit variance $\lambda^{2} = 4$ and the relative variance
+\begin{align*}
+  c = \sigma^{2}_{o}/\sigma^{2}_{r} = n_{r}/n_{o},
+\end{align*}
+which can be interpreted as the ratio of the replication to the original sample
+size.
+\begin{figure}[!htb]
+<< "example", fig.height = 3.5 >>=
+## example study for illustration of design prior
+studyname <- "Labels"
+study <- subset(protzkolong, Study == studyname & Type == "Original")
+
+## uninformative initial prior
+meanDP <- study$dr
+varDP <- study$vr
+varDPhet <- study$vr + tauAbs^2
+
+## empirical Bayes shrinkage prior
+shrinkEB <- pmax(0, 1 - study$vr/study$dr^2)
+meanEB <- shrinkEB*study$dr
+varDPEB <- shrinkEB*study$vr
+shrinkEBhet <- pmax(0, 1 - (study$vr + tauAbs^2)/study$dr^2)
+meanEBhet <- shrinkEBhet*study$dr
+varDPEBhet <- shrinkEBhet*(study$vr + tauAbs^2)
+
+## optimistic initial prior
+extstudy <- subset(protzkolong, Study == studyname & Type == "Self-Replication")
+varDPo <- 1/(1/study$vr + 1/extstudy$vr)
+meanDPo <- varDPo*(study$dr/study$vr + extstudy$dr/extstudy$vr)
+varDPohet <- 1/(1/(study$vr + tauAbs^2) + 1/extstudy$vr)
+meanDPohet <- varDPohet*(study$dr/(study$vr + tauAbs^2) + extstudy$dr/extstudy$vr)
+cSelf <- study$vr/extstudy$vr
+
+## plot the priors
+thetaseq <- seq(-0.05, 0.45, length.out = 500)
+applyGrid <- data.frame(mean = c(meanDP, meanDP,
+                                 meanEB, meanEBhet,
+                                 meanDPo, meanDPohet),
+                        var = c(varDP, varDPhet,
+                                varDPEB, varDPEBhet,
+                                varDPo, varDPohet),
+                        tau = c(0, tauAbs,
+                                0, tauAbs,
+                                0, tauAbs),
+                        initial = c("uninformative", "uninformative",
+                                    "shrinkage", "shrinkage",
+                                    "optimistic", "optimistic"))
+plotDF <- do.call("rbind",
+                    lapply(X = seq(1, nrow(applyGrid)), FUN = function(i) {
+    dens <- dnorm(x = thetaseq, mean = applyGrid$mean[i],
+                  sd = sqrt(applyGrid$var[i]))
+    data.frame(theta = thetaseq, density = dens,
+               applyGrid[i,])
+}))
+npriors <- length(unique(plotDF$initial))
+colsPriors <- palette.colors(n = npriors + 1, palette = "Okabe-ito")[2:(npriors + 1)]
+names(colsPriors) <- unique(plotDF$initial)
+
+ggplot(data = plotDF, aes(x = theta, y = density, color = initial)) +
+    geom_line(alpha = 0.9, size = 0.8) +
+    facet_wrap(~ tau, labeller = label_bquote(tau == .(round(tau, 2)))) +
+    labs(x = bquote("Effect size" ~ theta ~ "(SMD)"),
+         y = "Density", color = "") +
+    scale_color_manual(values = colsPriors) +
+    theme_bw() +
+        theme(legend.position = "top", panel.grid.minor = element_blank())
+@
+
+\caption{Design priors for the effect size $\theta$ (SMD) in the experiment
+  ``\Sexpr{studyname}'' based on the original effect estimate
+  $\hat{\theta}_{o} = \Sexpr{round(study[,"dr"], 2)}$ with standard error
+  $\sigma_{o} = \Sexpr{round(sqrt(study[,"vr"]), 2)}$. Shown are different
+  choices of the initial prior for $\theta$ and the between-study heterogeneity $\tau$.}
+\label{fig:dpexample}
+\end{figure}
+
+
+
+Suppose now the original studies have been finished, and we want to conduct SSD
+for the not yet conducted replication studies. We start by specifying the design
+priors (one for each replication). Since the original studies have been
+preregistered, we do not expect an exaggeration of their effect estimates due to
+selective reporting or other questionable research practices. Therefore, we
+choose an uninformative initial prior ($g \to \infty$), which leads to design
+prior and predictive distribution both centered around the original effect
+estimate $\that_{o}$.
+
+Concerning the specification of between-study heterogeneity, a distinction needs
+to be made between replications which are conducted in the same lab as the
+original study (\emph{self-replications}) and replications which are conducted
+in a different lab (\emph{external-replications}). For self-replications it is
+reasonable to set $\tau^{2} = 0$ because we would expect no between-study
+heterogeneity as the experimental conditions will be nearly identical in both
+studies. In contrast, one would expect some between-study heterogeneity for
+external-replications as the experimental conditions may slightly differ between
+the labs. In the following, we will use $\tau^{2} = \Sexpr{round(tauAbs, 2)}$
+elicited via the ``absolute'' approach as discussed in
+Section~\ref{sec:heterogeneity}, since it is independent of the sample size of
+the original study.
+
+
+Taken together, we obtain the design prior
+$\theta \given \hat{\theta}_{o}, \sigma^{2}_{o} \sim \Nor(\hat{\theta}_{o}, \sigma^{2}_{o})$
+for self-replications and the design prior
+$\theta \given \hat{\theta}_{o}, \sigma^{2}_{o} \sim \Nor(\hat{\theta}_{o}, \sigma^{2}_{o} + \tau^{2})$
+for external-replications. For example, for the experiment named
+``\Sexpr{studyname}'', the design prior would be centered around the original
+effect estimate $\hat{\theta}_{o} = \Sexpr{round(study[,"dr"], 3)}$ with
+variance
+$\sigma^{2}_{o} + \tau^{2} = \Sexpr{round(sqrt(study[,"vr"]), 2)}^{2} + \Sexpr{round(tauAbs, 2)}^{2} = \Sexpr{round(sqrt(varDPhet), 2)}^{2}$
+for an external-replication, and with variance
+$\sigma^{2}_{o} = \Sexpr{round(sqrt(study[,"vr"]), 2)}^{2}$ for a
+self-replication. Figure~\ref{fig:dpexample} (yellow lines) shows the two priors.
+% Note that power
+% calculations under the former prior have been termed ``predictive power''
+% \citep{Micheloud2020}, while the latter prior has not appeared in the SSD for
+% replication studies literature.
+
+If there would have been good reason to believe that the original result may have
+been exaggerated, we might have specified an initial shrinkage
+prior. Using the empirical Bayes approach for the specification of the prior variance
+(as described in Section~\ref{sec:shrinkage}), this would lead to a prior with shrinkage factor $\hat{g}/(1 + \hat{g}) = \Sexpr{round(shrinkEBhet, 2)}$ for
+an external-replication. The mean and variance would thus be shrunken towards
+zero by $\Sexpr{round((1 - shrinkEBhet)*100, 0)}$\% compared to the mean and
+variance of the design prior based on the uninformative initial prior (the blue lines in  Figure~\ref{fig:dpexample}). Conversely, if we had prior knowledge about the
+effect size $\theta$ from another study, we could have specified an initial optimistic
+prior. Suppose, for instance, that the self-replication of the experiment
+``\Sexpr{studyname}'' was a pilot study, and its effect estimate
+$\hat{\theta}_{p} = \Sexpr{round(extstudy[,"dr"], 3)}$ and standard error
+$\sigma_{p} = \Sexpr{round(sqrt(extstudy[,"vr"]), 2)}$ were available to us.
+This would lead to a design prior centered around the weighted mean of
+original and pilot study, as well as, a prior precision equal to the sum of the
+precision of both estimates (green lines in Figure~\ref{fig:dpexample}). Due to
+incorporation of the external data, this design prior is much more concentrated
+than the other two.
+
+
+\subsection{Probability of replication success and required sample size}
+To computing the probability of replication success one needs to select an
+analysis methods and integrate the predictive distribution~\eqref{eq:fthetar},
+respectively, \eqref{eq:zr} over the associated success region $S$. In the following
+we illustrate the success regions of different methods, and show how the
+sample size can be computed from them. It is important to note that
+
 
 \subsubsection{The two trials rule}
 
 \begin{align}
   \label{eq:S2TR}
-  S_{\scriptscriptstyle \text{2TR}} = \left[z_{\scriptscriptstyle 1 - \alpha}\, \sigma_{r}, \infty \right)
+  S_{\scriptscriptstyle \text{2TR}}
+  = \left[z_{\scriptscriptstyle 1 - \alpha}\, \sigma_{r}, \infty \right)
 \end{align}
 
 \subsubsection{Fixed effects meta-analysis}
@@ -504,19 +792,46 @@ specify normal design priors.
 \begin{align}
   \label{eq:SMA}
   S_{\scriptscriptstyle \text{MA}}
-  = \left[z_{\scriptscriptstyle 1 - \alpha}\, \sigma_{r} \left\{\sqrt{\frac{1}{c} + 1} - z_{o}\sqrt{c}\right\}, \infty \right)
+  = \left[z_{\scriptscriptstyle 1 - \alpha}\, \sigma_{r}
+  \left\{\sqrt{1/c + 1} -  z_{o}\sqrt{c}\right\}, \infty \right)
+\end{align}
+
+\subsubsection{Effect size difference equivalence test}
+
+\begin{align}
+  \label{eq:equivalence}
+  S_{\scriptscriptstyle \text{E}}
+  = \left[\that_{o} - \Delta - z_{\scriptscriptstyle 1 - \alpha} \sqrt{\sigma^{2}_{o} +
+  \sigma^{2}_{r}}, \that_{o} + \Delta - z_{\scriptscriptstyle 1 - \alpha}
+  \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}}\right]
 \end{align}
 
 \subsubsection{The replication Bayes factor}
 
 \begin{align}
-  \label{eq:SMA}
+  \label{eq:BFrsuccess}
   S_{\scriptscriptstyle \BFr}
-  = \left(-\infty, -\sqrt{A} - \frac{z_{o}}{\sqrt{c}}\right] \bigcup
-  \left[\sqrt{A} - \frac{z_{o}}{\sqrt{c}}, \infty\right)
+  = \left(-\infty, -\sqrt{A} - \that_{r}/c\right] \bigcup
+   \left[\sqrt{A} - \that_{r}/c, \infty\right)
+\end{align}
+with $A = \sigma^{2}_{r}\{z_{o}^{2} - 2 \log \gamma + \log(1 + c)\}(1 + 1/c)$
+
+\subsubsection{The sceptical \textit{p}-value}
+
+\begin{align}
+  \label{eq:Pssuccess}
+  S_{\scriptscriptstyle \ps}
+  = \left[\sigma_{r} z_{\scriptscriptstyle 1 - \alpha} \sqrt{1 +
+  c/\{(z_{o}^{2}/z_{\scriptscriptstyle 1 - \alpha}^{2}) - 1\}}, \infty\right)
 \end{align}
 
-\subsubsection{Reverse-Bayes methods}
+\subsubsection{The sceptical Bayes factor}
+
+\begin{align}
+  \label{eq:BFssuccess}
+  S_{\scriptscriptstyle \BFs}
+  =
+\end{align}
 
 \section{Discussion}
 \label{sec:discussion}
@@ -527,11 +842,9 @@ take into account the associated uncertainty. We have also discussed how
 different design requirements can be combined to satisfy different stakeholders,
 while also enabling conclusive inferences based on several analyses approaches
 of the replication data. As we showed, the approach helps to design informative
-and cost-effective replications. % , and it is applicable to simple self-replications up to
-% complex multisite replication projects.
-We have illustrated the approach for
-three Bayesian measures of replication success, but in principle our framework
-can be used for any analysis method, Bayes or non-Bayes, parameter estimation or
+and cost-effective replications. We have illustrated the approach for three
+Bayesian measures of replication success, but in principle our framework can be
+used for any analysis method, Bayes or non-Bayes, parameter estimation or
 hypothesis testing.
 
 There are some limitations and possible extensions: We have treated all
@@ -550,25 +863,14 @@ already been finished. One could also consider a scenario where both the
 original and replication study are planned simultaneously and adopt a
 ``project'' perspective as in \citet{Held2021}. However, in this case no
 information from the original study is available and the design prior needs to
-be specified entirely based on external knowledge. % Our results on the equality
-% of effect size difference Bayes factor also show that effect size comparison in
-% the replication setting can pose very stringent requirements in terms of the
-% required sample size. A possible modification of the method could be to use
-% non-local priors \citep{Johnson2010} as this class of priors enable a faster
-% accumulation of evidence for a null hypothesis compared to the local priors
-% which we have considered.
-% Finally, taking uncertainty properly into
-% account usually leads to larger sample sizes compared to the approach where the
-% underlying effect size is assumed to be the same as the original effect
-% estimate.
-Finally, researchers have only limited resources and it may happen that they
-cannot afford a large enough sample size to obtain their desired probability of
-replication success. In this situation a reverse-Bayes approach
-\citep{Held2021b} could be applied in order to determine the prior for the
-effect size which is required to meet all design requirements based on a fixed
-sample size. Researchers can then judge whether or not such prior beliefs are
-scientifically sensible, and decide whether they should conduct the replication
-study with their limited resources.
+be specified entirely based on external knowledge. Finally, researchers have
+only limited resources and it may happen that they cannot afford a large enough
+sample size to obtain their desired probability of replication success. In this
+situation a reverse-Bayes approach \citep{Held2021b} could be applied in order
+to determine the prior for the effect size which is required to meet all design
+requirements based on a fixed sample size. Researchers can then judge whether or
+not such prior beliefs are scientifically sensible, and decide whether they
+should conduct the replication study with their limited resources.
 
 \section*{Software and data}
 The data from \citet{Protzko2020} were were downloaded from
@@ -600,14 +902,9 @@ Micheloud for helpful comments on drafts of the manuscript.
 To determine the multisite version of the replication and the sceptical Bayes
 factor we need to know the marginal density of the replication effect estimates
 $\hat{\theta}_r \given \theta \sim \Nor_{n}(\theta J_{n}, \text{diag}\left\{\sigma_r^2 + \tau^2_{r} J_{n}\right\})$
-under a normal prior $H_{k} \colon \theta \sim \Nor(m, v)$.
-% the null hypothesis $H_{0} \colon \theta = 0$, under the sceptical prior
-% $\HS \colon \theta \sim \Nor(0, s  \sigma^{2}_{o})$, and under the advocacy
-% prior $\HA \colon \theta \sim \Nor(\hat{\theta}_{o}, \sigma^{2}_{o})$. % Under
-% % $H_{0}$ the marginal density is simply
-% % $\Nor_{n}(\hat{\theta}_{r}; 0 J_{n}, \text{diag}\left\{\sigma_r^2 + \tau^2_{r} J_{n}\right\})$
-Let $\Nor(x;m,v)$ denote the normal density function mean $m$ and variance $v$
-evaluated at $x$. Define also
+under a normal prior $H_{k} \colon \theta \sim \Nor(m, v)$. Let $\Nor(x;m,v)$
+denote the normal density function mean $m$ and variance $v$ evaluated at $x$.
+Define also
 $\hat{\theta}_{r*} = \left\{\sum_{i=1}^{n}\hat{\theta}_{ri}/(\sigma^{2}_{ri} + \tau^{2}_{r})\right\} \sigma^{2}_{r*}$
 and
 $\sigma^{2}_{r*} = 1/\left\{\sum_{i=1}^{n}1/(\sigma^{2}_{ri} + \tau^{2}_{r})\right\}$,
@@ -621,9 +918,6 @@ The marginal density is then given by
     \frac{(\theta - m)^{2}}{v}\right\} \right]}{
     \left\{2\pi v \prod_{i = 1}^{n} 2\pi \left(\sigma^{2}_{ri} + \tau^{2}_{r}\right)\right\}^{1/2}}
     \, \text{d}\theta \\
-    % \intertext{splitting the sum into
-    % $\sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \theta)^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}}
-    % = \sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \hat{\theta}_{r*})^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}} + \sum_{i=1}^{n} \frac{(\hat{\theta}_{r*} - \theta)^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}}$}
   &= \int \frac{
     \exp\left[-\frac{1}{2} \left\{\sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \hat{\theta}_{r*})^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}} +  \frac{(\hat{\theta}_{r*} - \theta)^{2}}{\sigma^{2}_{r*}} +
     \frac{(\theta - m)^{2}}{v}\right\} \right]}{
@@ -639,24 +933,9 @@ The marginal density under the sceptical prior $\HS$ is then obtained by setting
 $m = 0$ and $v = s \sigma^{2}_{o}$, whereas the marginal density under the
 advocacy prior $\HA$ is obtained by setting $m = \that_{o}$ and
 $v = \sigma^{2}_{o}$. The marginal density under the null hypothesis $H_{0}$ is
-itself a special case of the density under $\HS$ with $s = 0$.
-% Note that also under $H_{0}$ the density can be decomposed
-% \begin{align*}
-    %     f(\hat{\theta}_{r} \given H_{0})
-    %     &= \left\{\prod_{i = 1}^{n} 2\pi \left[\sigma^{2}_{ri} + \tau^{2}_{r}\right]\right\}^{-1/2}
-            %             \exp\biggl(-\frac{1}{2}
-            %             \underbrace{\sum_{i=1}^{n} \frac{\hat{\theta}_{ri}^{2}}{\sigma^{2}_{ri}
-            %             + \tau^{2}_{r}}}_{\sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \hat{\theta}_{r*})^{2}
-            %             }{\sigma^{2}_{ri}    + \tau^{2}_{r}} + \frac{\hat{\theta}_{r*}^{2}}{\sigma^{2}_{r*}}}
-            %             \biggr)
-            %   \end{align*}
-Taken together, this leads to the Bayes factor
+itself a special case of the density under $\HS$ with $s = 0$. Taken together,
+this leads to the Bayes factor
 \begin{align*}
-  % \BFr &= \frac{f(\hat{\theta}_{r} \given H_{0})}{f(\hat{\theta}_{r} \given
-  % \HA)} = \sqrt{1 + \sigma^{2}_{o}/\sigma^{2}_{r*}}
-  % \exp\left\{-\frac{1}{2}\left[ \frac{\hat{\theta}_{r*}^{2}}{\sigma^{2}_{r*}}
-  %     - \frac{(\hat{\theta}_{r*} - \hat{\theta}_{o})^{2}}{\sigma^{2}_{r*} +
-  %     \sigma^{2}_{o}}\right]\right\}
       \BF_{\text{SA}}(\hat{\theta}_{r}; s)
   &= \frac{f(\hat{\theta}_{r} \given \HS)}{f(\hat{\theta}_{r} \given \HA)}
     = \sqrt{\frac{1 + \sigma^{2}_{o}/\sigma^{2}_{r*}}{1 +
@@ -666,7 +945,7 @@ Taken together, this leads to the Bayes factor
 \end{align*}
 which can be further simplified to~\eqref{eq:bfmulti}.
 
-\section{The \texttt{BayesRepDesign} R package}
+\section{The BayesRepDesign R package}
 \label{app:package}
 
 
