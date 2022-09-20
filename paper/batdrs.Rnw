@@ -877,15 +877,52 @@ and the required standard error $\sigma_{r}^{*}$ for it to be sufficiently large
 can be computed numerically using a root finding algorithm.
 
 
-\subsubsection{Effect size difference equivalence test}
-
+\subsubsection{Effect size equivalence test}
+% Both the two-trials rule and the fixed effects meta-analysis approach define
+% replication success via measures of evidence against the null hypothesis
+% $H_{0} \colon \theta = 0$. Other approaches define replication success via
+% compatibility of the effect estimates from original and replication study. For
+% instance,
+\citet{Anderson2016} propose to declare replication success at level
+$\alpha$ if the $(1 - \alpha)$ confidence interval for the effect size difference
+$\theta_{r} - \theta_{o}$
+\begin{align*}
+  \that_{r} - \that_{o} \pm \zalpha \sqrt{\sigma^{2}_{r} + \sigma^{2}_{o}}
+\end{align*}
+is fully inside an equivalence region $[-\Delta, \Delta]$ defined via the
+margin $\Delta > 0$. This procedure corresponds to rejecting the null hypothesis
+$H_{0} \colon |\theta_{r} - \theta_{o}| > \Delta$
+in an equivalence test, and it implies a success region for the replication effect
+estimate $\that$ given by
 \begin{align}
   \label{eq:equivalence}
   S_{\scriptscriptstyle \text{E}}
-  = \left[\that_{o} - \Delta - \zalpha \sqrt{\sigma^{2}_{o} +
+  = \left[\that_{o} - \Delta + \zalpha \sqrt{\sigma^{2}_{o} +
   \sigma^{2}_{r}}, \that_{o} + \Delta - \zalpha
-  \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}}\right]
+  \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}}\right].
 \end{align}
+Wether or not replication success is achieved depends on the precision of
+the original estimate, and in particular when the margin
+$\Delta \geq \zalpha \sigma_{o}$, replication success
+is impossible regardless of how small the replication standard error $\sigma_{r}$
+is. Assuming now that $\Delta < \zalpha \sigma_{o}$, the probability of
+replication success can be computed by
+\begin{align}
+  \label{eq:MApros}
+  \Pr(\that \in S_{\scriptscriptstyle \text{E}} \given \that_{o}, \sigma_{o}, \sigma_{r})
+  &= \Phi\left(\frac{\that_{o} + \Delta - \zalpha
+  \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}} -\muthatr}{\sqrt{\sigma^{2}_{r} +
+  \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right) \nonumber \\
+&\phantom{=} -
+  \Phi\left(\frac{\that_{o} - \Delta + \zalpha
+  \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}} -\muthatr}{\sqrt{\sigma^{2}_{r} +
+  \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right),
+\end{align}
+from which one can see that there can only be a positive probability
+if the margin $\Delta$ is large enough relative to the standard error
+of the difference $\sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}}$
+and the required replication standard error $\sigma_{r}$ to achieve a desired
+power of replication success $1 - \beta$ can be computed numerically.
 
 \subsubsection{The replication Bayes factor}
 
