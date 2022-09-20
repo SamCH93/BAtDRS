@@ -62,7 +62,7 @@
         knowledge to be incorporated into a design prior for the underlying
         parameters. This is particularly useful because external knowledge, such
         as expected heterogeneity between original and replication study due to
-        differences in study design and study population, are common in the
+        differences in study execution and study population, are common in the
         replication setting. We investigate design priors in the normal normal
         hierarchical model where analytical results are available. Based on a
         design prior, predictions about the replication data can be made, and
@@ -239,7 +239,7 @@ distribution for the replication data
 After completion of the replication, the observed data $x_r$ will be analyzed in
 some way to quantify how much the original result could be replicated. The
 analysis may involve the original data (for example, a meta-analysis of the two
-data sets) or it may only use the replication data. Typically, there will be a
+data sets) or it may only use the replication data. Typically, there is a
 \emph{success region} $S$ which implies that if the replication data fall within
 it ($x_r \in S$), the replication is successful. The \emph{probability of
   replication success} can thus be computed by integrating the predictive
@@ -255,11 +255,11 @@ SSD). The required sample size $n_r^*$ is then given by
 \end{align}
 
 Often, replication studies are analyzed using several methods which quantify
-different aspects of replicability, and which typically have different success
-regions (\eg{} one method for quantifying parameter compatibility and another
-for quantifying evidence against a null hypothesis). In this case, the sample
-size may be chosen such that the probability of replication success is as large
-as desired for all planned analysis methods.
+different aspects of replicability, and which have different success regions
+(\eg{} one method for quantifying parameter compatibility and another for
+quantifying evidence against a null hypothesis). In this case, the sample size
+may be chosen such that the probability of replication success is as large as
+desired for all planned analysis methods.
 
 There may sometimes also be side constraints which the replication sample size
 needs to satisfy. For instance, funders and regulators may require from a method
@@ -358,7 +358,7 @@ distribution for the effect size $\theta$
 where $g = \sigmatheta^2/(\sigma^2_o + \tau^2)$ is the \emph{relative prior
   variance}. This posterior serves then as the design prior for predicting the
 replication data. Specifically, assuming a replication standard error
-$\sigma_{r}$ and integrating the marginal likelihood of the replication effect
+$\sigma_{r}$ and integrating the marginal density of the replication effect
 estimate~\eqref{eq:hat_theta_k2} with respect to the design
 prior~\eqref{eq:dpnormal} leads then to the predictive distribution
 \begin{align}
@@ -370,23 +370,22 @@ prior~\eqref{eq:dpnormal} leads then to the predictive distribution
   \, \sigma^2_r + \tau^2 + \frac{\sigma^2_o + \tau^2}{1 + 1/g}\right).
 \end{align}
 For some analysis methods, replication success is more naturally defined via the
-replication $z$-value $z_{r} = \that_{r}/\sigma_{r}$. In these cases, it is
-typically more convenient to use the associated predictive distribution of
-$z_{r}$
+replication $z$-value $z_{r} = \that_{r}/\sigma_{r}$. In these cases, it can be
+more convenient to use the associated predictive distribution of $z_{r}$
 \begin{align}
   \label{eq:zr}
   z_r \given z_o, c%,  z_{\scriptscriptstyle{\theta}},h, g
   \sim
-  \Nor\left(\muzr =
-  \frac{z_o \sqrt{c}}{1 + 1/g} +
-  \frac{z_{\scriptscriptstyle{\theta}} \sqrt{c  g  (1 + h)}}{1 + g},
+  \Nor\left\{\muzr =
+  \sqrt{c} \left(\frac{z_o}{1 + 1/g} +
+  \frac{z_{\scriptscriptstyle{\theta}} \sqrt{g  (1 + h)}}{1 + g}\right),
   \sigmazr^{2} =
-  \, 1 + c  h + \frac{c  \left(1 + h\right)}{1 + 1/g}  \right)
+  \, 1 + c \left( h + \frac{1 + h}{1 + 1/g}  \right) \right\}
 \end{align}
 which only depends on relative parameters, \ie{} the variance ratio
 $c = \sigma^{2}_{o}/\sigma^{2}_{r}$, the original $z$-value
-$z_{o} = \that_{o}/\sigma_{o}$, the prior
-$z$-value $z_{\scriptscriptstyle{\theta}} = \mutheta/\sigma_{\scriptscriptstyle{\theta}}$,
+$z_{o} = \that_{o}/\sigma_{o}$, the prior $z$-value
+$z_{\scriptscriptstyle{\theta}} = \mutheta/\sigma_{\scriptscriptstyle{\theta}}$,
 and the relative heterogeneity $h = \tau^{2}/\sigma^{2}_{o}$. Both the design
 prior~\eqref{eq:dp} and the predictive distributions~\eqref{eq:fthetar}
 and~\eqref{eq:zr} depend on the parameters of the initial prior ($\tau^{2}$,
@@ -483,7 +482,10 @@ highly concentrated prior ($\sigmatheta^2 \downarrow 0$) will completely shrink
 the design prior to a point mass. In practice, a pragmatic option with good
 predictive properties is to use the empirical Bayes estimate based on the
 original data
-$\hat{\sigma}^2_{\scriptscriptstyle{\theta}} = \max\{(\that_{o} - \mutheta)^{2} - \tau^{2} - \sigma^{2}_{o}, 0\}$.
+\begin{align}
+  \label{eq:EBestimate}
+  \hat{\sigma}^2_{\scriptscriptstyle{\theta}} = \max\{(\that_{o} - \mutheta)^{2} - \tau^{2} - \sigma^{2}_{o}, 0\}.
+\end{align}
 This choice will lead to adaptive shrinkage \citep{Pawel2020} in the sense that
 shrinkage is large for unconvincing original studies (those with small effect
 estimates $\that_{o}$ and/or large standard errors $\sigma_{o}$), but disappears
@@ -498,12 +500,10 @@ systematic reviews as in][]{vanZwet2021}.
 \label{sec:example}
 We will now illustrate the construction of design priors based on data from a
 recently conducted replication project \citep{Protzko2020}, see
-Figure~\ref{fig:data} for a summary. The data were collected in four
+Figure~\ref{fig:data} for a summary of the data. The data were collected in four
 laboratories. Each of them conducted four original studies and for each original
-study a replication study was carried out within the same lab but also by the
-other three labs. % This unique design allows to
-% dissentangle between-lab heterogeneity from within-lab variability of effect
-% sizes.
+study four replication studies were carried out, one by the same lab and three
+by the other three labs.
 
 \begin{figure}[!tb]
 << "analyse-protzko", fig.height = 9.65 >>=
@@ -754,9 +754,10 @@ self-replication. Figure~\ref{fig:dpexample} (yellow lines) shows the two priors
 
 If there would have been good reason to believe that the original result may have
 been exaggerated, we might have specified an initial shrinkage
-prior. Using the empirical Bayes approach for the specification of the prior variance
-(as described in Section~\ref{sec:shrinkage}), this would lead to a prior with shrinkage factor $\hat{g}/(1 + \hat{g}) = \Sexpr{round(shrinkEBhet, 2)}$ for
-an external-replication. The mean and variance would thus be shrunken towards
+prior. For instance, using the empirical Bayes estimate~\eqref{eq:EBestimate}
+for the prior variance leads to a prior with shrinkage factor
+$\hat{g}/(1 + \hat{g}) = \Sexpr{round(shrinkEBhet, 2)}$ for
+an external-replication. The mean and variance are then shrunken towards
 zero by $\Sexpr{round((1 - shrinkEBhet)*100, 0)}$\% compared to the mean and
 variance of the design prior based on the uninformative initial prior (the blue lines in  Figure~\ref{fig:dpexample}). Conversely, if we had prior knowledge about the
 effect size $\theta$ from another study, we could have specified an initial optimistic
@@ -772,37 +773,117 @@ than the other two.
 
 
 \subsection{Probability of replication success and required sample size}
-To computing the probability of replication success one needs to select an
-analysis methods and integrate the predictive distribution~\eqref{eq:fthetar},
-respectively, \eqref{eq:zr} over the associated success region $S$. In the following
-we illustrate the success regions of different methods, and show how the
-sample size can be computed from them. It is important to note that
+To compute the probability of replication success one needs to select an
+analysis methods and integrate the predictive distribution~\eqref{eq:fthetar}
+% , respectively, \eqref{eq:zr}
+ over the associated success region $S$. There is no universally accepted method
+for quantifying replicability and we do not want to contribute to the discussion
+which method is the most appropriate. In the following, we simply show the
+success regions of different methods, and how the replication sample size can be
+computed from them.
 
 
-\subsubsection{The two trials rule}
+\subsubsection{The two-trials rule}
+The most common approach for analysis of replication studies is to declare
+replication success when both the original and replication study lead to a
+$p$-value for testing the null hypothesis $H_{0} \colon \theta = 0$ smaller than a
+pre-specified threshold $\alpha$, usually $\alpha = 5\%$ for two-sided tests and
+$\alpha = 2.5\%$ for one-sided tests. This procedure is known as the
+\emph{two-trials rule} in drug regulation \citep{Senn2008}.
 
+We now assume the original study led to a positive effect estimate $\that_{o} > 0$ and
+the corresponding one-sided $p$-value was significant at some level $\alpha$, \ie{}
+$p_{o} = 1 - \Phi(\that_{o}/\sigma_{o}) \leq \alpha$. Replication success at level
+$\alpha$ with the two-trials is then achieved if the replication $p$-value is also
+significant, \ie{} $p_{r} = 1 - \Phi(\that_{r}/\sigma_{r}) \leq \alpha$, which
+implies a success region
 \begin{align}
   \label{eq:S2TR}
   S_{\scriptscriptstyle \text{2TR}}
-  = \left[z_{\scriptscriptstyle 1 - \alpha}\, \sigma_{r}, \infty \right)
+  = \left[\zalpha\, \sigma_{r}, \infty \right),
 \end{align}
+where $\zalpha$ is the $1 - \alpha$ quantile of the standard
+normal distribution. The probability of replication success is thus given by
+\begin{align}
+  \label{eq:2TRpros}
+  \Pr(\that \in S_{\scriptscriptstyle \text{2TR}} \given \that_{o}, \sigma_{o}, \sigma_{r})
+  = \Phi\left(\frac{\muthatr - \zalpha \, \sigma_{r}}{\sqrt{\sigma^{2}_{r} +
+\tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right)
+\end{align}
+with $\Phi(\cdot)$ the standard normal cumulative distribution function and
+$\muthatr$ the mean of the predictive distribution~\eqref{eq:fthetar}.
+Importantly, by decreasing the standard error $\sigma_{r}$ (through increasing
+the sample size $n_{r}$), the probability of replication
+success~\eqref{eq:2TRpros} cannot become arbitrarily large but is bounded by
+\begin{align}
+  \label{eq:limP2TR}
+  \text{limP}_{\scriptscriptstyle \text{2TR}} =
+  \Phi\left(\frac{ \muthatr}{\sqrt{
+\tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right).
+\end{align}
+The required replication standard error $\sigma_{r}^{*}$ to achieve replication
+success with probability
+$1 - \beta < \text{limP}_{\scriptscriptstyle \text{2TR}}$ can now be obtained by
+equating~\eqref{eq:2TRpros} to $1 - \beta$ and solving for $\sigma_{r}$. This
+leads to
+\begin{align}
+  \label{eq:ssd2tr}
+  \sigma_{r}^{*} =
+  \frac{\muthatr \zalpha + \zbeta\sqrt{
+  (\zalpha^{2} - \zbeta^{2})\left\{\tau^{2} + (\sigma^{2}_{o} +
+  \tau^{2})/(1 + 1/g)\right\} + \muthatr^{2}}}{\zalpha^{2} - \zbeta^{2}}
+\end{align}
+for $\beta < \alpha$. The standard error $\sigma_{r}^{*}$ can subsequently
+be translated in a sample size, the translation depending on the type of effect
+size (\eg{} for SMD effect sizes by $n_{r}^{*} \approx \lceil4/(\sigma^*_{r})^{2}\rceil$).
 
 \subsubsection{Fixed effects meta-analysis}
-
+Original and replication effect estimates have been analyzed via fixed-effects
+meta-analysis. The pooled effect estimate $\that_{m}$ and standard error
+$\sigma_{m}$ are given by
+\begin{align*}
+  &\that_{m} =
+    \left(\that_{o}/\sigma_{o}^{2} + \that_{r}/\sigma^{2}_{r}\right)\sigma^{2}_{m}&
+&\text{and}&                                                                                       &\sigma_{m} = \left(1/\sigma^{2}_{o} + 1/\sigma^{2}_{r}\right)^{-1/2},&
+\end{align*}
+and are equivalent to the mean and standard deviation of a posterior
+distribution for the effect size $\theta$ based on the data from both studies
+and an initial flat prior for $\theta$. Consequently, the
+success region for the replication effect estimate $\that_{r}$
 \begin{align}
   \label{eq:SMA}
   S_{\scriptscriptstyle \text{MA}}
-  = \left[z_{\scriptscriptstyle 1 - \alpha}\, \sigma_{r}
-  \left\{\sqrt{1/c + 1} -  z_{o}\sqrt{c}\right\}, \infty \right)
+  = \left[\sigma_{r} \zalpha\sqrt{1 + \sigma^{2}_{r}/\sigma^{2}_{o}} -
+  (\that_{o} \sigma^{2}_{r})/\sigma^{2}_{o},
+  \infty \right)
 \end{align}
+corresponds to both replication success defined via a one-sided meta-analytic
+$p$-value being smaller than a level $\alpha$,
+\ie{} $p_{m} = 1 - \Phi(\that_{m}/\sigma_{m}) \leq \alpha$, or to replication
+success defined via a Bayesian posterior probability
+$\Pr(\theta > 0 \given \that_{o}, \that_{r}, \sigma_{o}, \sigma_{r}) \geq 1 - \alpha$.
+From the success region~\eqref{eq:SMA} and an assumed standard error $\sigma_{r}$
+the probability of replication success can be computed by
+\begin{align}
+  \label{eq:MApros}
+  \Pr(\that \in S_{\scriptscriptstyle \text{MA}} \given \that_{o}, \sigma_{o}, \sigma_{r})
+  = \Phi\left(\frac{\muthatr - \sigma_{r} \zalpha\sqrt{1 + \sigma^{2}_{r}/\sigma^{2}_{o}}
+  + (\that_{o} \sigma^{2}_{r})/\sigma^{2}_{o}}{\sqrt{\sigma^{2}_{r} +
+\tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right).
+\end{align}
+As for the two-trials rule, the probability~\eqref{eq:MApros} cannot be made larger
+than~\eqref{eq:limP2TR} by decreasing the standard error $\sigma_{r}$.
+and the required standard error $\sigma_{r}^{*}$ for it to be sufficiently large
+can be computed numerically using a root finding algorithm.
+
 
 \subsubsection{Effect size difference equivalence test}
 
 \begin{align}
   \label{eq:equivalence}
   S_{\scriptscriptstyle \text{E}}
-  = \left[\that_{o} - \Delta - z_{\scriptscriptstyle 1 - \alpha} \sqrt{\sigma^{2}_{o} +
-  \sigma^{2}_{r}}, \that_{o} + \Delta - z_{\scriptscriptstyle 1 - \alpha}
+  = \left[\that_{o} - \Delta - \zalpha \sqrt{\sigma^{2}_{o} +
+  \sigma^{2}_{r}}, \that_{o} + \Delta - \zalpha
   \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}}\right]
 \end{align}
 
@@ -821,8 +902,8 @@ with $A = \sigma^{2}_{r}\{z_{o}^{2} - 2 \log \gamma + \log(1 + c)\}(1 + 1/c)$
 \begin{align}
   \label{eq:Pssuccess}
   S_{\scriptscriptstyle \ps}
-  = \left[\sigma_{r} z_{\scriptscriptstyle 1 - \alpha} \sqrt{1 +
-  c/\{(z_{o}^{2}/z_{\scriptscriptstyle 1 - \alpha}^{2}) - 1\}}, \infty\right)
+  = \left[\sigma_{r} \zalpha \sqrt{1 +
+  c/\{(z_{o}^{2}/\zalpha^{2}) - 1\}}, \infty\right)
 \end{align}
 
 \subsubsection{The sceptical Bayes factor}
