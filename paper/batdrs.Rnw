@@ -581,11 +581,11 @@ protzkolong %>%
               size = 2.2, nudge_y = -0.44, hjust = 0) +
     ## geom_text(data = protzko, aes(x = 0.63+0.12, label = BFeeF), parse = TRUE,
     ##           size = 2.2, nudge_y = -0.22, hjust = 0) +
-    geom_text(data = protzko, aes(x = 0.63+0.16, label = pmaF), parse = TRUE,
+    geom_text(data = protzko, aes(x = 0.63+0.12, label = pmaF), parse = TRUE,
               size = 2.2, nudge_y = -0.22, hjust = 0) +
-    geom_text(data = protzko, aes(x = 0.63+0.18, label = prF), parse = TRUE,
+    geom_text(data = protzko, aes(x = 0.63+0.12, label = prF), parse = TRUE,
               size = 2.2, nudge_y = 0, hjust = 0) +
-    geom_text(data = protzko, aes(x = 0.63+0.19, label = cF), parse = TRUE,
+    geom_text(data = protzko, aes(x = 0.63+0.12, label = cF), parse = TRUE,
               size = 2.2, nudge_y = 0.22, hjust = 0) +
     geom_pointrange(aes(xmin = dr - 1.96*sqrt(vr), xmax = dr + 1.96*sqrt(vr),
                         col = Type),
@@ -777,7 +777,7 @@ To compute the probability of replication success one needs to select an
 analysis methods and integrate the predictive distribution~\eqref{eq:fthetar}
 % , respectively, \eqref{eq:zr}
  over the associated success region $S$. There is no universally accepted method
-for quantifying replicability and we do not want to contribute to the discussion
+for quantifying replicability and we will not take part in the discussion
 which method is the most appropriate. In the following, we simply show the
 success regions of different methods, and how the replication sample size can be
 computed from them.
@@ -838,7 +838,7 @@ be translated in a sample size, the translation depending on the type of effect
 size (\eg{} for SMD effect sizes by $n_{r}^{*} \approx \lceil4/(\sigma^*_{r})^{2}\rceil$).
 
 \subsubsection{Fixed effects meta-analysis}
-Original and replication effect estimates have been analyzed via fixed-effects
+Original and replication effect estimates can be pooled via fixed-effects
 meta-analysis. The pooled effect estimate $\that_{m}$ and standard error
 $\sigma_{m}$ are given by
 \begin{align*}
@@ -846,10 +846,10 @@ $\sigma_{m}$ are given by
     \left(\that_{o}/\sigma_{o}^{2} + \that_{r}/\sigma^{2}_{r}\right)\sigma^{2}_{m}&
 &\text{and}&                                                                                       &\sigma_{m} = \left(1/\sigma^{2}_{o} + 1/\sigma^{2}_{r}\right)^{-1/2},&
 \end{align*}
-and are equivalent to the mean and standard deviation of a posterior
+and are also equivalent to the mean and standard deviation of a posterior
 distribution for the effect size $\theta$ based on the data from both studies
-and an initial flat prior for $\theta$. Consequently, the
-success region for the replication effect estimate $\that_{r}$
+and an initial flat prior for $\theta$. The
+success region %for the replication effect estimate $\that_{r}$
 \begin{align}
   \label{eq:SMA}
   S_{\scriptscriptstyle \text{MA}}
@@ -857,7 +857,7 @@ success region for the replication effect estimate $\that_{r}$
   (\that_{o} \sigma^{2}_{r})/\sigma^{2}_{o},
   \infty \right)
 \end{align}
-corresponds to both replication success defined via a one-sided meta-analytic
+then corresponds to both replication success defined via a one-sided meta-analytic
 $p$-value being smaller than a level $\alpha$,
 \ie{} $p_{m} = 1 - \Phi(\that_{m}/\sigma_{m}) \leq \alpha$, or to replication
 success defined via a Bayesian posterior probability
@@ -871,10 +871,11 @@ the probability of replication success can be computed by
   + (\that_{o} \sigma^{2}_{r})/\sigma^{2}_{o}}{\sqrt{\sigma^{2}_{r} +
 \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right).
 \end{align}
-As for the two-trials rule, the probability~\eqref{eq:MApros} cannot be made larger
-than~\eqref{eq:limP2TR} by decreasing the standard error $\sigma_{r}$.
-and the required standard error $\sigma_{r}^{*}$ for it to be sufficiently large
-can be computed numerically using a root finding algorithm.
+As for the two-trials rule, by decreasing the standard error $\sigma_{r}$
+the probability~\eqref{eq:MApros} can at most become as large as~$\text{limP}_{\text{2TR}}$
+from~\eqref{eq:limP2TR}. The required standard error $\sigma_{r}^{*}$
+to achieve a desired probability of replication success $1 - \beta < \text{limP}_{\text{2TR}}$
+can conveniently be computed using a root finding algorithm.
 
 
 \subsubsection{Effect size equivalence test}
@@ -883,7 +884,7 @@ can be computed numerically using a root finding algorithm.
 % $H_{0} \colon \theta = 0$. Other approaches define replication success via
 % compatibility of the effect estimates from original and replication study. For
 % instance,
-\citet{Anderson2016} propose to declare replication success at level
+\citet{Anderson2016} proposed to declare replication success at level
 $\alpha$ if the $(1 - \alpha)$ confidence interval for the effect size difference
 $\theta_{r} - \theta_{o}$
 \begin{align*}
@@ -901,11 +902,11 @@ estimate $\that$ given by
   \sigma^{2}_{r}}, \that_{o} + \Delta - \zalpha
   \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}}\right].
 \end{align}
-Wether or not replication success is achieved depends on the precision of
-the original estimate, and in particular when the margin
-$\Delta \geq \zalpha \sigma_{o}$, replication success
+Wether or not replication success is achievable depends on the standard error of
+the original estimate $\sigma_{o}$, and in particular when the margin is chosen too small
+($\Delta \leq \zalpha \sigma_{o}$), replication success
 is impossible regardless of how small the replication standard error $\sigma_{r}$
-is. Assuming now that $\Delta < \zalpha \sigma_{o}$, the probability of
+will be. Assuming now that $\Delta > \zalpha \sigma_{o}$, the probability of
 replication success can be computed by
 \begin{align}
   \label{eq:MApros}
@@ -916,23 +917,54 @@ replication success can be computed by
 &\phantom{=} -
   \Phi\left(\frac{\that_{o} - \Delta + \zalpha
   \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}} -\muthatr}{\sqrt{\sigma^{2}_{r} +
-  \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right),
+  \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right).
 \end{align}
-from which one can see that there can only be a positive probability
-if the margin $\Delta$ is large enough relative to the standard error
-of the difference $\sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}}$
-and the required replication standard error $\sigma_{r}$ to achieve a desired
-power of replication success $1 - \beta$ can be computed numerically.
+As with the previous methods, the probability cannot be made arbitrarily large
+by decreasing the replication standard error $\sigma_{r}$, but is bounded by
+\begin{align}
+  \label{eq:limPEqu}
+  \text{limP}_{\scriptscriptstyle \text{E}} =
+  \Phi\left(\frac{\that_{o} + \Delta - \zalpha\sigma_{o}
+  -\muthatr}{\sqrt{\tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right)
+  -\Phi\left(\frac{\that_{o} - \Delta + \zalpha\sigma_{o}
+  -\muthatr}{\sqrt{\tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right).
+\end{align}
+The required replication standard error $\sigma_{r}$ to achieve a desired
+power of replication success $1 - \beta < \text{limP}_{\scriptscriptstyle \text{E}}$
+can again be computed numerically.
 
 \subsubsection{The replication Bayes factor}
-
+A Bayesian hypothesis testing approach for assessing replication success was
+proposed by \citet{Verhagen2014}. They define a ``replication Bayes factor''
+\begin{align*}
+  \BFr = \frac{f(x_{r} \given H_{0})}{f(x_{r} \given H_{1})}
+\end{align*}
+which contrasts the likelihood of the replication data $x_{r}$ under the null
+hypothesis $H_{0} \colon \theta = 0$ and the alternative
+$H_{1} \colon \theta \sim f(\theta \given x_{o})$ which is the posterior of the
+effect size $\theta$ given the original data $x_{o}$. Bayes factor values $\BFr < 1$ indicate
+replication success. We show in the supplementary that under normality the
+success region for achieving $\BFr \leq \gamma$ is given by
 \begin{align}
   \label{eq:BFrsuccess}
   S_{\scriptscriptstyle \BFr}
-  = \left(-\infty, -\sqrt{A} - \that_{r}/c\right] \bigcup
-   \left[\sqrt{A} - \that_{r}/c, \infty\right)
+  = \left(-\infty, -\sqrt{A} - (\that_{o}\sigma^{2}_{r})/\sigma^{2}_{o}\right] \bigcup
+   \left[\sqrt{A} - (\that_{o}\sigma^{2}_{r})/\sigma^{2}_{o}, \infty\right)
 \end{align}
-with $A = \sigma^{2}_{r}\{z_{o}^{2} - 2 \log \gamma + \log(1 + c)\}(1 + 1/c)$
+with $A = \sigma^{2}_{r}(1 + \sigma^{2}_{r}/\sigma^{2}_{o})
+\{\that_{o}^{2}/\sigma^{2}_{o} - 2 \log \gamma +
+\log(1 + \sigma^{2}_{o}/\sigma^{2}_{r})\}$. Consequently, the probability of
+replication success at level $\gamma$ can be computed by
+\begin{align}
+  \label{eq:BFrpros}
+  \Pr(\that \in S_{\scriptscriptstyle \BFr} \given \that_{o}, \sigma_{o}, \sigma_{r})
+  &= \Phi\left(\frac{\muthatr - \sqrt{A} + (\that_{o}\sigma^{2}_{r})/\sigma^{2}_{o}}{\sqrt{\sigma^{2}_{r} +
+    \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right) \nonumber \\
+  &\phantom{=}
+    + \Phi\left(\frac{-\sqrt{A} - (\that_{o}\sigma^{2}_{r})/\sigma^{2}_{o}
+- \muthatr}{\sqrt{\sigma^{2}_{r} +
+  \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right)
+\end{align}
 
 \subsubsection{The sceptical \textit{p}-value}
 
@@ -950,6 +982,139 @@ with $A = \sigma^{2}_{r}\{z_{o}^{2} - 2 \log \gamma + \log(1 + c)\}(1 + 1/c)$
   S_{\scriptscriptstyle \BFs}
   =
 \end{align}
+
+\subsubsection{Example: Cross-laboratory replication project (continued)}
+<< "SSD-parameters" >>=
+## ssd parameters
+level <- 1/3
+levelBFee <- 3
+cseq <- exp(seq(log(1/10), log(10), length.out = 300))
+zo <- study$dr/sqrt(study$vr)
+tauMT <- 0.3
+power <- 0.8
+@
+We will now revisit the experiment ``\Sexpr{studyname}'' from
+Section~\ref{sec:example} and compute the probability of replication success
+based on different sample sizes for the three different analysis approaches. To
+specify the maximally tolerable
+heterogeneity $\tau^{2}_{\scriptscriptstyle \text{MT}}$ for the EESBF a similar
+elicitation approach as in Section~\ref{sec:example} could be applied. For
+example, we could specify
+$\tau_{\scriptscriptstyle \text{MT}} = \Sexpr{round(tauAbs, 2)}$ as in the
+design prior (Figure~\ref{fig:data} uses this value for the analysis of the
+actual data). However, the original study is only sufficiently sensitive to
+obtain
+$\BF_{\text{E}} \leq \sqrt{1 + \tau^{2}_{\scriptscriptstyle \text{MT}}/(\sigma^{2}_{o}/2)} \approx \Sexpr{round(sqrt(1 + tauAbs^2/(0.5*study[,"vr"])), 2)}$
+for this $\tau^{2}_{\scriptscriptstyle \text{MT}}$. We therefore choose an
+(unrealistic) larger value of
+$\tau_{\scriptscriptstyle \text{MT}} = \Sexpr{round(tauMT, 2)}$ so that we can
+illustrate SSD of the EESBF for higher levels of evidence.
+% for % $\tau^{2}_{\scriptscriptstyle \text{MT}}$
+% as the original study was not sufficiently precise the probability of
+% replication success would have been zero for
+% $\tau_{\scriptscriptstyle \text{MT}} = \Sexpr{round(tauAbs, 2)}$.
+% % For the same
+% % reason, we choose a lower evidence threshold for the EESBF than for the other
+% % two analysis methods.
+\begin{figure}[!htb]
+<< "example-applied", fig.height = 3.25, eval = FALSE >>=
+
+## parameter of RS methods
+levelSig <- 0.025
+levelSigMeta <- 0.025^2
+confLevel <- 0.9
+margin <- 0.2
+levelBFr <- 1/10
+
+## compute power curves
+DP <- c("predictive", "H0")
+
+applyGrid <- expand.grid(tau = c(0, tauAbs), DP = DP, stringsAsFactors = FALSE)
+
+plotDF <- do.call("rbind", lapply(X = seq(1, nrow(applyGrid)), FUN = function(i) {
+    tau <- applyGrid$tau[i]
+    DP <- applyGrid$DP[i]
+    plotDF <- rbind(data.frame(c = cseq, tau = tau, DP = DP,
+                               pow = powerBFs(level = level, zo = zo, c = cseq,
+                                              designPrior = DP,
+                                              h = tau^2/study$vr),
+                               method = "'BF'['S']"),
+                    data.frame(c = cseq, tau = tau, DP = DP,
+                               pow = powerBFr(level = level, zo = zo, c = cseq,
+                                              designPrior = DP,
+                                              h = tau^2/study$vr),
+                               method = "'BF'['R']"),
+                    data.frame(c = cseq, tau = tau, DP = DP,
+                               pow = powerBFee(level = levelBFee, to = study$dr,
+                                               so = sqrt(study$vr),
+                                               sr = sqrt(study$vr/cseq),
+                                               tauMT = tauMT,
+                                               designPrior = DP,
+                                               tau = tau),
+                               method = "'BF'['E']"))
+}))
+plotDF$method <- factor(plotDF$method,
+                        levels = c("'BF'['R']", "'BF'['S']", "'BF'['E']"))
+plotDF1 <- plotDF %>%
+    filter(DP == "predictive") %>%
+    mutate(facetLab = paste("tau ==", round(tau, 2)),
+           order = 1)
+plotDFH0 <- plotDF %>%
+    filter(DP == "H0") %>%
+    mutate(facetLab = paste("italic('H')[0] ~ ':' ~ theta == 0"),
+           order = 2)
+plotDFcomb <- rbind(plotDF1, plotDFH0)
+plotDFcomb$facetLab <- factor(x = plotDFcomb$facetLab,
+                              levels = unique(plotDFcomb$facetLab))
+
+## plot power curves
+powbks <- c(2.5, 20, 40, 60, 80, 100)/100
+cbks <- c(1/10, 1/3, 1, 3, 10, 30, 100)
+
+## ggplot(data = plotDFcomb, aes(x = c, y = pow, color = method)) +
+##     ## geom_hline(yintercept = power, lty = 3, alpha = 0.3) +
+##     ## geom_hline(yintercept = 0.025, lty = 1, alpha = 0.1) +
+##     facet_wrap(~ facetLab, labeller = label_parsed) +
+##     geom_line(alpha = 0.9) +
+##     scale_x_log10(breaks = cbks, labels = formatBF(cbks)) +
+##     scale_y_continuous(breaks = powbks, labels = scales::label_percent(accuracy = 0.1),
+##                        limits = c(0, 1)) +
+##     scale_color_brewer(palette = "Set2", labels = scales::parse_format()) +
+##     labs(x = ## bquote("Relative variance" ~ italic(c) == sigma[italic(o)]^2/sigma[italic(r)]^2),
+##              bquote("Relative sample size" ~ italic(c) == italic(n[r]/n[o])),
+##          y = "Probability of replication success",
+##          color = "") +
+##     theme_bw() +
+##     theme(legend.position = "right",
+##           panel.grid.minor = element_blank(), legend.text.align = 0)
+
+## ## compute sample size
+## tau <- 0
+## DP <- "predictive"
+## ssbfs <- ssBFs(level = level, power = power, zo = zo, h = tau^2/study$vr,
+##                designPrior = DP)
+## ssbfr <- ssBFr(level = level, power = power, zo = zo, h = tau^2/study$vr,
+##                designPrior = DP)
+## ssbfee <- ssBFee(level = levelBFee, power = power, to = study$dr,
+##                  so = sqrt(study$vr), tauMT = tauMT, designPrior = DP,
+##                  tau = tau)
+
+## tau <- tauAbs
+## DP <- "predictive"
+## ssbfs2 <- ssBFs(level = level, power = power, zo = zo, h = tau^2/study$vr,
+##                 designPrior = DP)
+## ssbfr2 <- ssBFr(level = level, power = power, zo = zo, h = tau^2/study$vr,
+##                 designPrior = DP)
+## ssbfee2 <- ssBFee(level = levelBFee, power = power, to = study$dr,
+##                   so = sqrt(study$vr), tauMT = tauMT, designPrior = DP,
+##                   tau = tau)
+@
+\caption{Probability of replication success as a function of relative
+  sample size $c = n_{r}/n_{o}$ for experiment ``\Sexpr{studyname}'' with
+  original effect estimate $\hat{\theta}_{o} = \Sexpr{round(study[,"dr"], 2)}$
+  and standard error $\sigma_{o} = \Sexpr{round(sqrt(study[,"vr"]), 2)}$.}
+\label{fig:example}
+\end{figure}
 
 \section{Discussion}
 \label{sec:discussion}
@@ -1065,6 +1230,22 @@ which can be further simplified to~\eqref{eq:bfmulti}.
 
 \section{The BayesRepDesign R package}
 \label{app:package}
+<< "package-illustration", echo = TRUE, size = "small" >>=
+library("BayesRepDesign")
+
+## design prior (flat initial prior for effect size + heterogeneity)
+dp <- designPrior(to = 0.2, so = 0.05, tau = 0.08)
+
+## compute replication standard error for achieving significance at 2.5%
+ssdSig(level = 0.025, dprior = dp, power = 0.8)
+
+## compute numerically via method agnostic function
+## function that returns success region based on replication standard error
+sregionfunSig <- function(sr, alpha = 0.025) {
+    successRegion(intervals = cbind(stats::qnorm(p = 1- alpha)*sr, Inf))
+}
+ssd(sregionfun = sregionfunSig, dprior = dp, power = 0.8)
+@
 
 
 \end{appendices}
