@@ -103,9 +103,12 @@ library(BayesRep)
 library(ReplicationSuccess)
 library(biostatUZH)
 library(dplyr)
+library(tidyr)
 library(ggplot2)
+library(scales)
 library(BayesRepDesign)
 library(colorspace)
+library(ggpubr)
 @
 
 << "load-clean-data" >>=
@@ -274,11 +277,11 @@ to be \emph{calibrated} \citep{Grieve2016}, that is, to have appropriate type I
 error rate control. A possible side constraint may thus be that the sample size
 $n_{r}^{*}$ has to be determined such that the probability of replication
 success under a null hypothesis is not larger than some desired level.
-Similarly, it may be reasonable to have \emph{precision} constraints, \eg{} to
-require that a confidence interval for the replication effect estimate has to be
-at least as tight as the confidence interval estimated in the original study.
-Finally, in most cases there is an upper limit on the possible sample size due
-to limited resources and/or availability of samples.
+% Similarly, it may be reasonable to have \emph{precision} constraints, \eg{} to
+% require that a confidence interval for the replication effect estimate has to be
+% at least as tight as the confidence interval estimated in the original study.
+In most cases there is also an upper limit on the possible sample size due
+to limited resources and/or availability of sample.
 
 
 
@@ -589,8 +592,6 @@ protzkolong %>%
     ##           size = 2.2, nudge_y = 0.22, hjust = 0) +
     geom_text(data = protzko, aes(x = 0.63+0.12, label = BFrF), parse = TRUE,
               size = 2.2, nudge_y = -0.44, hjust = 0) +
-    ## geom_text(data = protzko, aes(x = 0.63+0.12, label = BFeeF), parse = TRUE,
-    ##           size = 2.2, nudge_y = -0.22, hjust = 0) +
     geom_text(data = protzko, aes(x = 0.63+0.12, label = pmaF), parse = TRUE,
               size = 2.2, nudge_y = -0.22, hjust = 0) +
     geom_text(data = protzko, aes(x = 0.63+0.12, label = prF), parse = TRUE,
@@ -1047,7 +1048,6 @@ given by
 \end{align}
 with
 \begin{align*}
-  \label{eq:BFssuccess}
   B &= \left\{\frac{\that_{o}^{2}}{\sigma^{2}(1 - \gy)} +
       2\log\left(\frac{\sigma^{2}_{r} + \sigma^{2}_{o}}{\sigma^{2}_{r} + s \sigma^{2}_{o}}\right)
       - 2\log \gamma \right\}
@@ -1063,7 +1063,7 @@ with
   \exp\left\{-z_o^2\right\}\right)
 \end{align*}
 
-\subsubsection{Example: Cross-laboratory replication project (continued)}
+\subsection{Example: Cross-laboratory replication project (continued)}
 << "SSD-parameters" >>=
 ## ssd parameters
 level <- 1/3
@@ -1074,8 +1074,9 @@ tauMT <- 0.3
 power <- 0.8
 @
 We will now revisit the experiment ``\Sexpr{studyname}'' from
-Section~\ref{sec:example} and compute the probability of replication success
-based on the previously discussed methods, see Figure~\ref{fig:example}.
+Section~\ref{sec:example} and compute the probability of replication success and
+replication sample sizes based on the previously discussed methods, see
+Figure~\ref{fig:example}.
 
 \begin{figure}[!htb]
 << "example-applied", fig.height = 3.75 >>=
@@ -1186,6 +1187,440 @@ ssbfs2 <- ssdBFs(level = levelBFs, dprior = dprior2, power = power)
 \label{fig:example}
 \end{figure}
 
+The left and middle plot in Figure~\ref{fig:example} show the probability of
+replication success under the design prior based on a uniform initial prior for
+the effect size $\theta$ and data from the original study without (left) and
+with (middle) between-study heterogeneity taken into account. It is visible that
+the probability increases for monotonically with the relative sample size
+for all methods except meta-analysis which.
+
+
+The right plot show the probability of replication success under the null
+hypothesis that the effect size $\theta$ is exactly zero and that there is no
+between-study heterogeneity (the design prior~\eqref{eq:dpnormal} with
+$\mutheta = 0$, $\sigmatheta^{2} = 0$ and $\tau^{2} = 0$).
+
+
+<< "sample-size-all-protzko", results = FALSE >>=
+## compute sample size for all studies with significant origianl study
+dataSSD <- protzkolong %>%
+    mutate(zo = dr/sqrt(vr)) %>%
+    filter(Type == "Original",
+           abs(zo) >= qnorm(p = 0.975))
+resSSDlong <- lapply(X = dataSSD$Study, FUN = function(study) {
+    study <- dataSSD[dataSSD$Study == study,]
+    lapply(X = taus, FUN = function(tau) {
+        ## design prior
+        sp <- Inf
+        mu <- 0
+        dprior <- designPrior(to = study$dr, so = sqrt(study$vr), mu = mu,
+                              sp = sp, tau = tau)
+        ## compute standard errors
+        sr2TR <- ssdSig(level = levelSig, dprior = dprior, power = power)$sr
+        srMeta <- ssdMeta(level = levelSigMeta, dprior = dprior, power = power)$sr
+        srBFr <- ssdBFr(level = levelBFr, dprior = dprior, power = power)$sr
+        srEqu <- ssdEqu(level = 1 - confLevel, dprior = dprior, margin = margin,
+                        power = power)$sr
+        srPs <- ssdPs(level = levelPs, dprior = dprior, power = power)$sr
+        srBFs <- ssdBFs(level = levelBFs, dprior = dprior, power = power)$sr
+        ## compute type I errors
+        dpriorH0 <- designPrior(to = study$dr, so = sqrt(study$vr), mu = 0,
+                                sp = 0, tau = 0)
+        if (!is.nan(sr2TR)) {
+            t1e2TR <- porsSig(level = levelSig, dprior = dpriorH0, sr = sr2TR)
+        } else t1e2TR <- NaN
+        if (!is.nan(srMeta)) {
+            t1eMeta <- porsMeta(level = levelSigMeta, dprior = dpriorH0, sr = srMeta)
+        } else t1eMeta <- NaN
+        if (!is.nan(srEqu)) {
+            t1eEqu <- porsEqu(1 - confLevel, dprior = dpriorH0, margin = margin,
+                               sr = srEqu)
+        } else t1eEqu <- NaN
+        if (!is.nan(srBFr)) {
+            t1eBFr <- porsBFr(level = levelBFr, dprior = dpriorH0, sr = srBFr)
+        } else t1eBFr <- NaN
+        if (!is.nan(srPs)) {
+            t1ePs <- porsPs(level = levelPs, dprior = dpriorH0, sr = srPs)
+        } else t1ePs <- NaN
+        if (!is.nan(srBFs)) {
+            t1eBFs <- porsBFs(level = levelBFs, dprior = dpriorH0, sr = srBFs)
+        } else t1eBFs <- NaN
+        ## return results
+        data.frame(study, tau = tau, mu = mu, sp = sp, sr_2TR = sr2TR, sr_Meta = srMeta,
+                   sr_BFr = srBFr, sr_Equ = srEqu, sr_Ps = srPs, sr_BFs = srBFs,
+                   t1e_2TR = t1e2TR, t1e_Meta = t1eMeta, t1e_Equ = t1eEqu,
+                   t1e_BFr = t1eBFr, t1e_Ps = t1ePs, t1e_BFs = t1eBFs)
+    }) %>%
+        bind_rows()
+}) %>%
+    bind_rows() %>%
+    rename(to = dr, vo = vr) %>%
+    ## convert to long format
+    pivot_longer(cols = c("sr_2TR", "sr_Meta", "sr_BFr", "sr_Equ", "sr_Ps",
+                          "sr_BFs", "t1e_2TR",  "t1e_Meta", "t1e_Equ",
+                          "t1e_BFr", "t1e_Ps", "t1e_BFs"), names_sep = "_",
+                 names_to = c("res", "Method"))
+resSSDt1e <- filter(resSSDlong, res == "t1e") %>%
+    rename(t1e = value) %>%
+    select(-res)
+resSSDsr <- filter(resSSDlong, res == "sr") %>%
+    rename(sr = value) %>%
+    select(-res)
+resSSD1 <- merge(resSSDt1e, resSSDsr) %>%
+    mutate(so = sqrt(vo), c = so^2/sr^2)
+@
+
+
+\begin{figure}[!htb]
+<< "ssd-protzko", fig.height = 6 >>=
+## plot relative sample size and corresponding type I error rates
+resSSD2 <- resSSD1 %>%
+    mutate(dp = case_when(tau == 0 & sp == 0 ~ "italic('H')[0]",
+                          tau == 0 & sp == Inf ~ "tau == 0",
+                          tau > 0 & sp == Inf ~ paste("tau ==", round(tau, 2))),
+           Methodlab = factor(Method,
+                              levels = c("2TR", "BFr", "Meta", "Equ", "Ps", "BFs"),
+                              labels = methodLabs),
+           Studylab = paste0('"', Study,
+                             '" ~ "(" * hat(theta)[italic(o)] ~ "=" ~',
+                             round(to, 2), '* "," ~ sigma[italic("o")] ~ "=" ~',
+                             round(so, 3), '* ")"'))
+resSSD <- resSSD2 %>%
+    mutate(Studylab = factor(Studylab,
+                             levels = unique(resSSD2$Studylab)[
+                                 rev(order(unique(abs(resSSD2$zo))))]))
+
+## plot of relative sample size
+cBreaks <- c(1/10, 1/3, 1, 3, 10, 30, 100)
+plotA <- ggplot(data = resSSD, aes(x = Studylab, y = c, color = Methodlab,
+                                   shape = dp)) +
+    geom_hline(yintercept = 1, lty = 2, alpha = 0.3) +
+    geom_vline(xintercept = seq(1.5, 12.5, 1), lty = 3, alpha = 0.1) +
+    geom_linerange(aes(ymin = pmin(c, 1), ymax = pmax(c, 1),
+                       color = Methodlab), position = position_dodge(width = 0.7),
+                   show.legend = FALSE, alpha = 0.5, size = 0.4) +
+    geom_point(position = position_dodge2(width = 0.7), size = 0.7) +
+    labs(x = "Experiment",
+         y = bquote("Relative sample size" ~ italic(c) == italic(n[r]/n[o])),
+         color = "", shape = "") +
+    guides(color = guide_legend(override.aes = list(size = 1.2)),
+           shape = guide_legend(override.aes = list(size = 1.2))) +
+    scale_color_manual(values = cols, labels = scales::parse_format()) +
+    scale_y_log10(breaks = cBreaks, labels = formatBF(cBreaks)) +
+    scale_x_discrete(labels = scales::label_parse()) +
+    scale_shape_discrete(labels = scales::label_parse()) +
+    theme_bw() +
+    coord_flip(ylim = c(1/20, 20)) +
+    theme(panel.grid.major.y = element_blank(),
+          panel.grid.minor = element_blank(),
+          legend.position = "top",
+          axis.text.y = element_text(hjust = 0, size = 6),
+          plot.margin = unit(c(0, 0, 0, 0), units = "mm"),
+          legend.text.align = 0)
+
+## plot of type I error rate
+mysqrt_trans <- function() {
+    trans_new("mysqrt",
+              transform = base::sqrt,
+              inverse = function(x) ifelse(x<0, 0, x^2),
+              domain = c(0, Inf))
+}
+t1eNominal <- 0.025
+t1eBks <- c(0, t1eNominal, 0.1, 0.25, 0.5, 1)
+plotB <- ggplot(data = resSSD,
+                aes(x = Studylab, y = t1e, color = Methodlab, shape = dp)) +
+    geom_hline(yintercept = t1eNominal, lty = 2, alpha = 0.3) +
+    geom_vline(xintercept = seq(1.5, 12.5, 1), lty = 3, alpha = 0.1) +
+    geom_linerange(aes(ymin = pmin(t1eNominal, t1e), ymax = pmax(t1eNominal, t1e),
+                       color = Methodlab), position = position_dodge(width = 0.7),
+                   show.legend = FALSE, alpha = 0.5, size = 0.4) +
+    geom_point(position = position_dodge2(width = 0.7), size = 0.7) +
+    guides(color = guide_legend(override.aes = list(size = 1.2)),
+           shape = guide_legend(override.aes = list(size = 1.2))) +
+    scale_color_manual(values = cols, labels = scales::parse_format()) +
+    scale_shape_discrete(labels = scales::label_parse()) +
+    labs(x = "", y = "Type I error rate", color = "",
+         shape = "") +
+    scale_y_continuous(trans="mysqrt", breaks = t1eBks,
+                       labels = scales::label_percent(accuracy = 0.1),
+                       limits = c(0, 1)) +
+    scale_x_discrete(labels = scales::label_parse()) +
+    theme_bw() +
+    coord_flip(ylim = c(0, 0.6)) +
+    theme(panel.grid.major.y = element_blank(),
+          panel.grid.minor = element_blank(),
+          legend.position = "top",
+          axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          plot.margin = unit(c(0, 0, 0, 0), units = "mm"),
+          legend.text.align = 0)
+
+ggpubr::ggarrange(plotA, plotB, common.legend = TRUE,
+                  align = "h", widths = c(2, 1))
+@
+\caption{The left plot shows the required relative sample size $c = n_r/n_o$ to
+  achieve replication success with probability of replication success of
+  $1 - \beta = \Sexpr{round(power*100, 2)}$\% (if possible). Replication success
+  is defined through the two-trials rule at level $\alpha = \Sexpr{levelSig}$,
+  replication Bayes factor at level $\gamma = 1/\Sexpr{1/levelBFr}$, fixed
+  effects-meta analysis at level $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$,
+  effect size equivalence at level $\alpha = \Sexpr{1 - confLevel}$ with margin
+  $\Delta = \Sexpr{margin}$, sceptical $p$-value at level
+  $\alpha = \Sexpr{round(levelPs, 3)}$, and sceptical Bayes factor at level
+  $\gamma = 1/\Sexpr{1/levelBFs}$ for data from the replication project by
+  \citet{Protzko2020}. A flat initial prior for the effect size $\theta$ is used
+  along with no heterogeneity ($\tau = 0$) or heterogeneity
+  ($\tau = \Sexpr{round(taus[2], 2)}$). The right plot Bottom shows.}
+\label{fig:ssd-all}
+\end{figure}
+
+\subsection{Sample size determination for multisite replication projects}
+
+So far we have considered the situation where one replication is conducted per
+original study. It is, however, also possible to conduct several replications
+per original study, so-called \emph{multisite} replication studies. The
+replication project by \citet{Protzko2020} is an example for this type of
+design. When the entire ensemble of replications is analyzed jointly, some
+adaptations of the previously described SSD approach are required.
+
+The replication effect estimate and its standard error are now vectors
+$\bthat_{r} = (\that_{r1}, \dots, \that_{rn})^{\top}$ and
+$\bsigma^{2}_{r} = (\sigma^{2}_{r1}, \dots, \sigma^{2}_{rn})^{\top}$ consisting
+of $m$ replication effect estimates, respectively, their standard errors.
+The normal hierarchical model for the replication estimates $\bthat_{r}$ then becomes
+\begin{subequations}
+\label{eq:hierarch-model2}
+\begin{align}
+  \bthat_r \given \mspace{-1mu} \btheta_r &\sim \Nor_{m}\left\{\btheta_r, \text{diag}\left(\bsigma_r^2\right)\right\}
+  \label{eq:hat_theta_k2} \\
+  \btheta_r \given \theta \,\,  &\sim \Nor_{m}\left\{\theta \, \bone_{m},
+  \tau^2 \text{diag}(\bone_{m})\right\}, \label{eq:theta_k2}
+\end{align}
+\end{subequations}
+where $\theta_{r}$ is a vector of $m$ study specific effect sizes and $\bone_{m}$ is
+a vector of $m$ ones. By marginalizing over the study specific effect size $\btheta_{k}$,
+the model can alternatively be expressed by
+\begin{align}
+  \bthat_r \given \theta \sim \Nor_{m}\left\{\theta \, \bone_{m},
+\text{diag}\left(\bsigma_r^2 + \tau^2 \bone_{m}\right)\right\},
+  \label{eq:margimulti}
+\end{align}
+so the predictive distribution of $\bthat_r$ based on the design
+prior~\eqref{eq:dpnormal} is given by
+\begin{align}
+  \bthat_r \given \hat{\theta}_o, \sigma^{2}_{o}, \bsigma^{2}_{r}
+  \sim \Nor_{m}\left\{\muthatr \bone_{m},
+  \text{diag}\left(\bsigma_r^2 + \tau^2 \bone_{m}\right) +
+  \left(\frac{\tau^{2} + \sigma^{2}_{o}}{1 + 1/g}\right)
+  \bone_{m} \bone_{m}^{\top} \right\}
+  \label{eq:ftrmulti}
+\end{align}
+with $ \muthatr$ the mean of the predictive
+distribution of a single replication effect estimate from~\eqref{eq:fthetar}.
+
+Often the assessment of replication success can be formulated in terms of a
+weighted average of the replication effect estimates
+$\hat{\theta}_{r*} = (\sum_{i = 1}^{m} w_{i} \hat{\theta}_{ri})/(\sum_{i = 1}^{m} w_{i}$).
+For instance, several multisite replication projects \citep[\eg][]{Klein2018}
+have investigated replicability in terms of the statistical significance of a
+meta-analytic effect estimate of the effect size $\theta$. Based
+on~\eqref{eq:ftrmulti}, the predictive distribution of the weighted average is
+given by
+\begin{align}
+  \hat{\theta}_{r*} \given \hat{\theta}_o, \sigma^{2}_{o}, \sigma^{2}_{r}
+  \sim \Nor\Biggl\{
+  \mu_{\scriptscriptstyle \that_{r}},
+  \sigma^{2}_{\scriptscriptstyle \that_{r*}} =
+  \biggl(\sum_{i=1}^{m} w_{i}^{2} \sigma^{2}_{\scriptscriptstyle \that_{ri}} +
+  \sum_{i=1}^{m}\sum_{\substack{j =1 \\ j\neq i}}^{m} w_{i}w_{j}
+\frac{\tau^{2} + \sigma^{2}_{o}}{1 + 1/g} \biggr)\big/\biggl(\sum_{i=1}^{m} w_{i}\biggr)^{2} \Biggr\}
+  \label{eq:ftwm}
+\end{align}
+with $\sigma^{2}_{\scriptscriptstyle \that_{ri}}$ the predictive
+variance~\eqref{eq:fthetar} of a single replication effect estimate with
+standard error $\sigma_{ri}$. In particular when the studies receive equal
+weights ($w_{i} = w$ for $i = 1, \dots, m$) and the standard errors of the
+replication effect estimates are equal ($\sigma_{ri} = \sigma_{r}$ for
+$i = 1, \dots, m$), the predictive variance becomes
+\begin{align}
+  \sigma^{2}_{\scriptscriptstyle \that_{r*}} =
+  % \left(\sigma^{2}_{\scriptscriptstyle \that_{r}} + (n - 1) \frac{g}{g + 1} [\tau^{2} + \sigma^{2}_{o}]\right) \big/ n.
+  \frac{\sigma^{2}_{r} + \tau^{2}}{m} + \frac{\tau^{2} + \sigma^{2}_{o}}{1 + 1/g}.
+  \label{eq:predvarequal}
+\end{align}
+The probability of replication success can now be obtained by
+integrating~\eqref{eq:ftrmulti}, respectively~\eqref{eq:ftwm}, over the
+corresponding success region $S$.
+
+
+\subsubsection{Optimal allocation within and between sites}
+A key challenge in SSD for multisite replication studies is the optimal
+allocation of samples within and between sites, that is, how many sites $m$ and
+how many samples $n_{ri}$ per site $i$ should be used. A similar problem exists
+in SSD for cluster randomized trials and we can adapt the common solution based
+on cost functions \citep[Chapter 9.6]{Cochran1977}. That is, the optimal
+configuration is determined such that the probability of replication success is
+maximized subject to a constrained cost function which accounts for the
+(possibly different) costs of additional samples and additional sites.
+
+For example, assume a balanced design ($n_{ri} = n_{r}$ for $i = 1, \dots, m$)
+and that the standard errors of the replication effect estimates are inversely
+proportional to the square-root of the sample size
+$\sigma_{ri} = \lambda/\sqrt{n_{r}}$ for some unit variance $\lambda^{2}$.
+Further assume that maximizing the probability of replication success is
+corresponds to minimizing the variance of the weighted average
+$\sigma^{2}_{\scriptscriptstyle \that_{r*}}$ from~\eqref{eq:predvarequal}. % for
+% the chosen analysis method.
+Let $K_{s}$ denote the cost of an additional site,
+and $K_{c}$ the cost of an additional case. The total cost of the project
+is then $K = m(K_{c} \, n_{r} + K_{s})$, and constrained minimization
+of~\eqref{eq:predvarequal} leads to the optimal sample size per site
+\begin{align*}
+  n_{r}^{*} =  \frac{\lambda}{\tau} \, \sqrt{\frac{K_{s}}{K_{c}}}
+\end{align*}
+which is equivalent to the optimal cluster sample size known from cluster
+randomized trials \citep{Raudenbush2000}. Note that the optimal sample size per
+site may be different for other analysis approaches where maximizing the
+probability of replication success does not correspond to minimizing the
+variance of the weighted average. % \citep[for optimal
+% % sample sizes for estimation of between replication variances see
+% % \eg][]{Hedges2021}.
+% % For example, \citet{Hedges2021}
+% % found that the optimal sample size for between study variance estimation is
+% % given by
+% % \begin{align*}
+% %   n_{r}^{*} =  \frac{1 + \sqrt{1 + 8\tau^{2} K_{s}/K_{i}}}{2 \tau^{2}/\lambda^{2}}.
+% % \end{align*}
+Moreover, there are also practical considerations which affect the choice of how
+many sites should be included in a project. For instance, there may simply not
+be enough labs available with the required expertise to perform the replication
+experiments.
+
+\begin{figure}[!htb]
+<< "multisite-protzko", fig.height = 6 >>=
+## compute probability of replication success for different number of sites for
+## replication Bayes factor and two trials rule
+totalss <- round(exp(seq(log(90), log(11000), length.out = 500))) # total sample size
+ms <- c(1, 2, 4, 8) # number of sites
+tau <- taus[2]
+dp <- designPrior(to = study$dr, so = sqrt(study$vr), tau = tau)
+sregionFun2TR <- function(sr, tau, m, alpha = 0.025) {
+    srMA <- sqrt(1/(m/(sr^2 + tau^2)))
+    za <- qnorm(p = 1 - alpha)
+    successRegion(intervals = cbind(za*srMA, Inf))
+}
+sregionFunBFr <- function(sr, tau, m, to, so, level = 1/10) {
+    srMA <- sqrt(1/(m/(sr^2 + tau^2)))
+    c <- so^2/srMA^2
+    A <- srMA^2*(1 +1/c)*(to^2/so^2 - 2*log(level) + log(1 + c))
+    successRegion(intervals = rbind(c(-Inf, -sqrt(A) - to/c),
+                                    c(sqrt(A) - to/c, Inf)))
+}
+level2TR <- 0.025
+levelBFr <- 1/10
+porsDF <- lapply(X = ms, FUN = function(m) {
+    ni <- round(totalss/m) # sample size per site
+    sri <- 2/sqrt(ni) # approximate standard error of a site
+    ci <- study$vr/sri^2
+    p2TR <- sapply(X = sri, FUN = function(sr) {
+        sregion2TR <- sregionFun2TR(sr = sr, tau = tau, m = m, alpha = level2TR)
+        pors(sregion = sregion2TR, dprior = dp, sr = sr, nsites = m)
+    })
+    pBFr <- sapply(X = sri, FUN = function(sr) {
+        sregionBFr <- sregionFunBFr(sr = sr, tau = tau, m = m, to = study$dr,
+                                    so = sqrt(study$vr), level = levelBFr)
+        pors(sregion = sregionBFr, dprior = dp, sr = sr, nsites = m)
+    })
+    df1 <- data.frame(totalss, m, ni, sri, ci)
+    rbind(data.frame(df1, p = p2TR, method = "Two-trials rule"),
+          data.frame(df1, p = pBFr, method = "Replication Bayes factor"))
+}) %>%
+    bind_rows()
+nbks <- c(1, 100, 300, 1000, 3000, 10000)
+powbks <- seq(0, 1, 0.2)
+plotPors <- ggplot(data = porsDF, aes(x = totalss, y = p,
+                          color = factor(m, ordered = TRUE))) +
+    facet_wrap(~ method, ncol = 2) +
+    geom_step(alpha = 0.8) +
+    scale_x_log10(breaks = nbks) +
+    scale_y_continuous(breaks = powbks, limits = c(0, 1),
+                       labels = scales::label_percent()) +
+    scale_color_viridis_d(direction = -1,
+                          guide = guide_legend(reverse = TRUE)) +
+    labs(x = bquote("Total sample size" ~ italic(m) %*% italic(n[r])),
+         y = "Probability of replication success",
+         color = bquote(atop("Number   ", "of sites" ~ italic(m)))) +
+    theme_bw() +
+    theme(panel.grid.minor = element_blank(),
+          legend.position = "right")
+
+
+## compute total costs of design for different number of sites
+ms <- seq(1, 15, 1) # number of sites
+costratio <- c(30, 100, 300, 1000) # cost of 1 site relative to 1 sample
+applyGrid <- expand.grid(m = ms, costratio = costratio)
+pow <- 0.8
+costDF <- lapply(X = seq(1, nrow(applyGrid)), FUN = function(i) {
+    m <- applyGrid$m[i]
+    costratio <- applyGrid$costratio[i]
+    sregion2TRfun <- function(sr) {
+        sregionFun2TR(sr = sr, tau = tau, m = m, alpha = level2TR)
+    }
+    res2TR <- ssd(sregionfun = sregion2TRfun, dprior = dp, power = pow,
+                  nsites = m)
+    nri2TR <- ceiling(4/res2TR$sr^2)
+    cost2TR <- nri2TR*m + m*costratio
+    sregionBFrfun <- function(sr) {
+        sregionFunBFr(sr = sr, tau = tau, m = m, to = study$dr,
+                      so = sqrt(study$vr), level = levelBFr)
+    }
+    resBFr <- ssd(sregionfun = sregionBFrfun, dprior = dp, power = pow,
+                  nsites = m)
+    nriBFr <- ceiling(4/resBFr$sr^2)
+    costBFr <- nriBFr*m + m*costratio
+    df1 <- data.frame(pow, m, costratio)
+    rbind(data.frame(df1, sri = res2TR$sr, ci = res2TR$c, cost = cost2TR,
+                     method = "Two-trials rule"),
+          data.frame(df1, sri = resBFr$sr, ci = resBFr$c, cost = costBFr,
+                     method = "Replication Bayes factor"))
+}) %>%
+    bind_rows()
+
+mbks <- seq(1, 30, 3)
+costbks <- c(1500, 3000, 6000, 12000, 24000, 48000)
+plotCost <- ggplot(data = costDF, aes(x = m, y = cost,
+                          color = factor(costratio, ordered = TRUE))) +
+    facet_wrap(~ method, ncol = 2) +
+    geom_step(alpha = 0.8) +
+    scale_x_continuous(breaks = mbks) +
+    scale_y_log10(breaks = costbks) +
+    scale_color_viridis_d(direction = -1,
+                          guide = guide_legend(reverse = TRUE),
+                          option = "plasma") +
+    labs(x = "Number of sites" ~ italic(m),
+         y = "Relative cost of design" ~ italic(K) / italic(K[c]),
+         color = bquote(atop("Cost ratio", italic(K[s]) / italic(K[c])))) +
+    theme_bw() +
+    theme(panel.grid.minor = element_blank(),
+          legend.position = "right")
+
+ggpubr::ggarrange(plotPors, plotCost, ncol = 1, align = "v")
+@
+\caption{Top plots show the probability of replication success based on the
+replication Bayes factor at level $\gamma = 1/\Sexpr{1/levelBFr}$ (left) and the
+two-trials rule at level $\alpha = \Sexpr{level2TR}$ (right) as a function of
+the total sample size and for different number of sites $m$ for data from the
+experiment ``\Sexpr{studyname}''. A design prior with heterogeneity
+$\tau = \Sexpr{round(tauAbs, 2)}$ and flat initial prior for the effect size
+$\theta$ is used. The same heterogeneity value is assumed in the analysis of the
+replications ($\tau_{r} = \tau$). Bottom plot shows the total cost $K$ of the
+design (relative to the cost of a single case $K_{c}$) as a function of the
+number of sites $m$ and for different site costs $K_{s}$. The sample size of
+each design corresponds to a probability of replication success of
+$1 - \beta = \Sexpr{round(pow*100, 2)}$\%.}
+\label{fig:multisite}
+\end{figure}
+
 \section{Discussion}
 \label{sec:discussion}
 
@@ -1264,12 +1699,12 @@ Micheloud for helpful comments on drafts of the manuscript.
 % \ie{} the weighted average of the replication effect estimates and its variance.
 % The marginal density is then given by
 % \begin{align*}
-%   f(\hat{\theta}_{r} \given H_{k})
-%   &= \int f(\hat{\theta}_{r} \given \theta) f(\theta \given H_{k})
-%     \, \text{d}\theta \\
-%   &= \int \frac{\exp\left[-\frac{1}{2} \left\{\sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \theta)^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}} +
-%     \frac{(\theta - m)^{2}}{v}\right\} \right]}{
-%     \left\{2\pi v \prod_{i = 1}^{n} 2\pi \left(\sigma^{2}_{ri} + \tau^{2}_{r}\right)\right\}^{1/2}}
+    %     f(\hat{\theta}_{r} \given H_{k})
+    %     &= \int f(\hat{\theta}_{r} \given \theta) f(\theta \given H_{k})
+            %             \, \text{d}\theta \\
+    %           &= \int \frac{\exp\left[-\frac{1}{2} \left\{\sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \theta)^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}} +
+    %               \frac{(\theta - m)^{2}}{v}\right\} \right]}{
+                  %                   \left\{2\pi v \prod_{i = 1}^{n} 2\pi \left(\sigma^{2}_{ri} + \tau^{2}_{r}\right)\right\}^{1/2}}
 %     \, \text{d}\theta \\
 %   &= \int \frac{
 %     \exp\left[-\frac{1}{2} \left\{\sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \hat{\theta}_{r*})^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}} +  \frac{(\hat{\theta}_{r*} - \theta)^{2}}{\sigma^{2}_{r*}} +
@@ -1300,6 +1735,7 @@ Micheloud for helpful comments on drafts of the manuscript.
 
 \section{The BayesRepDesign R package}
 \label{app:package}
+
 << "package-illustration", echo = TRUE, size = "small" >>=
 library("BayesRepDesign")
 
