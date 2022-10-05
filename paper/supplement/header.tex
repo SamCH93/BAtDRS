@@ -13,7 +13,7 @@
 \usepackage{nameref} % reference appendices with names
 
 % fonts
-
+%% ----------------------------------------------------------------------------
 % \usepackage{lmodern} % math and serif font
 % \usepackage{mathpazo} % math and serif font
 \usepackage{times} % math and serif font
@@ -22,15 +22,6 @@
 \allsectionsfont{\sffamily} % for sections use sans serif
 \usepackage[onehalfspacing]{setspace} % more space
 \usepackage[labelfont=bf,font=small]{caption} % smaller captions
-
-
-% tikz options
-\usepackage{tikz}
-\usetikzlibrary{positioning,shapes,fit}
-% define color for tikz figure
-\definecolor{lightlightgray}{RGB}{211,211,211}
- % set default tikz font to sans serif
-\tikzset{every picture/.style={/utils/exec={\sffamily}}}
 
 %% margins
 %% ----------------------------------------------------------------------------
@@ -46,8 +37,8 @@
 
 %% title, authors, affiliations, mail
 %% ----------------------------------------------------------------------------
-\newcommand\longtitle{Bayesian approaches to designing replication studies}
-\newcommand\shorttitle{\longtitle} % if longtitle too long, change here
+\newcommand\longtitle{Bayesian approaches to designing replication studies \\ Supplementary materials}
+\newcommand\shorttitle{Bayesian approaches to designing replication studies}
 \newcommand\longauthors{Samuel Pawel\textsuperscript{$\star$}, Guido
   Consonni\textsuperscript{$\dagger$}, and Leonhard
   Held\textsuperscript{$\star$}} \newcommand\shortauthors{S. Pawel, G. Consonni,
@@ -86,6 +77,6 @@
 \lhead{\shorttitle}
 \rhead{\shortauthors}
 
+
 %% Definitions
-%% ----------------------------------------------------------------------------
-\input{defs.tex}
+\input{../defs.tex}

@@ -1,0 +1,71 @@
+%% Definitions
+%% -----------------------------------------------------------------------------
+%% Shortforms
+\newcommand{\eg}{e.\,g.,} % e.g.
+\newcommand{\ie}{i.\,e.,} % i.e.
+%% Distributions
+\DeclareMathOperator{\Ber}{B} % Bernoulli
+\DeclareMathOperator{\Bin}{Bin} % Binomial Distribution
+\DeclareMathOperator{\Cauchy}{C} % Cauchy Distribution
+\DeclareMathOperator{\Po}{Po} % Poisson
+\DeclareMathOperator{\Exp}{Exp} % Exponential
+\DeclareMathOperator{\Nor}{N} % Normal
+\DeclareMathOperator{\stud}{t} % Student
+\DeclareMathOperator{\Ga}{G} % Gamma
+\DeclareMathOperator{\Be}{Be} % Beta
+%% Operators and special functions
+\DeclareMathOperator{\Var}{Var} % Variance
+\DeclareMathOperator{\E}{\mathsf{E}} % Expectation
+\DeclareMathOperator{\Cov}{Cov} % Covariance
+\DeclareMathOperator{\Corr}{Corr} % Correlation
+\DeclareMathOperator{\se}{se} % Standard error
+\DeclareMathOperator{\sign}{sign} % Sign
+\DeclareMathOperator{\logit}{logit} % Logit
+\DeclareMathOperator{\Mod}{Mod} % Modus
+\DeclareMathOperator{\Med}{Med} % Median
+\DeclareMathOperator{\diag}{diag} % Diagonalmatrix
+\DeclareMathOperator{\trace}{tr} % Trace
+\renewcommand{\P}{\operatorname{\mathsf{Pr}}} % Probability
+\newcommand{\p}{f} % Density function
+\newcommand{\B}{\operatorname{{B}}} % Beta function
+\newcommand{\Lik}{L} % Likelihood function
+\DeclareMathOperator{\arctanh}{arctanh} % Arcus tangens hyperbolicus
+\DeclareMathOperator*{\argmax}{arg\,max} % Argmax
+\DeclareMathOperator*{\argmin}{arg\,min} % Argmin
+%% Other math things
+\newcommand{\C}{\mathbb{C}} % Complex
+\newcommand{\R}{\mathbb{R}} % Reals
+\newcommand{\Q}{\mathbb{Q}} % Rationals
+\newcommand{\Z}{\mathbb{Z}} % Integers
+\newcommand{\N}{\mathbb{N}} % Naturals
+\newcommand{\given}{\,\vert\,} % Given
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert} % Absolutvalue
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert} % Norm
+\newcommand{\ceil}[1]{\left\lceil#1\right\rceil} % Ceiling
+\newcommand{\floor}[1]{\left\lfloor#1\right\rfloor} % Floor
+\newcommand{\sprod}[1]{\left\langle#1\right\rangle} % Scalarproduct
+\newcommand{\Ind}[2]{\mathsf{I}_{#2}(#1)} % Indicatorfunction
+\newcommand{\IdMat}{\boldsymbol{\mathrm{I}}} % Identity matrix
+\DeclareMathOperator{\BF}{BF} % Bayes factor
+\newcommand\BFsub[2]{\BF_{\scriptscriptstyle{#1:#2}}} % BF with subscript
+\newcommand{\that}{\hat{\theta}} % Effect estimate
+\newcommand{\lw}[1]{W_{\scriptscriptstyle{#1}}} % Lambert W function
+\newcommand{\BFs}{\text{BF}_{\scriptscriptstyle\text{S}}} % Sceptical BF
+\newcommand{\BFr}{\text{BF}_{\scriptscriptstyle \text{R}}} % Replication BF
+\newcommand{\ps}{p_{\scriptscriptstyle\text{S}}} % Sceptical p-value
+\newcommand{\zas}{z_{\alpha_{\text{S}}}} % quantile of sceptical p-value level
+\newcommand{\gy}{s_{\scriptscriptstyle \gamma}}
+\newcommand{\HS}{H_{\text{S}}}
+\newcommand{\HA}{H_{\text{A}}}
+\newcommand{\mutheta}{\mu_{\scriptscriptstyle \theta}}
+\newcommand{\sigmatheta}{\sigma_{\scriptscriptstyle \theta}}
+\newcommand{\muthatr}{\mu_{\scriptscriptstyle \hat{\theta}_{r}}}
+\newcommand{\sigmathatr}{\sigma_{\scriptscriptstyle \hat{\theta}_{r}}}
+\newcommand{\muzr}{\mu_{\scriptscriptstyle z_{r}}}
+\newcommand{\sigmazr}{\sigma_{\scriptscriptstyle z_{r}}}
+\newcommand{\zalpha}{z_{\scriptscriptstyle \alpha}}
+\newcommand{\zbeta}{z_{\scriptscriptstyle \beta}}
+\newcommand{\bthat}{\hat{\boldsymbol{\theta}}} % bold effect estimate
+\newcommand{\bsigma}{\boldsymbol{\sigma}} % bold sigma
+\newcommand{\btheta}{\boldsymbol{\theta}} % bold theta
+\newcommand{\bone}{\mathbf{1}} % bold 1
