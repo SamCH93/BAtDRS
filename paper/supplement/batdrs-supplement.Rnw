@@ -166,7 +166,36 @@ the replication effect estimate $\that_{r}$ and standard error $\sigma_{r}$.
 \citep{Held2020}
 
 \section{The sceptical Bayes factor}
-\citep{Pawel2022b}
+\citet{Pawel2022b} showed that the success region based on $\BFr \leq \gamma$ is
+given by
+\begin{align}
+  \label{eq:BFssuccess}
+  S_{\scriptscriptstyle \BFs}
+  = \begin{cases}
+    (-\infty, -\sqrt{B} - M] \bigcup [\sqrt{B} - M, \infty) & \text{for} ~ \gy < 1 \\
+    [\that_{o} -\{(\sigma^{2}_{o} + \sigma^{2}_{r})\log\gamma\}/\that_{o}, \infty)
+    & \text{for} ~ \gy = 1  \\
+    [-\sqrt{B} - M, \sqrt{B} - M] & \text{for} ~ \gy > 1
+    \end{cases}
+\end{align}
+with
+\begin{align*}
+  B &= \left\{\frac{\that_{o}^{2}}{\sigma^{2}(1 - \gy)} +
+      2\log\left(\frac{\sigma^{2}_{r} + \sigma^{2}_{o}}{\sigma^{2}_{r} + s \sigma^{2}_{o}}\right)
+      - 2\log \gamma \right\}
+      \frac{(\sigma^{2}_{r} + s \sigma^{2}_{o})(\sigma^{2}_{r} + \sigma^{2}_{o})}{\sigma^{2}_{o}
+      (1 - \gy)} \\
+  M &= \frac{\that_{o} (\sigma^{2}_{r} + \gy \sigma^{2}_{o})}{\sigma^{2}_{o} (1 - \gy)} \\
+  \gy &=
+  \begin{cases}
+    -\dfrac{z_o^2}{q} - 1 & ~~ \text{if} ~ -\dfrac{z_o^2}{q} \geq 1 \\
+    \text{undefined} & ~~ \text{else}
+  \end{cases} \\
+  \text{where} ~ q &= \lw{-1} \left(-\frac{z_o^2}{\gamma^2} \cdot
+  \exp\left\{-z_o^2\right\}\right)
+\end{align*}
+
+
 
 
 %% Bibliography

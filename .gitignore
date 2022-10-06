@@ -54,3 +54,5 @@ package/
 paper/batdrsOld.*
 paper/defsOld.tex
 paper/old
+paper/cache
+paper/figure

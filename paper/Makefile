@@ -31,4 +31,7 @@ pdf2:
 clean:  
 	rm $(FILE).aux  $(FILE).blg  $(FILE).log  $(FILE).tex  $(FILE).bbl \
 	$(FILE).out  $(FILE).brf  $(FILE).synctex.gz \
-	rm -r ./figure/
+	rm -r #./figure/
+
+cleanfig:
+	rm ./figure/
