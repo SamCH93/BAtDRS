@@ -1,0 +1,384 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[dvipsnames]{xcolor}
+\input{header.tex}
+
+\begin{document}
+\maketitle
+
+In this document we provide additional information on methods for analyzing
+replication data. For each method we also derive the \emph{success region} in
+terms of the effect estimate of the replication study $\that_{r}$, which is
+required for sample size determination as illustrated in the main manuscript.
+For the two-trials rule and the replication Bayes factor methods we additionally
+provide derivations on how these methods can be generalized to the multisite
+replication setting.
+
+% \begin{table}[!htb]
+%   \centering
+%   \caption{Notation for data from original and replication study.}
+%   \begin{tabular}{lcc}
+%     \toprule
+%     & Original study & Replication study \\
+%     Effect estimate & $\that_o$ & $\that_{r}$ \\
+%     Standard error & $\sigma_{o}$ & $\sigma_{r}$ \\
+%     $z$-value & $z_{o} = \that_{o}/\sigma_{o}$ & $z_{r} = \that_{r}/\sigma_{r}$ \\
+%     \bottomrule
+%   \end{tabular}
+% \end{table}
+
+\section{The two-trials rule}
+The two-trials rule is the most common analysis approach for replication
+studies. Replication success is declared if both original and replication study
+achieve statistical significance at some level $\alpha$ (and both estimates go
+in the same direction which can be taken into account by using one-sided
+$p$-values). We will study the two-trial under normality using the data model
+$\that_{i} \given \theta \sim \Nor(\theta, \sigma^{2}_{i})$ with $\that_{i}$ the
+estimate of the unknown effect size $\theta$ from study $i$ and $\sigma_{i}$ is
+the corresponding standard error (assumed to be know). The $p$-values for
+testing $H_{0} \colon \theta = 0$ versus $H_{1} \colon \theta > 0$ are then
+$p_{i} = 1 - \Phi(\that_{i}/\sigma_{i})$ whereas for the alternative
+$H_{1} \colon \theta < 0$ they are $p_{i} = \Phi(\that_{i}/\sigma_{i})$. Suppose
+the original effect estimate was statistically significant at level $\alpha$,
+\ie{} $p_{o} \leq \alpha$. Replication success at level $\alpha$ is then
+established if the replication effect estimate $\that_{r}$ is also statistically
+significant at level $\alpha$, \ie{} $p_{r} \leq \alpha$. By applying some
+algebraic manipulations to the success condition, one can show that this implies
+that replication success is achieved if the replication effect estimate
+$\that_{r}$ is contained in the success region
+\begin{align*}
+  S_{\text{2TR}} =
+  \begin{cases}
+    \left[\zalpha \, \sigma_{r}, \infty \right) & \text{for} ~ \that_{o} > 0 \\
+    \left[-\infty, -\zalpha \, \sigma_{r} \right) & \text{for} ~ \that_{o} < 0.
+  \end{cases}
+\end{align*}
+
+\subsection{The multisite two-trials rule}
+If multiple replication studies are conducted for one original study (a
+\emph{multisite} replication), the two-trials rule is typically modified by
+meta-analyzing the effect estimates from all replications and then using the
+combined estimate as usual in the two-trials rule \citep[see \eg{} the ``Many
+labs'' projects from][]{Klein2014, Klein2018}. Suppose $m$ replication studies
+are conducted and produce $m$ effect estimates $\that_{r1}, \dots, \that_{m}$
+with standard errors $\sigma_{r1}, \dots, \sigma_{rm}$. Subsequently, a weighted
+average
+$\hat{\theta}_{r*} = \{\sum_{i = 1}^{m} \hat{\theta}_{ri}/(\sigma^{2}_{ri} + \tau^{2}_{r})\}\,\sigma_{r*}^{2}$
+with standard error
+$\sigma_{r*} = 1/\surd\{\sum_{i}^{m}1/(\sigma^{2}_{ri} + \tau^{2}_{r})\}$ can be
+computed. If the between-replication heterogeneity variance $\tau^{2}_{r}$ is
+set to zero this corresponds to the fixed effects estimate of $\theta$, while
+estimating $\tau^{2}_{r}$ from the data corresponds to the random effects
+estimate. Replication success at level $\alpha$ is then established if the
+replication $p$-value is smaller than $\alpha$, \ie{}
+$p_{r*} = 1 - \Phi(\that_{r*}/\sigma_{r*}) \leq \alpha$. With some algebra one
+can show that this implies a success region for the weighted average replication
+effect estimate $\that_{r*}$ given by
+\begin{align*}
+  S_{\text{2TR}} =
+  \begin{cases}
+    \left[\zalpha \, \sigma_{r*}, \infty \right) & \text{for} ~ \that_{o} > 0 \\
+    \left[-\infty, -\zalpha \, \sigma_{r*} \right) & \text{for} ~ \that_{o} < 0.
+  \end{cases}
+\end{align*}
+
+\section{Fixed effects meta-analysis}
+Assume again the data model
+$\that_{i} \given \theta \sim \Nor(\theta, \sigma^{2}_{i})$ where $\that_{i}$ is
+an estimate of the effect size $\theta$ from study $i \in \{o, r\}$ and
+$\sigma_{i}$ is the corresponding standard error (assumed to be know). In the
+fixed effects meta-analysis approach replicability is assessed in terms of the
+pooled effect estimate $\that_{m}$ and standard error $\sigma_{m}$ which are
+\begin{align*}
+  &\that_{m} =
+    \left(\that_{o}/\sigma_{o}^{2} + \that_{r}/\sigma^{2}_{r}\right)\sigma^{2}_{m}&
+&\text{and}&                                                                                       &\sigma_{m} = \left(1/\sigma^{2}_{o} + 1/\sigma^{2}_{r}\right)^{-1/2},&
+\end{align*}
+which are also equivalent to the mean and standard deviation of a posterior
+distribution for the effect size $\theta$ based on the data from original and
+replication study and an initial flat prior for $\theta$. Fixed effects
+meta-analyis is typically used because estimating a heterogeneity variance from
+two studies is highly unstable. Replication success at level $\alpha$ is
+established if the one-sided meta-analytic $p$-value (in the direction of the
+original effect estimate $\that$) is significant at level $\alpha$, \ie{}
+$p_{m} = 1 - \Phi(\that_{m}/\sigma_{m}) \leq \alpha$ for $\that_{o} > 0$ and
+$p_{m} = \Phi(\that_{m}/\sigma_{m}) \leq \alpha$ for $\that_{o} < 0$.
+With some algebraic manipulations one can show that this criterion implies a
+success region $S_{\text{MA}}$ for the replication effect estimate $\that_{r}$
+given by
+\begin{align*}
+  \SMA
+  =
+  \begin{cases}
+    [\sigma_{r} \zalpha\sqrt{1 + \sigma^{2}_{r}/\sigma^{2}_{o}} -
+      (\that_{o} \sigma^{2}_{r})/\sigma^{2}_{o},   \infty )
+    & \text{for} ~ \that_{o} > 0 \\
+    (-\infty, -\sigma_{r} \zalpha\sqrt{1 + \sigma^{2}_{r}/\sigma^{2}_{o}} -
+      (\that_{o} \sigma^{2}_{r})/\sigma^{2}_{o}]
+    & \text{for} ~ \that_{o} < 0.
+\end{cases}
+\end{align*}
+
+
+\section{Effect size equivalence}
+The effect size equivalence approach \citep{Anderson2016} defines replication
+success via comptability of the effect estimates from both studies. Under
+normality we may assume the data model
+$\that_{i} \given \theta_{i} \sim \Nor(\theta_{i}, \sigma^{2}_{i})$ for study
+$i \in \{o, r\}$, and we are interested in the true effect size difference
+$\delta = \theta_{r} - \theta_{o}$. A $(1 - \alpha)$ confidence interval for
+$\delta$ is then given by
+\begin{align*}
+  C_{\alpha} = \left[\that_{r} - \that_{o} - \zalphatwo \sqrt{\sigma^{2}_{r} + \sigma^{2}_{r}},
+  \that_{r} - \that_{o} + \zalphatwo \sqrt{\sigma^{2}_{r} + \sigma^{2}_{r}}\right]
+\end{align*}
+Effect size equivalence is established if the confidence interval is fully
+included in an equivalence region $C_{\alpha} \subseteq [-\Delta, \Delta]$ with
+$\Delta > 0$ a pre-specified margin. Applying some algebraic manipulations to
+the success condtions one can show that the equivalence test replication success
+criterion implies a success region $\SEqu$ for the replication estimate
+$\that_{r}$ given by
+\begin{align*}
+  \SEqu
+  = \left[\that_{o} - \Delta + \zalphatwo \sqrt{\sigma^{2}_{o} +
+  \sigma^{2}_{r}}, \that_{o} + \Delta - \zalphatwo
+  \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}}\right].
+\end{align*}
+
+
+
+% \section{The \textit{Q}-test}
+
+\section{The replication Bayes factor}
+The replication Bayes factor approach uses the replication data $x_{r}$ to
+quantify the evidence for the null hypothesis $H_{0}\colon \theta = 0$ relative
+to the alternative hypothesis $H_{1} \colon \theta \sim f(\theta \given x_{o})$,
+which postulates that the effect size $\theta$ is distributed according to its
+posterior distribution based on the original data $x_{o}$. Assume again a normal
+model $\that_{i} \given \theta \sim \Nor(\theta, \sigma^{2}_{i})$ with
+$\that_{i}$ an estimate of the effect size $\theta$ from study $i \in \{o, r\}$
+and $\sigma_{i}$ the corresponding standard error (assumed to be know), and that
+we use the alternative $H_{1} \colon \Nor(\that_{o}, \sigma^{2}_{o})$ which
+arises from updating an inital flat prior for $\theta$ the original data
+$x_{o} = \{\that_{o}, \sigma_{o}\}$. The replication Bayes factor is then
+\begin{align}
+  \label{eq:bfr}
+  \BFr &= \frac{f(\that_{r} \given H_{0})}{f(\that_{r} \given H_{1})}
+       = \sqrt{1 + \sigma^{2}_{o}/\sigma^{2}_{r}} \, \exp\left[
+         -\frac{1}{2}\left\{ \frac{\that^{2}_{r}}{\sigma^{2}_{r}} -
+         \frac{(\that_{r} - \that_{o})^{2}}{\sigma^{2}_{o} + \sigma^{2}_{r}}
+         \right\}\right].
+\end{align}
+Replication success at level $\gamma \in (0, 1)$ is achieved if
+$\BFr \leq \gamma$. By applying some algebra to $\BFr \leq \gamma$, one can show
+that it is equivalent to the replication effect estimate $\that_{r}$ falling in
+the success region
+\begin{align*}
+  \SBFr
+  = \left(-\infty, -\sqrt{A} - (\that_{o}\sigma^{2}_{r})/\sigma^{2}_{o}\right] \bigcup
+   \left[\sqrt{A} - (\that_{o}\sigma^{2}_{r})/\sigma^{2}_{o}, \infty\right)
+\end{align*}
+where
+$A = \sigma^{2}_{r}(1 + \sigma^{2}_{r}/\sigma^{2}_{o}) \{\that_{o}^{2}/\sigma^{2}_{o} - 2 \log \gamma + \log(1 + \sigma^{2}_{o}/\sigma^{2}_{r})\}$.
+
+\subsection{The multisite replication Bayes factor}
+The generalization of the replication Bayes factor to the multisite setting is
+straightforward. The data are represented by vector of replication effect
+estimates $\bthat_{r} = (\that_{r1}, \dots, \that_{rm})^{\top}$ with
+corresponding standard error vector
+$\bsigma_{r} = (\sigma_{r1}, \dots, \sigma_{rm})^{\top}$, and we assume the data
+model
+$\bthat_{r} \given \theta \sim \Nor_{m}\{\theta \, \bone_{m}, \diag(\bsigma^{2} + \tau^{2}_{r} \, \bone_{m}\}$
+where $\bone_{m}$ is a vector of $m$ ones and $\tau^{2}_{r}$ is a heterogeneity
+variance for the replication effect sizes (not to be confused with the
+heterogeneity variance $\tau^{2}$ used in the design prior).
+
+As in the singlsite case, the replication Bayes factor quantifies the evidence
+that the data provide for the null hypothesis $H_{0}\colon \theta = 0$ relative
+to the alternative hypothesis
+$H_{1} \colon \theta \sim \Nor(\that_{o}, \sigma^{2}_{o})$. The marginal density
+of the replication data under the null hypothesis is simply
+$\bthat_{r} \given H_{0} \sim \Nor_{m}\{0 \, \bone_{m}, \diag(\bsigma^{2} + \tau^{2}_{r} \, \bone_{m}\}$,
+whereas the marginal likelihood under the alternative $H_{1}$ is obtained from
+integrating the likelihood
+% $\bthat_{r} \given \theta \sim \Nor_{m}\{\theta \, \bone_{m}, \diag(\bsigma^{2} + \tau^{2}_{r} \, \bone_{m}\}$
+with respect to the prior distribution of $\theta$ under the alternative
+$H_{1}$. % $H_{1} \colon \theta \sim \Nor(\that_{o}, \sigma_{o})$.
+Let $\Nor(x;m,v)$ denote the normal density function mean $m$ and variance $v$
+evaluated at $x$. Define also
+$\hat{\theta}_{r*} = \left\{\sum_{i=1}^{n}\hat{\theta}_{ri}/(\sigma^{2}_{ri} + \tau^{2}_{r})\right\} \sigma^{2}_{r*}$
+and
+$\sigma^{2}_{r*} = 1/\left\{\sum_{i=1}^{n}1/(\sigma^{2}_{ri} + \tau^{2}_{r})\right\}$,
+\ie{} the weighted average of the replication effect estimates based on the
+heterogeneity $\tau^{2}_{r}$ and its variance. The marginal density is then
+
+\begin{align*}
+        f(\hat{\theta}_{r} \given H_{1})
+        &= \int f(\hat{\theta}_{r} \given \theta) f(\theta \given H_{1})
+                        \, \text{d}\theta \\
+              &= \int \frac{\exp\left[-\frac{1}{2} \left\{\sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \theta)^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}} +
+                  \frac{(\theta - \that_{o})^{2}}{\sigma^{2}_{o}}\right\} \right]}{
+                                    \left\{2\pi \sigma^{2}_{o} \prod_{i = 1}^{n} 2\pi \left(\sigma^{2}_{ri} + \tau^{2}_{r}\right)\right\}^{1/2}}
+    \, \text{d}\theta \\
+  &= \int \frac{
+    \exp\left[-\frac{1}{2} \left\{\sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \hat{\theta}_{r*})^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}} +  \frac{(\hat{\theta}_{r*} - \theta)^{2}}{\sigma^{2}_{r*}} +
+    \frac{(\theta - \that_{o})^{2}}{\sigma^{2}_{o}}\right\} \right]}{
+    \left\{2\pi \sigma^{2}_{o} \prod_{i = 1}^{n} 2\pi \left(\sigma^{2}_{ri} + \tau^{2}_{r}\right)\right\}^{1/2}}
+    \, \text{d}\theta \\
+  &= \frac{\exp\left[-\frac{1}{2} \left\{\sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \hat{\theta}_{r*})^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}}\right\} \right]}{\left\{2\pi \sigma^{2}_{o} \prod_{i = 1}^{n} 2\pi \left(\sigma^{2}_{ri} + \tau^{2}_{r}\right)\right\}^{1/2}}
+    \underbrace{\int \exp\left[-\frac{1}{2} \left\{\frac{(\hat{\theta}_{r*} - \theta)^{2}}{\sigma^{2}_{r*}} +
+    \frac{(\theta - \that_{o})^{2}}{\sigma^{2}_{o}}\right\} \right] \text{d}\theta}_{= \Nor(\hat{\theta}_{r*}; m, \sigma^{2}_{o} + \sigma^{2}_{r*}) 2\pi \sigma_{o} \sigma_{r*}} \\
+  &= \left\{(1 + \sigma^{2}_{o}/\sigma^{2}_{r*}) \prod_{i = 1}^{n} 2\pi \left(\sigma^{2}_{ri} + \tau^{2}_{r}\right)\right\}^{-1/2} \exp\left[-\frac{1}{2}\left\{
+    \sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \hat{\theta}_{r*})^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}} + \frac{(\hat{\theta}_{r*} - \that_{o})^{2}}{\sigma^{2}_{r*} + \sigma^{2}_{o}}\right\}\right].
+\end{align*}
+Dividing the marginal density of $\bthat_{r}$ under $H_{0}$ by the marginal
+density of $\bthat_{r}$ under $H_{1}$ leads to cancelation of several terms, and
+produces the replication Bayes factor
+\begin{align*}
+  \BF_{01}(\hat{\theta}_{r})
+  &= \frac{f(\hat{\theta}_{r} \given H_{0})}{f(\hat{\theta}_{r} \given H_{1})}
+    = \sqrt{1 + \sigma^{2}_{o}/\sigma^{2}_{r*}}  \exp\left[-\frac{1}{2}\left\{
+    \frac{\hat{\theta}_{r*}^{2}}{\sigma^{2}_{r*}} -
+    \frac{(\hat{\theta}_{r*} - \hat{\theta}_{o})^{2}}{\sigma^{2}_{r*} + \sigma^{2}_{o}}\right\}\right].
+\end{align*}
+The multisite replication Bayes factor is therefore equivalent to the singlesite
+replication Bayes factor from~\eqref{eq:bfr} but using the weighted average
+$\that_{r*}$ and its standard error $\sigma_{r*}$ as the replication effect
+estimate $\that_{r}$ and standard error $\sigma_{r}$.
+
+\section{The sceptical \textit{p}-value}
+\citet{Held2020} proposed a reverse-Bayes approach for assessing replicability.
+One assumes again the data model
+$\that_{i} \given \theta \sim \Nor(\theta, \sigma^{2}_{i})$ with
+$i \in \{o, r\}$, along with a zero-mean ``sceptical'' prior
+$\theta \sim \Nor(0, \sigma^{2}_{s})$ for the effect size. In a first step, a
+level $\alpha \geq p_{o} = 1 - \Phi(|\that_{o}|/\sigma_{o})$ is fixed and the
+``sufficiently sceptical'' prior variance $\sigma^{2}_{s}$ is computed
+\begin{align*}
+  \sigma^{2}_{s} = \frac{\sigma^{2}_{o}}{(z_{o}^{2}/\zalpha^{2}) - 1}
+\end{align*}
+where $z_{o} = \that_{o}/\sigma_{o}$. The sufficiently sceptical prior variance
+$\sigma^{2}_{s}$ has the property that it renders the resulting posterior of
+$\theta$ no longer ``credible'' at level $\alpha$, that is, the posterior tail
+probability is fixed to
+$\Pr(\theta \geq 0 \given \that_{o}, \sigma_{o}, \sigma_{s}) = 1 - \alpha$ for
+positive estimates and
+$\Pr(\theta \leq 0 \given \that_{o}, \sigma_{o}, \sigma_{s}) = 1 - \alpha$ for
+negative estimates. In a second step, the conflict between the sceptical prior
+and the obsereved replication data is quantified, larger conflict indicating a
+higher degree of replication success. For doing so, a prior predictive tail
+probability
+\begin{align*}
+  p_{\text{Box}} =
+  \begin{cases}
+    1 - \Phi\left\{\that_{r}/(\sigma^{2}_{r} + \sigma^{2}_{s})\right\}
+    & \text{if} ~ \that_{o} > 0 \\
+   \Phi\left\{\that_{r}/(\sigma^{2}_{r} + \sigma^{2}_{s})\right\}
+    & \text{if} ~ \that_{o} < 0 \\
+    \end{cases}
+\end{align*}
+is computed and replication success at level $\alpha$ is declared if
+$p_{\text{Box}} \leq \alpha$. The smallest level $\alpha$ at which replication
+success is achieved is called the \emph{the sceptical $p$-value} $\ps$ and
+replication success at level $\alpha$ is equivalent with $\ps \leq \alpha$
+\citep[see][for more details on $\ps$]{Held2020, Held2021}. By applying some
+algebraic maniputations to the condition $p_{\text{Box}} \leq \alpha$, one can
+show that it is equivalent to the replication effect estimate $\that_{r}$
+falling in the success region
+\begin{align*}
+  \SPs =
+  \begin{cases}
+    [\zalpha \surd\{\sigma^{2}_{r} +
+  \frac{\sigma^{2}_{o}}{(z_{o}^{2}/\zalpha^{2}) - 1}\}, \infty)
+    & \text{if} ~ \that_{o} > 0 \\
+   (-\infty, -\zalpha \surd\{\sigma^{2}_{r} +
+  \frac{\sigma^{2}_{o}}{(z_{o}^{2}/\zalpha^{2}) - 1}\}]
+    & \text{if} ~ \that_{o} < 0. \\
+    \end{cases}
+\end{align*}
+
+\section{The sceptical Bayes factor}
+\citet{Pawel2022b} modified the reverse-Bayes assessment of replication success
+from \citet{Held2020} to use Bayes factors \citep{Jeffreys1961, Kass1995}
+instead of tail probabilities as measures of evidence and prior data conflict.
+The procedure assumes again the data model
+$\that_{i} \given \theta \sim \Nor(\theta, \sigma^{2}_{i})$ for study
+$i \in \{o, r\}$. In the first step the original data are used to contrast the
+evidence for the point null hypothesis $H_{0} \colon \theta = 0$ relative to the
+``sceptical'' alternative $H_{S} \colon \theta \sim \Nor(0, \sigma^{2}_{s})$
+with the Bayes factor
+\begin{align*}
+  \BF_{0S}
+  = \frac{f(\that_{o} \given H_{0})}{f(\that_{o} \given H_{S})}
+  = \sqrt{1 + \sigma^{2}_{s}/\sigma^{2}_{o}} \, \exp\left\{-
+  \, \frac{z_{o}^{2}}{2(1 + \sigma^{2}_{o}/\sigma^{2}_{s})}\right\}.
+\end{align*}
+where $z_{o} = \that/\sigma^{2}_{o}$. One then determines the sufficiently
+sceptical prior variance $\sigma^{2}_{s}$ so that the Bayes factor is fixed to a
+level $\gamma \in (0, 1)$ meaning that there is no longer evidence against the
+null hypothesis at level $\gamma$. The sufficiently sceptical prior variance can
+be computed by
+\begin{align}
+  \label{eq:ssv}
+  \sigma^{2}_{s} &=
+  \begin{cases}
+    -\dfrac{\that_{o}^2}{q} - \sigma^{2}_{o} & ~~ \text{if} ~ -\dfrac{\that_o^2}{q} \geq \sigma^{2}_{o} \\
+    \text{undefined} & ~~ \text{else}
+  \end{cases} \\
+  \text{where} ~ q &= \lw{-1} \left\{-\frac{z_o^2}{\gamma^2} \,
+  \exp\left(-z_o^2\right)\right\}
+\end{align}
+with $\lw{-1}(\cdot)$ the branch of the
+Lambert W function with $\text{W}(y) \leq -1$ for $y \in [-1/e, 0)$.
+
+In a second step the conflict between the sceptical prior and the replication
+data is quantified. To do so, the sceptic is contrasted to the ``advocacy''
+alternative $H_{A} \colon \theta \sim \Nor(\that_{o}, \sigma^{2}_{o})$ which
+represents the position of an advocate as the prior corresponds to the posterior
+distribution based on the original data $\{\that_{o}, \sigma_{o}\}$ and a flat
+prior for the effect size $\theta$. This is done by computing the Bayes factor
+\begin{align*}
+  \BF_{SA}
+  = \frac{f(\that_{r} \given H_{S})}{f(\that_{r} \given H_{A})}
+  = \sqrt{\frac{\sigma^{2}_{o} + \sigma^{2}_{r}}{\sigma^{2}_{s} + \sigma^{2}_{r}}}
+  \, \exp\left[-\frac{1}{2}\left\{\frac{\that_{r}^{2}}{\sigma^{2}_{s} +
+  \sigma^{2}_{r}} - \frac{(\that_{r} - \that_{o}^{2})}{\sigma^{2}_{o} +
+  \sigma^{2}_{r}}\right\}\right]
+\end{align*}
+and replication success at level $\gamma$ is defined by $\BF_{SA} \leq \gamma$
+as the data favor the advocate over the sceptic at a higher level than the
+sceptic's initial objection to the null hypothesis. The smallest level $\gamma$
+at which replication success is achievable is then called \emph{the sceptical
+  Bayes factor} $\BFs$, and replication success at level $\gamma$ is equivalent
+to $\BFs \leq \gamma$ \citep[see][for details on how to compute
+$\BFs$]{Pawel2022b}. To derive the success region of the sceptical Bayes factor
+one can apply algebraic manipulations to $\BF_{SA} \leq \gamma$ the condition
+for replication success at level $\gamma$, leading to
+\begin{align}
+  \label{eq:BFssuccess}
+  S_{\scriptscriptstyle \BFs}
+  = \begin{cases}
+    (-\infty, -\sqrt{B} - M] \bigcup [\sqrt{B} - M, \infty) & \text{for} ~ \sigma^{2}_{s} < \sigma^{2}_{o} \\
+    [\that_{o} -\{(\sigma^{2}_{o} + \sigma^{2}_{r})\log\gamma\}/\that_{o}, \infty)
+    & \text{for} ~ \sigma^{2}_{s} = \sigma^{2}_{o}  \\
+    [-\sqrt{B} - M, \sqrt{B} - M] & \text{for} ~ \sigma^{2}_{s} > \sigma^{2}_{o}
+    \end{cases}
+\end{align}
+with
+\begin{align*}
+  B &= \left\{\frac{\that_{o}^{2}}{\sigma^{2}_{o} - \sigma^{2}_{s}} +
+      2\log\left(\frac{\sigma^{2}_{o} + \sigma^{2}_{r}}{\sigma^{2}_{s} + \sigma^{2}_{r}}\right)
+      - 2\log \gamma \right\}
+      \frac{(\sigma^{2}_{s} + \sigma^{2}_{r})(\sigma^{2}_{o} + \sigma^{2}_{r})}{\sigma^{2}_{o}
+       - \sigma^{2}_{s}} \\
+  M &= \frac{\that_{o} (\sigma^{2}_{s} + \sigma^{2}_{r})}{\sigma^{2}_{o} - \sigma^{2}_{s}}
+\end{align*}
+and the sufficiently sceptical prior variance $\sigma^{2}_{s}$ computed
+by~\eqref{eq:ssv}.
+
+
+%% Bibliography
+%% -----------------------------------------------------------------------------
+\bibliographystyle{../apalikedoiurl}
+\bibliography{../bibliography}
+
+\end{document}

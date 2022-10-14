@@ -25,7 +25,8 @@ RUN install2.r --error --skipinstalled --ncpus -1 \
 ## install R packages from GitHub (use @ for specific version/tag)
 ## install from tar.gz in repository if this does not work anymore in the future
 RUN R -e "remotes::install_gitlab(repo = 'samuel.pawel/BayesRep', subdir = 'pkg', \
-          host = 'gitlab.uzh.ch')" --vanilla
+    host = 'gitlab.uzh.ch'); \
+    remotes::install_github(repo = 'SamCH93/BayesRepDesign')" --vanilla
 
 ## knit Rnw to tex and compile tex to PDF
 CMD if [ "$pdfdocker" = "false" ] ; then \
