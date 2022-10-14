@@ -6,3 +6,9 @@ ggplot2
 scales
 colorspace
 ggpubr
+deSolve
+contfrac
+elliptic
+RcppParallel
+hypergeo
+lamW
