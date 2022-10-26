@@ -5,13 +5,15 @@
 \begin{document}
 \maketitle
 
-In this document we provide additional information on methods for analyzing
-replication data. For each method we also derive the \emph{success region} in
-terms of the effect estimate of the replication study $\that_{r}$, which is
-required for sample size determination as illustrated in the main manuscript.
-For the two-trials rule and the replication Bayes factor methods we additionally
-provide derivations on how these methods can be generalized to the multisite
-replication setting.
+In this document we provide additional information on computing the predictive
+distribution of the replication effect estimate when a prior is assigned to the
+heterogeneity variance $\tau^{2}$. Moreover, we provide additional information
+on methods for analyzing replication data. For each method we also derive the
+\emph{success region} in terms of the effect estimate of the replication study
+$\that_{r}$, which is required for sample size determination as illustrated in
+the main manuscript. For the two-trials rule and the replication Bayes factor
+methods we additionally provide derivations on how these methods can be
+generalized to the multisite replication setting.
 
 % \begin{table}[!htb]
 %   \centering
@@ -25,6 +27,48 @@ replication setting.
 %     \bottomrule
 %   \end{tabular}
 % \end{table}
+
+\section{Predictive distribution with prior on heterogeneity variance}
+When also a prior is assigned to the heterogeneity variance $\tau^{2}$, the
+predictive distribution of the replication effect estimate $\that_{r}$ is given
+by
+\begin{align*}
+  f(\that_{r} \given \that_{o}, \sigma_{o}, \sigma_{r})
+  &= \int_{0}^{+\infty} f(\that_{r} \given \sigma_{r}, \that_{o}, \sigma_{o},
+    \tau^{2}) \,
+    f(\tau^{2} \given \that_{o}, \sigma_{o}) \, \text{d}\tau^{2}.
+\end{align*}
+That is, it is the predictive distribution of the replication effect estimate
+$\that_{r}$ integrated with respect to the marginal posterior of $\tau^{2}$
+based on the original data $x_{o} = \{\that_{o}, \sigma^{2}_{o}\}$. If the
+initial prior for $\theta$ is formulated conditional on $\tau^{2}$ and taken as
+in the main manuscript, and the initial prior for $\tau^{2}$ is formulated
+marginally, we have
+\begin{align*}
+  f(\tau^{2} \given \that_{o}, \sigma_{o})
+  &= \int_{-\infty}^{+\infty} f(\theta, \tau^{2} \given \that_{o}, \sigma_{o}) \, \text{d}\theta \\
+  &= \frac{\int f(\that_{r} \given \theta, \tau^{2}, \sigma^{2}_{r}) \,
+    f(\theta \given \tau^{2}) \, f(\tau^{2}) \, \text{d}\theta}{\int_{0}^{+\infty}
+    \int_{-\infty}^{+\infty} f(\that_{r} \given \theta_{*}, \tau^{2}_{*}, \sigma^{2}_{r}) \,
+    f(\theta_{*} \given \tau^{2}_{*}) \, f(\tau^{2}_{*}) \, \text{d}\theta_{*} \,
+    \text{d}\tau^{2}} \\
+  &=  \frac{\Nor(\that_{r} \given \muthatr, \sigmathatr^{2}) \,
+    f(\tau^{2})}{\int_{0}^{+\infty} \Nor(\that_{r} \given \muthatr, \sigmathatr^{2})
+    \, f(\tau^{2}_{*}) \, \text{d}\tau^{2}_{*}}
+\end{align*}
+with $\muthatr = \hat{\theta}_o/(1 + 1/g) + \mutheta/(1 + g)$,
+$\sigmathatr^{2} = \sigma^2_r + \tau^2 + (\sigma^2_o + \tau^2)/(1 + 1/g)$, and
+$g = \sigmatheta^{2}/(\tau^{2} + \sigma^{2}_{o})$. To compute the marginal
+posterior density of $\tau^{2}$ one numerical integration is hence required. The
+probability of replication success can thus be written
+\begin{align*}
+  \Pr(\that_{r} \in S \given \that_{o}, \sigma_{o}, \sigma_{r})
+  &= \int_{S}\int_{0}^{+\infty} f(\that_{r} \given \that_{o}, \sigma_{o}, \sigma_{r}, \tau^{2}) \,
+    f(\tau^{2} \given \that_{o}, \sigma_{o}) \, \text{d}\that_{r} \,\text{d}\tau^{2} \\
+  &= \int_{0}^{+\infty} \Pr(\that_{r} \in S \given \that_{o}, \sigma_{o}, \sigma_{r}, \tau^{2}) \,
+    f(\tau^{2} \given \that_{o}, \sigma_{o}) \, \text{d}\tau^{2} \\
+\end{align*}
+
 
 \section{The two-trials rule}
 The two-trials rule is the most common analysis approach for replication
@@ -52,6 +96,8 @@ $\that_{r}$ is contained in the success region
     \left[-\infty, -\zalpha \, \sigma_{r} \right) & \text{for} ~ \that_{o} < 0.
   \end{cases}
 \end{align*}
+
+TODO: polish
 
 \subsection{The multisite two-trials rule}
 If multiple replication studies are conducted for one original study (a
