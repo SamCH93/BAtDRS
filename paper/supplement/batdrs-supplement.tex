@@ -421,6 +421,29 @@ with
 and the sufficiently sceptical prior variance $\sigma^{2}_{s}$ computed
 by~\eqref{eq:ssv}.
 
+\section{Optimal number of sites}
+
+The total cost of the design are $K = m(K_{c}n_{r} + K_{s})$ so that we can
+write the number of sites $m$ for a given total cost as
+\begin{align}
+  \label{eq:msites}
+  m = K (K_{c}n_{r} + K_{s})^{-1}.
+\end{align}
+We now want to minimize the predictive variance of the weighted average
+$\that_{r*}$ which, for a balanced design, is given by
+\begin{align}
+  \label{eq:predvar}
+  \sigma^{2}_{\scriptscriptstyle \that_{r*}}
+  = \frac{\sigma^{2}_{r} + \tau^{2}}{m} + \frac{\tau^{2} + \sigma^{2}_{o}}{1 + 1/g}.
+\end{align}
+Plugging in~\eqref{eq:msites} into~\eqref{eq:predvar} and minimizing it with
+respect to $n_{r}$, leads to the optimal sample size
+\begin{align*}
+  n_{r}^{*}
+  = \frac{\lambda}{\tau} \, \sqrt{\frac{K_{s}}{K_{c}}}
+\end{align*}
+for a given cost ratio $K_{s}/K_{c}$.
+
 
 %% Bibliography
 %% -----------------------------------------------------------------------------
