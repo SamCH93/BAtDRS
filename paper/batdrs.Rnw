@@ -99,7 +99,6 @@ protzkolong <- read.csv("../data/protzko2020long.csv")
 protzko$zo <- with(protzko, do/sqrt(vo))
 protzko$zr <- with(protzko, dr/sqrt(vr))
 protzko$c <- with(protzko, vo/vr)
-
 protzko$BFs <- with(protzko, BFs(zo = zo, zr = zr, c = c))
 protzko$BFr <- with(protzko, BFr(zo = zo, zr = zr, c = c, g = 0))
 protzko$ps <- with(protzko, pSceptical(zo = zo, zr = zr, c = c,
@@ -942,8 +941,7 @@ $\sigma_{r}$, the probability of replication success can be computed by
 \end{align}
 As for the two-trials rule, the probability~\eqref{eq:MApros} cannot be made
 arbitrarily large by decreasing the standard error $\sigma_{r}$ but is bounded
-from above by the limit $\text{limPr}_{\text{2TR}}$ defined
-in~\eqref{eq:limP2TR}.
+from above by $\text{limPr}_{\text{2TR}}$ defined in~\eqref{eq:limP2TR}.
 % However, as the original data already provide some information, the
 % probability of replication success is also bounded from below.
 The required standard error $\sigma_{r}^{*}$ to achieve a target probability of
@@ -1029,9 +1027,9 @@ under the null hypothesis $H_{0} \colon \theta = 0$ to the marginal likelihood
 of $x_{r}$ under the alternative hypothesis
 $H_{1} \colon \theta \sim f(\theta \given x_{o})$, that is the posterior of the
 effect size $\theta$ based on the original data $x_{o}$. If the original study
-provided evidence against the null hypothesis, replication Bayes factor values
-$\BFr < 1$ indicate replication success, and the smaller $\BFr$ the higher the
-degree of replication success.
+provides evidence against the null hypothesis, replication Bayes factor values
+$\BFr < 1$ indicate replication success, and the smaller the value the higher
+the degree of success.
 
 Under normality and assuming no heterogeneity, the success region for achieving
 $\BFr \leq \gamma$ is given by
@@ -1046,12 +1044,12 @@ $A = \sigma^{2}_{r}(1 + \sigma^{2}_{r}/\sigma^{2}_{o}) \{\that_{o}^{2}/\sigma^{2
 Details of this calculation are given in the supplement. The fact that the
 success region~\eqref{eq:BFrsuccess} is defined on both sides around zero shows
 that replication success is also possible if the replication effect estimate
-goes in opposite direction of the original one, which is know as the
-``replication paradox'' \citep{Ly2018}. The paradox can be avoided by using a
-modified version of the replication Bayes factor but the success region is then
-not available anymore in closed-form \citep[Appendix D]{Pawel2022b}. Based on
-the success region~\eqref{eq:BFrsuccess}, the probability of replication success
-can be computed by
+goes in opposite direction of the original one, which is known as the
+``replication paradox'' \citep{Ly2018}. The paradox can be avoided using a
+modified version of the replication Bayes factor but the success region is no
+longer available in closed-form \citep[Appendix D]{Pawel2022b}. Based on the
+success region~\eqref{eq:BFrsuccess}, the probability of replication success can
+be computed by
 \begin{align}
   \label{eq:BFrpros}
   \Pr(\that_{r} \in S_{\scriptscriptstyle \BFr} \given \that_{o}, \sigma_{o}, \sigma_{r})
@@ -1117,11 +1115,11 @@ with
 replication success from \citet{Held2020} to work with Bayes factors instead of
 tail probabilities as measures of evidence and prior data conflict. Again, the
 procedure can be summarized in a single measure termed the ``sceptical Bayes
-factor'' $\BFs$, and the lower $\BFs$ the higher the degree of replication
-success. Also for this method, the success region and the probability of
-replication success can be derived in closed-form but the derivations are more
-involved than for the other methods. For this reason, they are only given in the
-supplement.
+factor'' $\BFs$, with lower values of $\BFs$ pointing to higher degrees of
+replication success. Also for this method, the success region and the
+probability of replication success can be expressed in closed-form but the
+derivations are more involved than for the other methods. For this reason, they
+are only given in the supplement.
 
 \subsection{Example: Cross-laboratory replication project (continued)}
 << "SSD-parameters" >>=
@@ -1296,9 +1294,9 @@ of replication success the fewest samples are required with meta-analysis,
 followed by the sceptical $p$-value, the two-trials rule, the replication Bayes
 factor, the sceptical Bayes factor, and lastly the equivalence test. If the
 chosen sample size should guarantee a sufficiently conclusive replication study
-with all these methods, the replication sample size has be slightly larger than
-the original one in the situation of no heterogeneity ($\tau^{2} = 0$), while it
-has to be more than ten-fold increased if there is heterogeneity
+with all these methods, the replication sample size has to be slightly larger
+than the original one in the situation of no heterogeneity ($\tau^{2} = 0$),
+while it has to be increased more than ten-fold if there is heterogeneity
 ($\tau^{2} = \Sexpr{round(taus[2], 2)}^{2}$). However, this is mostly due to the
 equivalence test which requires by far the most samples. If the equivalence test
 sample size is ignored, the relative sample size
@@ -1910,7 +1908,7 @@ sensible, and decide whether they should conduct the replication study with
 their limited resources.
 
 \section*{Software and data}
-The data from \citet{Protzko2020} were were downloaded from
+The data from \citet{Protzko2020} were  downloaded from
 \url{https://osf.io/42ef9/}. All analyses were conducted in the R programming
 language version \Sexpr{paste(version[["major"]], version[["minor"]], sep =
   ".")} \citep{R}. The code to reproduce this manuscript is available at
