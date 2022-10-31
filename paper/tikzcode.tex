@@ -21,7 +21,7 @@
    %    {\scriptsize $\theta \sim f(\theta \,|\, \text{original data, external
    %    knowledge})$}\\
    %       \end{tabular}};
-   \node (designPrior) [below right = 2.5em and 3.25em of oData]
+   \node (designPrior) [below right = 3.5em and 3.25em of oData]
    {\begin{tabular}{c} \textbf{Design prior for model parameters} \\
       {\scriptsize $f(\theta \given x_{o}, \text{external
       knowledge})$}\\
@@ -37,14 +37,23 @@
   \node[rectangle, draw, rounded corners = 0.2em] (external) [right = 22em of oData]
   {\begin{tabular}{c} \textbf{Initial prior for model parameters} \\
      {\scriptsize $f(\theta \given \text{external knowledge})$} \\
-     % % {\scriptsize -- between-study heterogeneity} \\
-     % % {\scriptsize -- scepticism} \\
-     % % {\scriptsize -- data from other studies} \\
+     % {\scriptsize -- between-study heterogeneity} \\
+     % {\scriptsize -- scepticism} \\
+     % {\scriptsize -- data from other studies} \\
      % % {\scriptsize $\phantom{\rightarrow} \hdots$} \\
      % {\scriptsize -- heterogeneity $\rightarrow$ hierarchical prior} \\
      % {\scriptsize -- skepticism $\rightarrow$ shrinkage prior} \\
      % {\scriptsize -- other data sets $\rightarrow$ optimistic prior} \\
    \end{tabular}};
+
+   \node[rectangle, draw, rounded corners = 0.2em] (externalknowl) [below = 2em of external]
+  {\begin{tabular}{l} \textbf{External knowledge} \\
+     {\scriptsize -- between-study heterogeneity} \\
+     {\scriptsize -- skepticism regarding original study} \\
+     {\scriptsize -- data from other studies} \\
+     {\scriptsize $\phantom{\rightarrow} \hdots$} \\
+   \end{tabular}};
+
 
  % \node (rData) [below = 2em of designPrior]
  % {\begin{tabular}{c} \textbf{Predictive distribution of replication data} \\
@@ -52,7 +61,7 @@
  %    knowledge}, n_{r})$}
  %  \end{tabular}};
 
- \node (rData) [below = 3em of designPrior]
+ \node (rData) [below = 4.5em of designPrior]
  {\begin{tabular}{c} \textbf{Predictive distribution of replication data} \\
     {\scriptsize $f(x_{r} \given n_{r}, x_{o}, \text{external
     knowledge})$}
@@ -61,13 +70,13 @@
 % \node[rectangle, draw, fill = lightlightgray] (nr) [below = 4em of external]
 % {\begin{tabular}{c} \textbf{Replication sample size $n_{r}$}
 %    \end{tabular}};
-\node[rectangle, draw, fill = lightlightgray] (nr) [below = 4em of external]
+\node[rectangle, draw, fill = lightlightgray] (nr) [below = 2em of externalknowl]
 {\begin{tabular}{c} \textbf{Replication sample size} \\
    {\scriptsize $n_{r}$}
  \end{tabular}};
 
 
-\node (PRS) [below = 3em of rData]
+\node (PRS) [below = 4.5em of rData]
 {\begin{tabular}{c} \textbf{Probability of replication success} \\
    {\scriptsize $\Pr(X_r \in S \given n_{r}, x_{o}, \text{external
     knowledge})$}
@@ -82,7 +91,7 @@
 %     % {\scriptsize -- Hypothesis testing} \\
 %     % {\scriptsize -- Parameter estimation \dots}
      %    \end{tabular}};
-\node[rectangle, draw, rounded corners = 0.2em] (measureRS) [below = 11em of oData]
+\node[rectangle, draw, rounded corners = 0.2em] (measureRS) [below = 15em of oData]
 {\begin{tabular}{c} \textbf{Analysis method}  \\
     {\scriptsize success region $S$} \\
     % {\scriptsize -- Parameter estimation \dots}
@@ -98,7 +107,7 @@
 %    \end{tabular}};
 
 \node[rectangle, draw, rounded corners = 0.2em] (sideCond) [below = 2.5em of nr]
-{\begin{tabular}{l} \textbf{Side constraints} \\
+{\begin{tabular}{l} \textbf{Side constraints}\\
    {\scriptsize -- type-I error rate requirements} \\
    % {\scriptsize -- precision requirements} \\
    {\scriptsize -- cost/availability constraints} \\
@@ -116,6 +125,7 @@
 \draw [->] [bend left] (measureRS.east) to ([xshift=-1em]PRS.north);
 \draw [->] [dashed] (oData) to (measureRS);
 \draw [->] [dashed] (sideCond) to (nr.south);
+\draw [->] [dashed] (externalknowl.north) to (external.south);
 
 % \draw [->] [bend left] [dashed] (sideCond) to ([xshift=2.2em]PRS.south);
 % \draw [->] [bend right] [dashed] (PRS) to (nr);

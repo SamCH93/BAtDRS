@@ -18,4 +18,4 @@ pdf: tex
 clean:  
 	rm $(FILE).aux  $(FILE).blg  $(FILE).log  $(FILE).bbl \
 	$(FILE).out  $(FILE).brf  $(FILE).synctex.gz  $(FILE).tex \
-	rm -r ./figure/
+#	rm -r ./figure/

@@ -415,7 +415,7 @@ which can again be shown using standard Bayesian theory \citep[Section
 The design prior~\eqref{eq:dpnormal} and the resulting predictive
 distribution~\eqref{eq:fthetar}
 % and~\eqref{eq:zr}
-depend on the parameters of the initial prior ($\tau^{2}$, $\mutheta$,
+depend on the parameters of the initial prior ($\tau^ {2}$, $\mutheta$,
 $\sigmatheta^{2}$). We will now explain how these parameters can be specified
 based on external knowledge.
 
@@ -478,17 +478,18 @@ $I^{2} = \tau^{2}/(\tau^{2} + \sigma^{2}_{o}) = 40\%$ is classified as
 ``negligible'', which translates to
 $\tau^{2} = \sigma^{2}_{o}/(1/I^{2} - 1) = (2\sigma^{2}_{o})/3$.
 
-We note that, in principle, one can also assign a prior distribution to $\tau^2$
-\citep[for an overview of prior distributions for heterogeneity variances in the
-normal-normal hierarchical model see][]{Rover2021}. In this case there are is no
-closed-form expression for the predictive distribution of the replication effect
-estimate anymore but numerical or Monte Carlo integration need to be used. To
-gain more insight, we will thus only consider fixed $\tau^{2}$ in the remaining
-part of the paper. In the supplement we illustrate how the probability of
-replication success can be computed when a prior is assigned to $\tau^{2}$. The
-derived closed-form expression conditional on $\tau^{2}$ are still useful in
-this situation as they enable computation of the predictive distribution up to a
-single one-dimensional integral which can be computed numerically.
+We note that one can also assign a prior distribution to $\tau^2$ \citep[for an
+overview of prior distributions for heterogeneity variances in the normal-normal
+hierarchical model see][]{Rover2021}. In this case there are is no closed-form
+expression for the predictive distribution of the replication effect estimate
+anymore but numerical or Monte Carlo integration need to be used. % To
+% gain more insight, we will thus only consider fixed $\tau^{2}$ in the remaining
+% part of the paper.
+In the supplement we illustrate how the probability of replication success can
+be computed when a prior is assigned to $\tau^{2}$. The derived closed-form
+expression conditional on $\tau^{2}$ are still useful in this situation as they
+enable computation of the predictive distribution up to a single one-dimensional
+integral which can be computed numerically.
 % However, a relatively straightforward solution is to first simulate from the
 % marginal posterior distribution of $\tau^{2}$ based on an the original data
 % $x_{o} = \{\that_{o}, \sigma_{o}\}$ and initial prior for $\theta$ and
@@ -624,8 +625,8 @@ protzkolong %>%
     mutate(Type = case_when(Type == "Original" ~ "original study",
                             Type == "Replication" ~ "external-replication",
                             Type == "Self-Replication" ~ "self-replication"),
-           Type = factor(Type, levels = c("original study", "external-replication",
-                                          "self-replication"))) %>%
+           Type = factor(Type, levels = c("original study", "self-replication",
+                                          "external-replication"))) %>%
   ggplot(aes(x = dr, y = Rlab)) +
     geom_hline(yintercept = c(1.4, 2.4, 3.4), alpha = 0.1, size = 0.3) +
     geom_vline(xintercept = 0, lty = 2, alpha = 0.3, size = 0.5) +
@@ -643,7 +644,8 @@ protzkolong %>%
                     key_glyph = "point") +
     scale_x_continuous(breaks = seq(0, 0.6, 0.3), minor_breaks = NULL) +
     coord_cartesian(xlim = c(-0.15, 1.2)) +
-    scale_color_brewer(palette = "Dark2") +
+    ## scale_color_brewer(palette = "Dark2") +
+    scale_color_grey() +
     facet_wrap(~ Studyord) +
     labs(y = "Laboratory", x = "SMD effect estimate with 95% CI", color = "") +
     theme_bw() +
@@ -756,17 +758,21 @@ plotDF <- do.call("rbind",
                   sd = sqrt(applyGrid$var[i]))
     data.frame(theta = thetaseq, density = dens,
                applyGrid[i,])
-}))
+                    }))
+plotDF$initial <- factor(plotDF$initial,
+                         levels = c("uninformative", "shrinkage", "optimistic"))
 npriors <- length(unique(plotDF$initial))
-colsPriors <- palette.colors(n = npriors + 1, palette = "Okabe-ito")[2:(npriors + 1)]
-names(colsPriors) <- unique(plotDF$initial)
+## ## Okabe Ito colors
+## colsPriors <- palette.colors(n = npriors + 1, palette = "Okabe-ito")[2:(npriors + 1)]
+## names(colsPriors) <- unique(plotDF$initial)
 
-ggplot(data = plotDF, aes(x = theta, y = density, color = initial)) +
+ggplot(data = plotDF, aes(x = theta, y = density, color = initial, lty = initial)) +
     geom_line(alpha = 0.9, size = 0.8) +
     facet_wrap(~ tau, labeller = label_bquote(tau == .(round(tau, 2)))) +
     labs(x = bquote("Effect size" ~ theta ~ "(SMD)"),
-         y = "Density", color = "") +
-    scale_color_manual(values = colsPriors) +
+         y = "Density", color = "", linetype = "") +
+    #scale_color_manual(values = colsPriors) +
+    scale_color_grey() +
     theme_bw() +
         theme(legend.position = "top", panel.grid.minor = element_blank())
 @
@@ -792,8 +798,8 @@ $\hat{\theta}_{o} = \Sexpr{round(study[,"dr"], 3)}$ with variance
 $\sigma^{2}_{o} = \Sexpr{round(sqrt(study[,"vr"]), 2)}^{2}$ for a
 self-replication, and with variance
 $\sigma^{2}_{o} + \tau^{2} = \Sexpr{round(sqrt(study[,"vr"]), 2)}^{2} + \Sexpr{round(tauAbs, 2)}^{2} \approx \Sexpr{round(sqrt(varDPhet), 2)}^{2}$
-for an external-replication. Figure~\ref{fig:dpexample} (yellow lines) shows the
-densities of the two priors.
+for an external-replication. Figure~\ref{fig:dpexample} (dark-grey solid lines)
+shows the densities of the two priors.
 % Note that power
 % calculations under the former prior have been termed ``predictive power''
 % \citep{Micheloud2020}, while the latter prior has not appeared in the SSD for
@@ -805,18 +811,18 @@ believe that the original result might be exaggerated, we could have specified
 an initial shrinkage prior ($\mutheta = 0$ and $\sigmatheta^{2} < \infty$). For
 instance, the empirical Bayes estimate for the prior variance $\sigmatheta^{2}$
 from~\eqref{eq:EBestimate} leads to a prior whose mean and variance are shrunken
-towards zero by $\Sexpr{round((1 - shrinkEBhet)*100, 0)}$\% (blue lines in
-Figure~\ref{fig:dpexample}). In contrast, if we had prior knowledge about the
-effect size $\theta$ from another study, we could have specified an initial
-``optimistic'' prior. For example, if the self-replication of the
-``\Sexpr{studyname}'' experiment had been a pilot study and we used its effect
-estimate $\hat{\theta}_{p} = \Sexpr{round(extstudy[,"dr"], 3)}$ and standard
-error $\sigma_{p} = \Sexpr{round(sqrt(extstudy[,"vr"]), 2)}$ to specify the
-initial prior, this would lead to a design prior centered around the weighted
-mean of original and pilot study, and a prior precision equal to the sum of the
-precision of both estimates (green lines in Figure~\ref{fig:dpexample}). Due to
-the inclusion of the external data, this design prior is much more concentrated
-than the other two.
+towards zero by $\Sexpr{round((1 - shrinkEBhet)*100, 0)}$\% (medium-grey
+short-dashed lines in Figure~\ref{fig:dpexample}). In contrast, if we had prior
+knowledge about the effect size $\theta$ from another study, we could have
+specified an initial ``optimistic'' prior. For example, if the self-replication
+of the ``\Sexpr{studyname}'' experiment had been a pilot study and we used its
+effect estimate $\hat{\theta}_{p} = \Sexpr{round(extstudy[,"dr"], 3)}$ and
+standard error $\sigma_{p} = \Sexpr{round(sqrt(extstudy[,"vr"]), 2)}$ to specify
+the initial prior, this would lead to a design prior centered around the
+weighted mean of original and pilot study, and a prior precision equal to the
+sum of the precision of both estimates (light-grey long-dashed lines in
+Figure~\ref{fig:dpexample}). Due to the inclusion of the external data, this
+design prior is much more concentrated than the other two.
 
 
 \subsection{Probability of replication success and required sample size}
@@ -894,7 +900,7 @@ Moreover, by assuming a standard error of the form
 $\sigma_{r} = \lambda/\sqrt{n_{r}}$ and plugging in the parameters of the
 ``conditional'' design prior from Section~\ref{sec:designpredictive}
 ($\tau^{2} = 0$, $\mutheta = \that_{o}$, $g \downarrow 0$), we obtain the
-well-known sample size formula
+well-known sample size formula \citep[chapter 3.3]{Matthews2006}
 \begin{align*}
   n_{r}^{*} = \frac{(\zalpha + \zbeta)^{2}}{(\that_{o}/\lambda)^{2}}
 \end{align*}
@@ -1251,8 +1257,8 @@ ssbfs2 <- ssdBFs(level = levelBFs, dprior = dprior2, power = power)
 @
 \caption{Probability of replication success as a function of relative sample
   size $c = n_{r}/n_{o}$ for experiment ``\Sexpr{studyname}'' with original
-  effect estimate $\hat{\theta}_{o} = \Sexpr{round(study[,"dr"], 2)}$ and
-  standard error $\sigma_{o} = \Sexpr{round(sqrt(study[,"vr"]), 2)}$ for
+  effect estimate $\hat{\theta}_{o} = \Sexpr{round(study[,"dr"], 3)}$ and
+  standard error $\sigma_{o} = \Sexpr{round(sqrt(study[,"vr"]), 3)}$ for
   different initial prior parameters ($\tau, \mutheta, \sigmatheta^{2}$). The
   probability of replication success with the design prior
   $\tau = 0, \mutheta = 0$, and $\sigmatheta^{2} = 0$ (right plot) corresponds
@@ -1705,25 +1711,9 @@ plots show the probability of replication success as a function of the total
 sample size $m \times n_{r}$ for different number of sites $m$. We see that for
 the same total sample size a larger number of sites increases the probability of
 replication success. For instance, a total sample size of roughly 3000 is
-required to achieve an 80\% target probability with one site (yellow) for the
-two-trials rule, whereas only approximately half as many samples are required
-for two sites (green).
-
-However, focusing only on the total sample size ignores the fact that the cost
-of an additional site is usually larger than the cost of an additional
-observation. The bottom plot shows the total cost $K$ of a design (relative to
-the cost of one sample $K_{c}$) whose sample size is determined for a target
-probability of replication success $1 - \beta = \Sexpr{round(power*100, 2)}$\%.
-We see that if the cost of an additional site $K_{s}$ is not much larger than
-the cost of an additional sample $K_{c}$, \eg{} $K_{S}/K_{c} = 30$ (yellow) the
-optimal number of sites is $m = 5$ for the two-trials rule and $m = 8$ for the
-replication Bayes factor. If an additional site is more costly the optimal
-number of sites is lower, \eg{} if the cost ratio is $K_{S}/K_{c} = 300$
-(purple), the optimal number of sites is $m = 2$ for the two trials rule and
-$m = 3$ for the replication Bayes factor, while the number of sites in the
-actually used by \citet{Protzko2020} was $m = 3$ (counting only
-external-replications), respectively, $m = 4$ (counting also the
-internal-replication).
+required to achieve an 80\% target probability with one site %(yellow)
+for the two-trials rule, whereas only approximately half as many samples are
+required for two sites. %(green).
 
 
 \begin{figure}[!htb]
@@ -1771,15 +1761,16 @@ porsDF <- lapply(X = ms, FUN = function(m) {
 
 nbks <- c(1, 100, 300, 1000, 3000, 10000)
 powbks <- seq(0, 1, 0.2)
-plotPors <- ggplot(data = porsDF, aes(x = totalss, y = p,
-                          color = factor(m, ordered = TRUE))) +
+plotPors <- ggplot(data = porsDF,
+                   aes(x = totalss, y = p, color = factor(m, ordered = TRUE))) +
     facet_wrap(~ method, ncol = 2) +
     geom_step(alpha = 0.8) +
     scale_x_log10(breaks = nbks) +
     scale_y_continuous(breaks = powbks, limits = c(0, 1),
                        labels = scales::label_percent()) +
-    scale_color_viridis_d(direction = -1,
-                          guide = guide_legend(reverse = TRUE)) +
+    #scale_color_viridis_d(direction = -1,
+    #                      guide = guide_legend(reverse = TRUE)) +
+    scale_color_grey(guide = guide_legend(reverse = TRUE)) +
     labs(x = bquote("Total sample size" ~ italic(m) %*% italic(n[r])),
          y = "Probability of replication success",
          color = bquote(atop("Number   ", "of sites" ~ italic(m)))) +
@@ -1819,19 +1810,21 @@ costDF <- lapply(X = seq(1, nrow(applyGrid)), FUN = function(i) {
 }) %>%
     bind_rows() %>%
     mutate(method = factor(method,
-                           levels = c("Two-trials rule", "Replication Bayes factor")))
+                           levels = c("Two-trials rule", "Replication Bayes factor")),
+           costratioFac = factor(costratio, ordered = TRUE))
 
 mbks <- seq(1, 30, 3)
 costbks <- c(1500, 3000, 6000, 12000, 24000, 48000)
 plotCost <- ggplot(data = costDF, aes(x = m, y = cost,
-                          color = factor(costratio, ordered = TRUE))) +
+                    color = costratioFac)) +
     facet_wrap(~ method, ncol = 2) +
     geom_step(alpha = 0.8) +
     scale_x_continuous(breaks = mbks) +
     scale_y_log10(breaks = costbks) +
-    scale_color_viridis_d(direction = -1,
-                          guide = guide_legend(reverse = TRUE),
-                          option = "plasma") +
+    #scale_color_viridis_d(direction = -1,
+    #                      guide = guide_legend(reverse = TRUE),
+    #                      option = "plasma") +
+    scale_color_grey(guide = guide_legend(reverse = TRUE)) +
     labs(x = "Number of sites" ~ italic(m),
          y = "Relative cost of design" ~ italic(K) / italic(K[c]),
          color = bquote(atop("Cost ratio", italic(K[s]) / italic(K[c])))) +
@@ -1855,6 +1848,22 @@ ggpubr::ggarrange(plotPors, plotCost, ncol = 1, align = "v")
   $1 - \beta = \Sexpr{round(pow*100, 2)}$\%.}
 \label{fig:multisite}
 \end{figure}
+
+However, focusing only on the total sample size ignores the fact that the cost
+of an additional site is usually larger than the cost of an additional
+observation. The bottom plot shows the total cost $K$ of a design (relative to
+the cost of one sample $K_{c}$) whose sample size is determined for a target
+probability of replication success $1 - \beta = \Sexpr{round(power*100, 2)}$\%.
+We see that if the cost of an additional site $K_{s}$ is not much larger than
+the cost of an additional sample $K_{c}$, \eg{} $K_{S}/K_{c} = 30$ %(yellow)
+the optimal number of sites is $m = 5$ for the two-trials rule and $m = 8$ for
+the replication Bayes factor. If an additional site is more costly the optimal
+number of sites is lower, \eg{} if the cost ratio is $K_{S}/K_{c} = 300$,
+% (purple),
+the optimal number of sites is $m = 2$ for the two trials rule and $m = 3$ for
+the replication Bayes factor, while the number of sites in the actually used by
+\citet{Protzko2020} was $m = 3$ (counting only external-replications),
+respectively, $m = 4$ (counting also the internal-replication).
 
 \section{Discussion}
 \label{sec:discussion}
