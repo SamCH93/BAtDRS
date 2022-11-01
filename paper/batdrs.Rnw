@@ -1,5 +1,5 @@
 \PassOptionsToPackage{dvipsnames}{xcolor}
-\documentclass[a4paper, 12pt, man, natbib, floatsintext]{apa7}
+\documentclass[a4paper, 11pt, man, natbib, floatsintext]{apa7}
 \usepackage[english]{babel} % english
 \usepackage{amsmath, amssymb} % math
 \usepackage{booktabs} % nicer tables
@@ -57,9 +57,9 @@
   be defined through Bayesian or non-Bayesian criteria, and different criteria
   may also be combined to meet distinct stakeholders and allow conclusive
   inferences based on multiple analysis approaches. We illustrate with
-  application to data from a multisite replication project how Bayesian
-  approaches help to design informative and cost-effective replication studies.
-  Our methods are made available in an R package.}
+  application to data from a multisite replication project from Psychology how
+  Bayesian approaches help to design informative and cost-effective replication
+  studies. Our methods are made available in an R package.}
 
 \keywords{Bayesian design, design prior, multisite replication, sample size
   determination}
@@ -80,6 +80,11 @@
   Hirschengraben 84, 8001 Zurich, Switzerland. E-mail: samuel.pawel@uzh.ch
 }
 
+\journal{}
+\volume{}
+\ccoppy{}
+\copnum{}
+
 %% Definitions
 %% ----------------------------------------------------------------------------
 \input{defs.tex}
@@ -94,7 +99,7 @@ opts_chunk$set(fig.height = 4,
                echo = FALSE,
                warning = FALSE,
                message = FALSE,
-               cache = TRUE,
+               cache = FALSE,
                eval = TRUE,
                out.width = "\\textwidth")
 
@@ -217,13 +222,14 @@ Importantly, Bayesian design approaches can also be used if the planned analysis
 of the replication study is non-Bayesian, which is the more common situation in
 practice.
 
-We start with presenting a general framework for Bayesian SSD of replication
-studies (Section~\ref{sec:GFW}), followed by investigating design priors and
-sample size determination closer in the normal-normal hierarchical model and for
-several Bayesian and non-Bayesian analysis methods (Section~\ref{sec:SS}). To
-illustrate the methodology, we use data from a multisite replication project
+This paper is structured as follows: We start with presenting a general
+framework for Bayesian SSD of replication studies, %(Section~\ref{sec:GFW}),
+followed by investigating design priors and sample size determination closer in
+the normal-normal hierarchical model and for several Bayesian and non-Bayesian
+analysis methods. %(Section~\ref{sec:SS}).
+To illustrate the methodology, we use data from a multisite replication project
 \citep{Protzko2020} as a running example. We then close with concluding remarks,
-limitations, and open questions (Section \ref{sec:discussion}).
+limitations, and open questions. %(Section \ref{sec:discussion}).
 
 
 \section{General framework} \label{sec:GFW}
@@ -255,11 +261,11 @@ posterior distribution of $\theta$ based on the original data and an
 The initial prior of $\theta$ may depend on external knowledge (\eg{} data from
 other studies) and it represents the uncertainty about $\theta$ before observing
 the original data. We will discuss common types of external knowledge in the
-replication setting in Section~\ref{sec:SS}. The design prior~\eqref{eq:dp}
-hence represents the state of knowledge and uncertainty about the parameter
-$\theta$ before the replication is conducted, and, along with an assumed
-replication sample size $n_{r}$, it can be used to compute a predictive
-distribution for the replication data
+replication setting in the next Section. %~\ref{sec:SS}.
+The design prior~\eqref{eq:dp} hence represents the state of knowledge and
+uncertainty about the parameter $\theta$ before the replication is conducted,
+and, along with an assumed replication sample size $n_{r}$, it can be used to
+compute a predictive distribution for the replication data
 \begin{align}
   \label{eq:ftr}
   f(x_r \given n_r, x_o, \text{external knowledge})
@@ -746,9 +752,10 @@ experimental conditions will be nearly identical in both studies. In contrast,
 one would expect some between-study heterogeneity for external-replications as
 the experimental conditions may slightly differ between the labs. In the
 following, we will use $\tau^{2} = \Sexpr{round(tauAbs, 2)}^{2}$ elicited via
-the ``absolute'' approach as discussed in Section~\ref{sec:heterogeneity}, so
-that the range between the 2.5\% and the 97.5\% quantile of the study specific
-effect size distribution is equal to a small effect size $d = 0.2$.
+the ``absolute'' approach as discussed in previously,
+% Section~\ref{sec:heterogeneity},
+so that the range between the 2.5\% and the 97.5\% quantile of the study
+specific effect size distribution is equal to a small effect size $d = 0.2$.
 % since it is independent of the sample size of the original study.
 
 
@@ -894,21 +901,22 @@ Replication success at level $\alpha$ % with the two-trials
 is then achieved if the replication $p$-value is also significant, \ie{}
 $p_{r} = 1 - \Phi(\that_{r}/\sigma_{r}) \leq \alpha$, which implies a success
 region
-\begin{align}
-  \label{eq:S2TR}
+\begin{align*}
   S_{\scriptscriptstyle \text{2TR}}
   = \left[\zalpha\, \sigma_{r}, \infty \right),
-\end{align}
+\end{align*}
 where $\zalpha$ is the $1 - \alpha$ quantile of the standard
 normal distribution. The probability of replication success is thus given by
 \begin{align}
   \label{eq:2TRpros}
   \Pr(\that_{r} \in S_{\scriptscriptstyle \text{2TR}} \given \that_{o}, \sigma_{o}, \sigma_{r})
-  = \Phi\left(\frac{\muthatr - \zalpha \, \sigma_{r}}{\sqrt{\sigma^{2}_{r} +
-\tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right)
+  = % \Phi\left(\frac{\muthatr - \zalpha \, \sigma_{r}}{\sqrt{\sigma^{2}_{r} +
+  % \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right)
+  \Phi\left(\frac{\muthatr - \zalpha \, \sigma_{r}}{\sigmathatr}\right)
 \end{align}
 with $\Phi(\cdot)$ the standard normal cumulative distribution function and
-$\muthatr$ the mean of the predictive distribution~\eqref{eq:fthetar}.
+$\muthatr$ and $\sigmathatr$ the mean and standard deviation of the predictive
+distribution~\eqref{eq:fthetar}. %, the latter also depending on $\sigma_{r}$.
 Importantly, by decreasing the standard error $\sigma_{r}$ (through increasing
 the sample size $n_{r}$), the probability of replication
 success~\eqref{eq:2TRpros} cannot become arbitrarily large but is bounded from
@@ -934,10 +942,11 @@ leads to
 for $\alpha < \beta$. The standard error $\sigma_{r}^{*}$ can subsequently be
 translated in a sample size. The translation depends on the type of effect size,
 for instance, for SMD effect sizes we can use the approximation
-$n_{r}^{*} \approx 4/(\sigma^*_{r})^{2}$ from Section~\ref{sec:example}.
+$n_{r}^{*} \approx 4/(\sigma^*_{r})^{2}$ from
+earlier. %Section~\ref{sec:example}.
 Moreover, by assuming a standard error of the form
 $\sigma_{r} = \lambda/\sqrt{n_{r}}$ and plugging in the parameters of the
-``conditional'' design prior from Section~\ref{sec:designpredictive}
+``conditional'' design prior %from Section~\ref{sec:designpredictive}
 ($\tau^{2} = 0$, $\mutheta = \that_{o}$, $g \downarrow 0$), we obtain the
 well-known sample size formula \citep[chapter 3.3]{Matthews2006}
 \begin{align*}
@@ -980,9 +989,11 @@ $\sigma_{r}$, the probability of replication success can be computed by
 \begin{align}
   \label{eq:MApros}
   \Pr(\that_{r} \in S_{\scriptscriptstyle \text{MA}} \given \that_{o}, \sigma_{o}, \sigma_{r})
-  = \Phi\left(\frac{\muthatr - \sigma_{r} \zalpha\sqrt{1 + \sigma^{2}_{r}/\sigma^{2}_{o}}
-  + (\that_{o} \sigma^{2}_{r})/\sigma^{2}_{o}}{\sqrt{\sigma^{2}_{r} +
-\tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right).
+  = % \Phi\left(\frac{\muthatr - \sigma_{r} \zalpha\sqrt{1 + \sigma^{2}_{r}/\sigma^{2}_{o}}
+%   + (\that_{o} \sigma^{2}_{r})/\sigma^{2}_{o}}{\sqrt{\sigma^{2}_{r} +
+%   \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right).
+  \Phi\left(\frac{\muthatr - \sigma_{r} \zalpha\sqrt{1 + \sigma^{2}_{r}/\sigma^{2}_{o}}
+  + (\that_{o} \sigma^{2}_{r})/\sigma^{2}_{o}}{\sigmathatr}\right).
 \end{align}
 As for the two-trials rule, the probability~\eqref{eq:MApros} cannot be made
 arbitrarily large by decreasing the standard error $\sigma_{r}$ but is bounded
@@ -1037,13 +1048,18 @@ of replication success can be computed by
 \begin{align}
   \label{eq:porsEqu}
   \Pr(\that_{r} \in S_{\scriptscriptstyle \text{E}} \given \that_{o}, \sigma_{o}, \sigma_{r})
-  &= \Phi\left(\frac{\that_{o} + \Delta - \zalphatwo
-  \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}} -\muthatr}{\sqrt{\sigma^{2}_{r} +
-  \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right) \nonumber \\
+  &= % \Phi\left(\frac{\that_{o} + \Delta - \zalphatwo
+%   \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}} -\muthatr}{\sqrt{\sigma^{2}_{r} +
+%   \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right) \nonumber \\
+% &\phantom{=} -
+%   \Phi\left(\frac{\that_{o} - \Delta + \zalphatwo
+%   \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}} -\muthatr}{\sqrt{\sigma^{2}_{r} +
+%   \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right).
+    \Phi\left(\frac{\that_{o} + \Delta - \zalphatwo
+  \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}} -\muthatr}{\sigmathatr}\right) \nonumber \\
 &\phantom{=} -
   \Phi\left(\frac{\that_{o} - \Delta + \zalphatwo
-  \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}} -\muthatr}{\sqrt{\sigma^{2}_{r} +
-  \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right).
+  \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}} -\muthatr}{\sigmathatr}\right).
 \end{align}
 As with the previous methods, the probability~\eqref{eq:porsEqu} cannot be made
 arbitrarily large by decreasing the replication standard error $\sigma_{r}$, but
@@ -1098,19 +1114,23 @@ be computed by
 \begin{align}
   \label{eq:BFrpros}
   \Pr(\that_{r} \in S_{\scriptscriptstyle \BFr} \given \that_{o}, \sigma_{o}, \sigma_{r})
-  &= \Phi\left(\frac{\muthatr - \sqrt{A} + (\that_{o}\sigma^{2}_{r})/\sigma^{2}_{o}}{\sqrt{\sigma^{2}_{r} +
-    \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right) \nonumber \\
-  &\phantom{=}
+  &=%  \Phi\left(\frac{\muthatr - \sqrt{A} + (\that_{o}\sigma^{2}_{r})/\sigma^{2}_{o}}{\sqrt{\sigma^{2}_{r} +
+%     \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right) \nonumber \\
+%   &\phantom{=}
+%     + \Phi\left(\frac{-\sqrt{A} - (\that_{o}\sigma^{2}_{r})/\sigma^{2}_{o}
+% - \muthatr}{\sqrt{\sigma^{2}_{r} +
+% \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right).
+      \Phi\left(\frac{\muthatr - \sqrt{A} + (\that_{o}\sigma^{2}_{r})/\sigma^{2}_{o}}{
+      \sigmathatr}\right)
     + \Phi\left(\frac{-\sqrt{A} - (\that_{o}\sigma^{2}_{r})/\sigma^{2}_{o}
-- \muthatr}{\sqrt{\sigma^{2}_{r} +
-  \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right).
+- \muthatr}{\sigmathatr}\right).
 \end{align}
 One may want to compute the probability of replication success only for the part
 of the success region with the same sign as the original effect estimate to
 avoid the replication paradox. As for the other methods, the
 probability~\eqref{eq:BFrpros} is bounded from above by a constant
-$\text{limPr}_{\scriptscriptstyle \BFr} = \lim_{\sigma_{r} \downarrow 0} \Pr(\that_r \in S_{\scriptscriptstyle \BFr} \given \that_{o}, \sigma_{o}, \sigma_{r})$.
-Root finding algorithms can be used to numerically determine the required
+$\text{limPr}_{\scriptscriptstyle \BFr} = \lim_{\sigma_{r} \downarrow 0} \Pr(\that_r \in S_{\scriptscriptstyle \BFr} \given \that_{o}, \sigma_{o}, \sigma_{r})$,
+and root finding algorithms can be used to numerically determine the required
 standard error $\sigma^{*}_{r}$ for achieving a target probability of
 replication success $1 - \beta < \text{limPr}_{\scriptscriptstyle \BFr}$.
 
@@ -1134,9 +1154,11 @@ From the success region~\eqref{eq:Pssuccess} the probability of replication
 success at level $\alpha$ is
 \begin{align*}
   \Pr(\that_r \in S_{\scriptscriptstyle \ps} \given \that_{o}, \sigma_{o}, \sigma_{r})
-  &= \Phi\left(\frac{\muthatr - \zalpha \sqrt{\sigma^{2}_{r} +
-    \sigma^{2}_{o}/\{(z_{o}^{2}/\zalpha^{2}) - 1}\}}{\sqrt{\sigma^{2}_{r} +
-    \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right),
+  &=%  \Phi\left(\frac{\muthatr - \zalpha \sqrt{\sigma^{2}_{r} +
+    % \sigma^{2}_{o}/\{(z_{o}^{2}/\zalpha^{2}) - 1}\}}{\sqrt{\sigma^{2}_{r} +
+    % \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right),
+     \Phi\left(\frac{\muthatr - \zalpha \sqrt{\sigma^{2}_{r} +
+    \sigma^{2}_{o}/\{(z_{o}^{2}/\zalpha^{2}) - 1}\}}{\sigmathatr}\right),
 \end{align*}
 and also bounded from above by a constant
 $\text{limPr}_{\scriptscriptstyle \ps} = \lim_{\sigma_{r} \downarrow 0} \Pr(\that_r \in S_{\scriptscriptstyle \ps} \given \that_{o}, \sigma_{o}, \sigma_{r})$.
@@ -1180,8 +1202,9 @@ levelBFs <- 1/10
 @
 %
 
-We will now revisit the experiment ``\Sexpr{studyname}'' from
-Section~\ref{sec:example} and compute the probability of replication success.
+We will now revisit the experiment ``\Sexpr{studyname}'' % from
+% Section~\ref{sec:example}
+and compute the probability of replication success.
 % and
 % the replication sample size
 % based on the previously discussed analysis methods.
@@ -1745,7 +1768,7 @@ Figure~\ref{fig:multisite} illustrates multisite SSD for the experiment
 two-trials rule and the replication Bayes factor (see the supplement for details
 on the multisite extension of these two methods). As for singlesite SSD, we use
 the design prior based on an initial flat prior for the effect size and taking
-into account heterogeneity ($\tau^{2} = \Sexpr{round(tauAbs, 2)}$). The top
+into account heterogeneity ($\tau = \Sexpr{round(tauAbs, 2)}$). The top
 plots show the probability of replication success as a function of the total
 sample size $m \times n_{r}$ for different number of sites $m$. We see that for
 the same total sample size a larger number of sites increases the probability of
@@ -1964,7 +1987,7 @@ language version \Sexpr{paste(version[["major"]], version[["minor"]], sep =
 time of writing this article is archived at
 \url{https://doi.org/10.5281/zenodo.XXXXXX}. Methods for Bayesian SSD of
 replication studies are implemented in the R package \textbf{BayesRepDesign}
-which is available at \url{https://github.com/SamCH93/BayesRepDesign}.
+which is available at \url{https://github.com/SamCH93/BayesRepDesign}. The
 Appendix~\ref{app:package} illustrates basic usage of the package.
 
 \section*{Acknowledgments}
@@ -1984,12 +2007,12 @@ this article.
 \section{The BayesRepDesign R package}
 \label{app:package}
 
-<< "package-illustration", echo = TRUE, size = "footnotesize", fig.height = 3.5 >>=
+<< "package-illustration", echo = TRUE, size = "footnotesize", fig.height = 3.5, out.width = "0.9\\textwidth" >>=
 library("BayesRepDesign")
 
 ## design prior (flat initial prior for effect size + heterogeneity)
 dp <- designPrior(to = 0.2, so = 0.05, tau = 0.08)
-## plot(dp) # plot design prior with this command
+plot(dp)
 
 ## compute replication standard error for achieving significance at 2.5%
 ssdSig(level = 0.025, dprior = dp, power = 0.8)
