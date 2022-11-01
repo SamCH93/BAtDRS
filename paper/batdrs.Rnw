@@ -1,46 +1,91 @@
-\documentclass[a4paper, 11pt]{article}
-\usepackage[dvipsnames]{xcolor}
-\input{header.tex}
+\PassOptionsToPackage{dvipsnames}{xcolor}
+\documentclass[a4paper, 12pt, man, natbib, floatsintext]{apa7}
+\usepackage[english]{babel} % english
+\usepackage{amsmath, amssymb} % math
+\usepackage{booktabs} % nicer tables
+\usepackage[title]{appendix} % better appendices
+\usepackage{nameref} % reference appendices with names
+% \usepackage{doi} % doi link
+
+
+%% fonts
+%% ----------------------------------------------------------------------------
+% % \usepackage{lmodern} % math and serif font
+% % \usepackage{mathpazo} % math and serif font
+\usepackage{times} % math and serif font
+\usepackage[semibold]{sourcesanspro} % sans serif font
+% \usepackage{sectsty} % use different fonts for different sections
+% \allsectionsfont{\sffamily} % for sections use sans serif
+\usepackage{setspace} % more space
+\usepackage[font={small, stretch=1.2}]{caption} % smaller captions
+
+
+%% tikz
+%% ----------------------------------------------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes,fit}
+% define color for tikz figure
+\definecolor{lightlightgray}{RGB}{211,211,211}
+ % set default tikz font to sans serif
+\tikzset{every picture/.style={/utils/exec={\sffamily}}}
+
+
+%% title, authors, affiliations, abstract etc.
+%% ----------------------------------------------------------------------------
+\title{Bayesian approaches to designing replication studies}
+\shorttitle{Bayesian approaches to designing replication studies}
+
+\authorsnames[1,2,1]{Samuel Pawel, Guido Consonni, Leonhard Held}
+\authorsaffiliations{{Department of Biostatistics, Center for Reproducible
+    Science, University of Zurich}, {Dipartimento di Scienze Statistiche,
+    Universit\`{a} Cattolica del Sacro Cuore}}
+
+\leftheader{Pawel, Consonni, Held}
+
+\abstract{Replication studies are essential for assessing the credibility of
+  claims from original studies. A critical aspect of designing replication
+  studies is determining their sample size; a too small sample size may lead to
+  inconclusive studies whereas a too large sample size may waste resources that
+  could be allocated better in other studies. Here we show how Bayesian
+  approaches can be used for tackling this problem. The Bayesian framework
+  allows researchers to combine the original data and external knowledge in a
+  design prior distribution for the underlying parameters. We investigate design
+  priors in the normal-normal hierarchical model where analytical results are
+  available. Based on a design prior, predictions about the replication data can
+  be made, and the replication sample size can be chosen to ensure a
+  sufficiently high probability of replication success. Replication success may
+  be defined through Bayesian or non-Bayesian criteria, and different criteria
+  may also be combined to meet distinct stakeholders and allow conclusive
+  inferences based on multiple analysis approaches. We illustrate with
+  application to data from a multisite replication project how Bayesian
+  approaches help to design informative and cost-effective replication studies.
+  Our methods are made available in an R package.}
+
+\keywords{Bayesian design, design prior, multisite replication, sample size
+  determination}
+
+\authornote{
+
+  \addORCIDlink{Samuel Pawel}{0000-0003-2779-320X}
+
+  \addORCIDlink{Guido Consonni}{0000-0002-1252-5926}
+
+  \addORCIDlink{Leonhard Held}{0000-0002-8686-5325}
+
+  Preprint version \today. % don't forget to hard-code date when submitting to arXiv!
+  Licensed under CC-BY.
+
+  Correspondence concerning this article should be addressed to Samuel Pawel,
+  Epidemiology, Biostatistics and Prevention Institute, University of Zurich,
+  Hirschengraben 84, 8001 Zurich, Switzerland. E-mail: samuel.pawel@uzh.ch
+}
+
+%% Definitions
+%% ----------------------------------------------------------------------------
+\input{defs.tex}
 
 \begin{document}
 \maketitle
-
-%% Disclaimer that a preprint
-%% ----------------------------------------------------------------------------
-\begin{center}
-  \vspace{-2em}
-  {\color{red}This is a preprint which has not yet been peer reviewed.}
-\end{center}
-
-\begin{center}
-  \begin{minipage}{13cm}
-    {\small
-      \rule{\textwidth}{0.4pt} \\
-      {\centering\textbf{Abstract}\\ Replication studies are essential for
-        assessing the credibility of claims from original studies. A critical
-        aspect of designing replication studies is determining their sample
-        size; a too small sample size may lead to inconclusive studies whereas a
-        too large sample size may waste resources that could be allocated better
-        in other studies. Here we show how Bayesian approaches can be used for
-        tackling this problem. The Bayesian framework allows researchers to
-        combine the original data and external knowledge in a design prior
-        distribution for the underlying parameters. We investigate design priors
-        in the normal-normal hierarchical model where analytical results are
-        available. Based on a design prior, predictions about the replication
-        data can be made, and the replication sample size can be chosen to
-        ensure a sufficiently high probability of replication success.
-        Replication success may be defined through Bayesian or non-Bayesian
-        criteria, and different criteria may also be combined to meet distinct
-        stakeholders and allow conclusive inferences based on multiple analysis
-        approaches. We illustrate with application to data from a multisite
-        replication project how Bayesian approaches help to design informative
-        and cost-effective replication studies. Our methods are made available
-        in an R package.}
-      \rule{\textwidth}{0.4pt} \\
-      \textit{Keywords}: Bayesian design, design prior, multisite replication,
-      sample size determination}
-  \end{minipage}
-\end{center}
 
 << "main-setup", echo = FALSE, message = FALSE, warning = FALSE >>=
 ##  knitr options
@@ -49,8 +94,9 @@ opts_chunk$set(fig.height = 4,
                echo = FALSE,
                warning = FALSE,
                message = FALSE,
-               cache = FALSE,
-               eval = TRUE)
+               cache = TRUE,
+               eval = TRUE,
+               out.width = "\\textwidth")
 
 ## should sessionInfo be printed at the end?
 reproducibility <- TRUE
@@ -147,20 +193,11 @@ approaches \citep{Spiegelhalter1986b, Spiegelhalter1986c, Weiss1997,
 Figure~\ref{fig:SSDschema}) applies to any kind of data model and analysis
 method.
 
-\begin{figure}[!tb]
+\begin{figure}[!ht]
   \centering
   {\small \input{tikzcode.tex}}
   \caption{Schematic illustration of Bayesian sample size determination for
     replication studies.}
-    % ; the observed data from the original study $x_{o}$ are used for
-    % specifying a design prior for the model parameters $\theta$ (possibly along
-    % with external knowledge). The design prior and an assumed replication sample
-    % size $n_{r}$ then define a predictive distribution for the replication data
-    % $X_{r}$. Based on this predictive distribution and a specified analysis
-    % method (possibly involving the original data), the probability of
-    % replication success can be computed. The replication sample size $n_{r}$ is
-    % then determined such that the probability of replication success becomes
-    % sufficiently large (and such that possible side constraints are satisfied).}
 \label{fig:SSDschema}
 \end{figure}
 
@@ -482,14 +519,14 @@ We note that one can also assign a prior distribution to $\tau^2$ \citep[for an
 overview of prior distributions for heterogeneity variances in the normal-normal
 hierarchical model see][]{Rover2021}. In this case there are is no closed-form
 expression for the predictive distribution of the replication effect estimate
-anymore but numerical or Monte Carlo integration need to be used. % To
+but numerical or Monte Carlo integration need to be used. % To
 % gain more insight, we will thus only consider fixed $\tau^{2}$ in the remaining
 % part of the paper.
-In the supplement we illustrate how the probability of replication success can
-be computed when a prior is assigned to $\tau^{2}$. The derived closed-form
-expression conditional on $\tau^{2}$ are still useful in this situation as they
-enable computation of the predictive distribution up to a single one-dimensional
-integral which can be computed numerically.
+We illustrate in the supplement how the probability of replication success can
+in this case be computed. The derived closed-form expression conditional on
+$\tau^{2}$ are still useful as they enable computation of the predictive
+distribution up to a single one-dimensional integral which can be computed
+numerically.
 % However, a relatively straightforward solution is to first simulate from the
 % marginal posterior distribution of $\tau^{2}$ based on an the original data
 % $x_{o} = \{\that_{o}, \sigma_{o}\}$ and initial prior for $\theta$ and
@@ -571,7 +608,7 @@ original finding, four replication studies were then carried out, one by the
 same lab (a \emph{self-replication}) and three by the other three labs (three
 \emph{external-replications}).
 
-\begin{figure}[!tb]
+\begin{figure}[ph!]
 << "analyse-protzko", fig.height = 9.65 >>=
 ## compute heterogeneity estimates for external replications
 MAerDF <- lapply(X = unique(protzko$Study), FUN = function(study) {
@@ -715,7 +752,7 @@ effect size distribution is equal to a small effect size $d = 0.2$.
 % since it is independent of the sample size of the original study.
 
 
-\begin{figure}[!htb]
+\begin{figure}[!ht]
 << "example-design-prior", fig.height = 3.5 >>=
 ## uninformative initial prior
 meanDP <- study$dr
@@ -773,6 +810,8 @@ ggplot(data = plotDF, aes(x = theta, y = density, color = initial, lty = initial
          y = "Density", color = "", linetype = "") +
     #scale_color_manual(values = colsPriors) +
     scale_color_grey() +
+    scale_linetype_manual(values = c("uninformative" = 1, "shrinkage" = 2,
+                                     "optimistic" = 4)) +
     theme_bw() +
         theme(legend.position = "top", panel.grid.minor = element_blank())
 @
@@ -812,7 +851,7 @@ an initial shrinkage prior ($\mutheta = 0$ and $\sigmatheta^{2} < \infty$). For
 instance, the empirical Bayes estimate for the prior variance $\sigmatheta^{2}$
 from~\eqref{eq:EBestimate} leads to a prior whose mean and variance are shrunken
 towards zero by $\Sexpr{round((1 - shrinkEBhet)*100, 0)}$\% (medium-grey
-short-dashed lines in Figure~\ref{fig:dpexample}). In contrast, if we had prior
+dashed lines in Figure~\ref{fig:dpexample}). In contrast, if we had prior
 knowledge about the effect size $\theta$ from another study, we could have
 specified an initial ``optimistic'' prior. For example, if the self-replication
 of the ``\Sexpr{studyname}'' experiment had been a pilot study and we used its
@@ -820,7 +859,7 @@ effect estimate $\hat{\theta}_{p} = \Sexpr{round(extstudy[,"dr"], 3)}$ and
 standard error $\sigma_{p} = \Sexpr{round(sqrt(extstudy[,"vr"]), 2)}$ to specify
 the initial prior, this would lead to a design prior centered around the
 weighted mean of original and pilot study, and a prior precision equal to the
-sum of the precision of both estimates (light-grey long-dashed lines in
+sum of the precision of both estimates (light-grey dot-dashed lines in
 Figure~\ref{fig:dpexample}). Due to the inclusion of the external data, this
 design prior is much more concentrated than the other two.
 
@@ -837,7 +876,7 @@ computed from them. Some methods depend on the direction of the original effect
 estimate $\that_{o}$ and throughout we will assume that it was positive
 ($\that_{o} > 0$). Functions for computing the probability of replication
 success and the required sample size are implemented in the R package
-\texttt{BayesRepDesign} (Appendix~\ref{app:package}) for all analysis methods
+\textbf{BayesRepDesign} (Appendix~\ref{app:package}) for all analysis methods
 discussed in the following.
 
 
@@ -1163,7 +1202,7 @@ replication Bayes factor and the sceptical Bayes factor we use the ``strong
 evidence'' level $\gamma = 1/\Sexpr{1/levelBFr}$ from \citet{Jeffreys1961}.
 
 
-\begin{figure}[!htb]
+\begin{figure}[!ht]
 << "example-applied", fig.height = 3.75 >>=
 ## compute power curves
 cseq <- exp(seq(log(1/10), log(10), length.out = 300))
@@ -1924,7 +1963,7 @@ language version \Sexpr{paste(version[["major"]], version[["minor"]], sep =
 \url{https://github.com/SamCH93/BAtDRS}. A snapshot of the Git repository at the
 time of writing this article is archived at
 \url{https://doi.org/10.5281/zenodo.XXXXXX}. Methods for Bayesian SSD of
-replication studies are implemented in the R package \texttt{BayesRepDesign}
+replication studies are implemented in the R package \textbf{BayesRepDesign}
 which is available at \url{https://github.com/SamCH93/BayesRepDesign}.
 Appendix~\ref{app:package} illustrates basic usage of the package.
 
@@ -1945,12 +1984,12 @@ this article.
 \section{The BayesRepDesign R package}
 \label{app:package}
 
-<< "package-illustration", echo = TRUE, size = "small", fig.height = 3.5 >>=
+<< "package-illustration", echo = TRUE, size = "footnotesize", fig.height = 3.5 >>=
 library("BayesRepDesign")
 
 ## design prior (flat initial prior for effect size + heterogeneity)
 dp <- designPrior(to = 0.2, so = 0.05, tau = 0.08)
-plot(dp)
+## plot(dp) # plot design prior with this command
 
 ## compute replication standard error for achieving significance at 2.5%
 ssdSig(level = 0.025, dprior = dp, power = 0.8)
@@ -1968,7 +2007,6 @@ ssd(sregionfun = sregFun, dprior = dp, power = 0.8)
 
 %% Bibliography
 %% -----------------------------------------------------------------------------
-\bibliographystyle{apalikedoiurl}
 \bibliography{bibliography}
 
 %% R sessionInfo for reproducibility
@@ -1978,9 +2016,10 @@ ssd(sregionfun = sregFun, dprior = dp, power = 0.8)
 ## used to compile the manuscript (set Reproducibility = FALSE, to not do that)
 cat("\\newpage \\section*{Computational details}")
 @
-<< "sessionInfo2", echo = reproducibility, results = reproducibility, size = "small" >>=
+<< "sessionInfo2", echo = reproducibility, results = reproducibility, size = "footnotesize" >>=
 sessionInfo()
 @
+
 
 
 \end{document}

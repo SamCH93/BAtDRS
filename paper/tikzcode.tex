@@ -1,6 +1,5 @@
-  \begin{tikzpicture}[thick, node distance = 11em and 1em, font=\small
-    % , font=\sffamily
-    ]
+\begin{tikzpicture}[thick, node distance = 11em and 1em,
+  font=\fontsize{10pt}{12pt}\selectfont]
 
     % % nodes
     % \node[rectangle, draw, rounded corners = 0.2em] (oData)
@@ -21,7 +20,7 @@
    %    {\scriptsize $\theta \sim f(\theta \,|\, \text{original data, external
    %    knowledge})$}\\
    %       \end{tabular}};
-   \node (designPrior) [below right = 3.5em and 3.25em of oData]
+   \node (designPrior) [below right = 3.5em and 2.25em of oData]
    {\begin{tabular}{c} \textbf{Design prior for model parameters} \\
       {\scriptsize $f(\theta \given x_{o}, \text{external
       knowledge})$}\\
@@ -34,7 +33,7 @@
   %    {\scriptsize -- data from other studies} \\
   %  {\scriptsize ~~ $\dots$} \end{tabular}};
 
-  \node[rectangle, draw, rounded corners = 0.2em] (external) [right = 22em of oData]
+  \node[rectangle, draw, rounded corners = 0.2em] (external) [right = 18em of oData]
   {\begin{tabular}{c} \textbf{Initial prior for model parameters} \\
      {\scriptsize $f(\theta \given \text{external knowledge})$} \\
      % {\scriptsize -- between-study heterogeneity} \\

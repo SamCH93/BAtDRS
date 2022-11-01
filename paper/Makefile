@@ -3,10 +3,9 @@ all: pdf clean
 # names of .Rnw .bib. and .bst files
 FILE=batdrs
 BIB=bibliography
-BIBSTYLE=apalikedoiurl
 
 ## generate .tex file from .Rnw file with knitr
-tex: $(FILE).Rnw $(BIB).bib $(BIBSTYLE).bst
+tex: $(FILE).Rnw $(BIB).bib
 	Rscript -e "knitr::knit('$(FILE).Rnw')" --vanilla
 
 ## generate .pdf file from .tex file
