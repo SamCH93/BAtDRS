@@ -2,23 +2,13 @@
 \documentclass[a4paper, 11pt, man, natbib, floatsintext]{apa7}
 \usepackage[english]{babel} % english
 \usepackage{amsmath, amssymb} % math
-\usepackage{booktabs} % nicer tables
-\usepackage[title]{appendix} % better appendices
-\usepackage{nameref} % reference appendices with names
-% \usepackage{doi} % doi link
-
 
 %% fonts
 %% ----------------------------------------------------------------------------
-% % \usepackage{lmodern} % math and serif font
-% % \usepackage{mathpazo} % math and serif font
 \usepackage{times} % math and serif font
 \usepackage[semibold]{sourcesanspro} % sans serif font
-% \usepackage{sectsty} % use different fonts for different sections
-% \allsectionsfont{\sffamily} % for sections use sans serif
 \usepackage{setspace} % more space
 \usepackage[font={small, stretch=1.2}]{caption} % smaller captions
-
 
 %% tikz
 %% ----------------------------------------------------------------------------
@@ -29,8 +19,7 @@
  % set default tikz font to sans serif
 \tikzset{every picture/.style={/utils/exec={\sffamily}}}
 
-
-%% title, authors, affiliations, abstract etc.
+%% title, authors, affiliations, abstract, etc.
 %% ----------------------------------------------------------------------------
 \title{Bayesian approaches to designing replication studies}
 \shorttitle{Bayesian approaches to designing replication studies}
@@ -49,17 +38,20 @@
   could be allocated better in other studies. Here we show how Bayesian
   approaches can be used for tackling this problem. The Bayesian framework
   allows researchers to combine the original data and external knowledge in a
-  design prior distribution for the underlying parameters. We investigate design
-  priors in the normal-normal hierarchical model where analytical results are
-  available. Based on a design prior, predictions about the replication data can
-  be made, and the replication sample size can be chosen to ensure a
-  sufficiently high probability of replication success. Replication success may
-  be defined through Bayesian or non-Bayesian criteria, and different criteria
-  may also be combined to meet distinct stakeholders and allow conclusive
-  inferences based on multiple analysis approaches. We illustrate with
-  application to data from a multisite replication project from Psychology how
-  Bayesian approaches help to design informative and cost-effective replication
-  studies. Our methods are made available in an R package.}
+  design prior distribution for the underlying parameters. We investigate sample
+  size determination for design priors in the normal-normal hierarchical model
+  where analytical results are available. In this framework no Monte Carlo
+  simulation is required, and frequentist sample size determination is a special
+  case where the uncertainty from the original data is ignored. Based on a
+  design prior, predictions about the replication data can be made, and the
+  replication sample size can be chosen to ensure a sufficiently high
+  probability of replication success. Replication success may be defined through
+  Bayesian or non-Bayesian criteria, and different criteria may also be combined
+  to meet distinct stakeholders and allow conclusive inferences based on
+  multiple analysis approaches. We illustrate with application to data from a
+  multisite replication project in Psychology how Bayesian approaches help to
+  design informative and cost-effective replication studies. Our methods are
+  available in the R package BayesRepDesign.}
 
 \keywords{Bayesian design, design prior, multisite replication, sample size
   determination}
@@ -72,18 +64,20 @@
 
   \addORCIDlink{Leonhard Held}{0000-0002-8686-5325}
 
-  Preprint version \today. % don't forget to hard-code date when submitting to arXiv!
-  Licensed under CC-BY.
+  Preprint version
+  \today. % don't forget to hard-code date when submitting to arXiv!
+  Licensed under CC-BY 4.0.
+  % (\href{https://creativecommons.org/licenses/by/4.0/}{https://creativecommons.org/licenses/by/4.0/}).
 
   Correspondence concerning this article should be addressed to Samuel Pawel,
   Epidemiology, Biostatistics and Prevention Institute, University of Zurich,
   Hirschengraben 84, 8001 Zurich, Switzerland. E-mail: samuel.pawel@uzh.ch
 }
 
-\journal{}
-\volume{}
-\ccoppy{}
-\copnum{}
+\journal{Journal of XXX}
+\volume{X}
+\ccoppy{X}
+\copnum{X}
 
 %% Definitions
 %% ----------------------------------------------------------------------------
@@ -99,7 +93,7 @@ opts_chunk$set(fig.height = 4,
                echo = FALSE,
                warning = FALSE,
                message = FALSE,
-               cache = FALSE,
+               cache = TRUE,
                eval = TRUE,
                out.width = "\\textwidth")
 
@@ -181,26 +175,38 @@ SSD for replication studies comes with unique opportunities and challenges; the
 data from the original study can be used to inform SSD, at the same time the
 analysis of replication success based on original and replication study is
 typically different from an analysis of a single study for which traditional SSD
-methodology was developed. For these reasons, a relatively small literature has
-emerged which specifically deals with replication study SSD. Apart from
-\citet{Anderson2022} who discuss SSD for different analysis methods in a
-frequentist framework, most of these papers only deal with selected analysis
-methods and data models. For instance, SSD for standardized mean difference
-effect sizes analyzed with Bayes factors \citep{Bayarri2002}, SSD for
-statistical significance assessment of the replication \citep{Goodman1992,
-  Senn2002, Micheloud2020, vanZwet2022}, SSD for reverse-Bayes assessment of
-replication studies \citep{Held2020, Pawel2022b}, or SSD for meta-analysis of
-replication studies \citep{Hedges2021}. The aim of this paper is to unify these
-methods under a general framework based on principles from Bayesian design
-approaches \citep{Spiegelhalter1986b, Spiegelhalter1986c, Weiss1997,
-  OHagan2001b, Gelfand2002, DeSantis2004, Spiegelhalter2004, Schoenbrodt2017,
-  Grieve2022}. Our proposed framework (schematically illustrated in
-Figure~\ref{fig:SSDschema}) applies to any kind of data model and analysis
-method.
+methodology was developed. Since analysis and design of replication studies
+should be in accordance, a relatively small literature has emerged which
+specifically deals with replication study power calculations and SSD
+\citep{Bayarri2002, Goodman1992, Senn2002, Micheloud2020, vanZwet2022, Held2020,
+  Pawel2022b, Hedges2021}. However, most of these articles only deal with
+selected analysis methods and data models. % For
+% instance, SSD for standardized mean difference effect sizes analyzed with Bayes
+% factors \citep{Bayarri2002}, SSD for statistical significance assessment of the
+% replication \citep{Goodman1992, Senn2002, Micheloud2020, vanZwet2022}, SSD for
+% reverse-Bayes assessment of replication studies \citep{Held2020, Pawel2022b}, or
+% SSD for meta-analysis of replication studies \citep{Hedges2021}.
+An exception is the excellent article from \citet{Anderson2022} who discuss more
+general principles of replication SSD in the context of psychological research,
+mostly from a frequentist perspective. As they state ``the literature on
+Bayesian sample size planning is still nascent, particularly with respect to
+Bayes Factors \citep{Schoenbrodt2017}, and has not yet been clearly optimized
+for the context of most replication goals'' \citep[p. 18]{Anderson2022}. Our
+goal is therefore to complement their article by developing a unified framework
+of replication SSD (schematically illustrated in Figure~\ref{fig:SSDschema})
+based on principles from Bayesian design approaches \citep{Spiegelhalter1986b,
+  Spiegelhalter1986c, Weiss1997, OHagan2001b, Gelfand2002, DeSantis2004,
+  Spiegelhalter2004, Schoenbrodt2017, Pek2019,
+  Grieve2022}. % , which applies to any kind of data model
+% and analysis method.
+We aim to provide both a theoretical basis for methodologists developing new
+methods for design and analysis methods of replication studies, and also to
+illustrate how Bayesian design approaches can practically be used by researchers
+planning a replication study.
 
 \begin{figure}[!ht]
   \centering
-  {\small \input{tikzcode.tex}}
+  \input{tikzcode.tex}
   \caption{Schematic illustration of Bayesian sample size determination for
     replication studies.}
 \label{fig:SSDschema}
@@ -220,16 +226,29 @@ the replication data can then be made, and the sample size can be chosen such
 that the probability of replication success becomes sufficiently high.
 Importantly, Bayesian design approaches can also be used if the planned analysis
 of the replication study is non-Bayesian, which is the more common situation in
-practice.
+practice. Bayesian design based on a frequentist analysis is known under various
+names, such as ``hybrid classical-Bayesian design'' \citep{Spiegelhalter2004} or
+``Bayesian assurance'' \citep{OHagan2005}, and has also been used for
+psychological applications \citep{Pek2019}.
 
 This paper is structured as follows: We start with presenting a general
-framework for Bayesian SSD of replication studies, %(Section~\ref{sec:GFW}),
-followed by investigating design priors and sample size determination closer in
-the normal-normal hierarchical model and for several Bayesian and non-Bayesian
-analysis methods. %(Section~\ref{sec:SS}).
-To illustrate the methodology, we use data from a multisite replication project
-\citep{Protzko2020} as a running example. We then close with concluding remarks,
-limitations, and open questions. %(Section \ref{sec:discussion}).
+framework for Bayesian SSD of replication studies which applies to any kind of
+data model and analysis method. %(Section~\ref{sec:GFW}),
+We then investigate design priors and SSD in the normal-normal hierarchical
+model framework which provides flexibility for incorporating the original data
+and external knowledge in replication design. %(Section~\ref{sec:SS}).
+No advanced computational methods, such as (Markov Chain) Monte Carlo sampling,
+are required for conducting Bayesian SSD in this framework, and in many cases
+there are even simple formulae which generalize classical power and sample size
+calculations. We illustrate the methodology for several Bayesian and
+non-Bayesian analysis methods, and for both singlesite and multisite replication
+studies. Since multisite replication studies are becoming increasingly popular
+in psychology \citep[\eg{}][]{Klein2018}, we also discuss how to choose the
+optimum allocation of samples within and between sites, from a Bayesian design
+point of view. As a running example we use data from a multisite replication
+project in psychology \citep{Protzko2020}. Finally, we close with concluding
+remarks, limitations, and open questions. %(Section \ref{sec:discussion}).
+
 
 
 \section{General framework} \label{sec:GFW}
@@ -614,8 +633,8 @@ original finding, four replication studies were then carried out, one by the
 same lab (a \emph{self-replication}) and three by the other three labs (three
 \emph{external-replications}).
 
-\begin{figure}[ph!]
-<< "analyse-protzko", fig.height = 9.65 >>=
+\begin{figure}[!htb]
+<< "analyse-protzko", fig.height = 8.75 >>=
 ## compute heterogeneity estimates for external replications
 MAerDF <- lapply(X = unique(protzko$Study), FUN = function(study) {
     dat <- subset(protzko, Study == study & Type == "Replication")
@@ -827,7 +846,13 @@ ggplot(data = plotDF, aes(x = theta, y = density, color = initial, lty = initial
   ``\Sexpr{studyname}'' based on the original effect estimate
   $\hat{\theta}_{o} = \Sexpr{round(study[,"dr"], 3)}$ with standard error
   $\sigma_{o} = \Sexpr{round(sqrt(study[,"vr"]), 3)}$. Shown are different
-  choices of the initial prior for $\theta$ and the between-study heterogeneity $\tau$.}
+  choices for the between-study heterogeneity $\tau$ and the initial prior for
+  the effect size $\theta$: uninformative corresponding to a flat prior for
+  $\theta$, shrinkage corresponding to a zero-mean normal prior for $\theta$
+  with empirical Bayes variance estimate~\eqref{eq:EBestimate}, and optimistic
+  corresponding to a flat prior updated by the data from a pilot study with
+  effect estimate $\hat{\theta}_{p} = \Sexpr{round(extstudy[,"dr"], 3)}$ and
+  standard error $\sigma_{p} = \Sexpr{round(sqrt(extstudy[,"vr"]), 3)}$.}
 \label{fig:dpexample}
 \end{figure}
 
@@ -883,8 +908,8 @@ computed from them. Some methods depend on the direction of the original effect
 estimate $\that_{o}$ and throughout we will assume that it was positive
 ($\that_{o} > 0$). Functions for computing the probability of replication
 success and the required sample size are implemented in the R package
-\textbf{BayesRepDesign} (Appendix~\ref{app:package}) for all analysis methods
-discussed in the following.
+\textbf{BayesRepDesign} (see Appendix) %~\ref{app:package})
+for all analysis methods discussed in the following.
 
 
 \subsubsection{The two-trials rule}
@@ -2002,9 +2027,9 @@ this article.
 
 % Appendix
 % ------------------------------------------------------------------------------
-\begin{appendices}
 
-\section{The BayesRepDesign R package}
+
+\section{Appendix: The BayesRepDesign R package}
 \label{app:package}
 
 << "package-illustration", echo = TRUE, size = "footnotesize", fig.height = 3.5, out.width = "0.9\\textwidth" >>=
@@ -2025,7 +2050,6 @@ sregFun <- function(sr) {
 ssd(sregionfun = sregFun, dprior = dp, power = 0.8)
 @
 
-\end{appendices}
 
 
 %% Bibliography

@@ -160,7 +160,7 @@ dposttau2 <- function(tau2, to, so, mu, sp, priorDens) {
 
 ## half normal prior on tau implies the following prior on tau^2 (by change of
 ## variables)
-priorsd <- 0.05
+priorsd <- 0.05/sqrt(pi/2) # choose mean of prior to be equal to 0.05
 priorDens <- function(tau2, sd = priorsd) dnorm(x = sqrt(tau2), sd = sd)/sqrt(tau2)
 
 ## prior on effect size
@@ -203,7 +203,7 @@ ggplot(data = posteriorDF, aes(x = tau, y = densitytau, linetype = type)) +
   standard error $\sigma_{o} = \Sexpr{round(so, 3)}$. A
   $\theta \sim \Nor(\Sexpr{mu}, \sigmatheta^{2})$ prior is assigned to the
   effect size $\theta$ and a half normal prior with standard deviation
-  $\Sexpr{priorsd}$ is assigned to $\tau$.}
+  $\Sexpr{round(priorsd, 3)}$ is assigned to $\tau$.}
 \label{fig:margposttau2}
 \end{figure}
 
@@ -240,7 +240,6 @@ methodLabs <- c("'Two-trials rule'", "'Replication Bayes factor'",
                 "'Sceptical Bayes factor'")
 
 ## prior density
-priorsd <- 0.05
 fprior <- function(tau2) dnorm(x = sqrt(tau2), sd = priorsd)/sqrt(tau2)
 
 ## generic function to compute probability of replication success for random
@@ -291,7 +290,7 @@ plotDF1 <- do.call("rbind", lapply(X = seq(1, length(porsList)), FUN = function(
                pow = porstau(sr = sqrt(study$vr/cseq), to = to, so = so,
                              porsfun = porsList[[i]], priorfun = fprior))
 }))
-plotDF1$facetlab <- paste0('tau ~ "~" ~ "HN(" *', priorsd,'* ")"')
+plotDF1$facetlab <- paste0('tau ~ "~" ~ "HN(" *', round(priorsd, 3),'* ")"')
 
 ## comparison to fixed tau as in main manuscript
 tauAbs <- 0.2/(2*qnorm(p = 0.975))
@@ -328,7 +327,7 @@ ggplot(data = plotDF, aes(x = c, y = pow, color = method)) +
   $\sigma_{o} = \Sexpr{round(so, 3)}$ for uniform initial prior for effect size
   $\theta$ and either fixed $\tau = \Sexpr{round(tauAbs, 2)}$ (as in main
   manuscript) or half normal prior with standard deviation
-  $\Sexpr{round(priorsd, 2)}$ assigned to $\tau$. Replication success is defined
+  $\Sexpr{round(priorsd, 3)}$ assigned to $\tau$. Replication success is defined
   by the two-trials rule at level $\alpha = \Sexpr{levelSig}$, the replication
   Bayes factor at level $\gamma = 1/\Sexpr{1/levelBFr}$, fixed effects-meta
   analysis at level $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$, effect size
@@ -341,14 +340,13 @@ ggplot(data = plotDF, aes(x = c, y = pow, color = method)) +
 
 Figure~\ref{fig:exampletaurandom} shows the probability of replication success
 based on data from the ``Labels'' experiment, as in the main manuscript. A half
-normal prior with is assigned to the heterogeneity $tau$ which is a typical
+normal prior with is assigned to the heterogeneity $\tau$ which is a typical
 prior distribution used for heterogeneity modeling in meta-analysis
 \citep{Rover2021}. The standard deviation of the prior is set to
-$\Sexpr{round(priorsd, 2)}$ so that a range of heterogeneity values around the
-value of $\tau = \Sexpr{round(priorsd, 2)}$ elicited in the main manuscript is
-taken into account. We see that the probability of replication success is
-slightly higher but similar as for a fixed $\tau^{2} = 0.05$ from the main
-manuscript.
+$\Sexpr{round(priorsd, 3)}$ so that the mean of the prior equals the value of
+the fixed heterogeneity $\tau = 0.05$ elicited in the main manuscript. We see
+that the probability of replication success is only slightly higher compared to
+the fixed $\tau = 0.05$ from the main manuscript.
 
 
 \section{The two-trials rule}
@@ -935,7 +933,7 @@ large $p$-values receive more shrinkage.
 \newpage
 %% Bibliography
 %% -----------------------------------------------------------------------------
-\bibliographystyle{../apalikedoiurl}
+\bibliographystyle{apalikedoiurl}
 \bibliography{../bibliography}
 
 
