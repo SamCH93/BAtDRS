@@ -178,9 +178,10 @@ typically different from an analysis of a single study for which traditional SSD
 methodology was developed. Since analysis and design of replication studies
 should be in accordance, a relatively small literature has emerged which
 specifically deals with replication study power calculations and SSD
-\citep{Bayarri2002, Goodman1992, Senn2002, Micheloud2020, vanZwet2022, Held2020,
-  Pawel2022b, Hedges2021}. However, most of these articles only deal with
-selected analysis methods and data models. % For
+\citep{Bayarri2002, Goodman1992, Senn2002, Anderson2017, Micheloud2020,
+  vanZwet2022, Held2020, Pawel2022b, Hedges2021, Anderson2022}. However, most
+of these articles only deal with selected analysis methods and data
+models. % For
 % instance, SSD for standardized mean difference effect sizes analyzed with Bayes
 % factors \citep{Bayarri2002}, SSD for statistical significance assessment of the
 % replication \citep{Goodman1992, Senn2002, Micheloud2020, vanZwet2022}, SSD for
@@ -221,15 +222,16 @@ be different from the so-called \emph{analysis prior} which, unlike the design
 prior, is usually desired to be objective or uninformative, in some sense
 % , whereas the design prior should represent the resarchers best bet on the
 % replication outcome
-\citep{OHagan2001b, Gelfand2002}. Based on the design prior, predictions about
-the replication data can then be made, and the sample size can be chosen such
-that the probability of replication success becomes sufficiently high.
-Importantly, Bayesian design approaches can also be used if the planned analysis
-of the replication study is non-Bayesian, which is the more common situation in
+\citep{OHagan2001b}. Based on the design prior, predictions about the
+replication data can then be made, and the sample size can be chosen such that
+the probability of replication success becomes sufficiently high. Importantly,
+Bayesian design approaches can also be used if the planned analysis of the
+replication study is non-Bayesian, which is the more common situation in
 practice. Bayesian design based on a frequentist analysis is known under various
 names, such as ``hybrid classical-Bayesian design'' \citep{Spiegelhalter2004} or
-``Bayesian assurance'' \citep{OHagan2005}, and has also been used for
-psychological applications \citep{Pek2019}.
+``Bayesian assurance'' \citep{OHagan2005}, and has also been used before for
+psychological applications \citep{Pek2019} and replication studies
+\citep{Anderson2017, Micheloud2020}.
 
 This paper is structured as follows: We start with presenting a general
 framework for Bayesian SSD of replication studies which applies to any kind of
@@ -777,7 +779,6 @@ so that the range between the 2.5\% and the 97.5\% quantile of the study
 specific effect size distribution is equal to a small effect size $d = 0.2$.
 % since it is independent of the sample size of the original study.
 
-
 \begin{figure}[!ht]
 << "example-design-prior", fig.height = 3.5 >>=
 ## uninformative initial prior
@@ -847,12 +848,12 @@ ggplot(data = plotDF, aes(x = theta, y = density, color = initial, lty = initial
   $\hat{\theta}_{o} = \Sexpr{round(study[,"dr"], 3)}$ with standard error
   $\sigma_{o} = \Sexpr{round(sqrt(study[,"vr"]), 3)}$. Shown are different
   choices for the between-study heterogeneity $\tau$ and the initial prior for
-  the effect size $\theta$: uninformative corresponding to a flat prior for
-  $\theta$, shrinkage corresponding to a zero-mean normal prior for $\theta$
-  with empirical Bayes variance estimate~\eqref{eq:EBestimate}, and optimistic
-  corresponding to a flat prior updated by the data from a pilot study with
-  effect estimate $\hat{\theta}_{p} = \Sexpr{round(extstudy[,"dr"], 3)}$ and
-  standard error $\sigma_{p} = \Sexpr{round(sqrt(extstudy[,"vr"]), 3)}$.}
+  the effect size $\theta$, ``uninformative'' corresponds to a flat prior,
+  ``shrinkage'' corresponds to a zero-mean normal prior with empirical Bayes
+  variance estimate~\eqref{eq:EBestimate}, and ``optimistic'' corresponds to a
+  flat prior updated by the data from a pilot study with effect estimate
+  $\hat{\theta}_{p} = \Sexpr{round(extstudy[,"dr"], 3)}$ and standard error
+  $\sigma_{p} = \Sexpr{round(sqrt(extstudy[,"vr"]), 3)}$.}
 \label{fig:dpexample}
 \end{figure}
 
