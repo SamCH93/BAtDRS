@@ -57,16 +57,38 @@
 
 \authornote{
 
-  \addORCIDlink{Samuel Pawel}{0000-0003-2779-320X}
-
-  \addORCIDlink{Guido Consonni}{0000-0002-1252-5926}
-
+  \addORCIDlink{Samuel Pawel}{0000-0003-2779-320X}\\
+  \addORCIDlink{Guido Consonni}{0000-0002-1252-5926}\\
   \addORCIDlink{Leonhard Held}{0000-0002-8686-5325}
 
-  Preprint version
-  \today. % don't forget to hard-code date when submitting to arXiv!
+  Preprint version November 4,
+  2022. % don't forget to hard-code date when submitting to arXiv!
   Licensed under CC-BY 4.0.
   % (\href{https://creativecommons.org/licenses/by/4.0/}{https://creativecommons.org/licenses/by/4.0/}).
+
+  This research was not preregistered and has not been previously disseminated.
+  We declare to have no conflicts of interest.
+
+  This work was supported by the Swiss National Science Foundation (\#189295).
+  The funder had no role in study design, data collection, data analysis, data
+  interpretation, decision to publish, or preparation of the manuscript.
+
+  We thank \citet{Protzko2020} for publicly sharing their data. We thank
+  Charlotte Micheloud and Angelika Stefan for helpful comments on drafts of the
+  manuscript. Our acknowledgment of these individuals does not imply their
+  endorsement of this article.
+
+  The CC-By 4.0 licensed data were downloaded from
+  \href{https://osf.io/42ef9/}{https://osf.io/42ef9/}. Analyses were conducted
+  in the R programming language version \Sexpr{paste(version[["major"]],
+    version[["minor"]], sep = ".")} \citep{R}. Code to reproduce this manuscript
+  is available at
+  \href{https://github.com/SamCH93/BAtDRS}{https://github.com/SamCH93/BAtDRS}. A
+  snapshot of the Git repository at the time of writing is archived at
+  \href{https://doi.org/10.5281/zenodo.XXXXXX}{https://doi.org/10.5281/zenodo.X}.
+  Methods for Bayesian design of replication studies are implemented in the R
+  package BayesRepDesign which is available at
+  \href{https://github.com/SamCH93/BayesRepDesign}{https://github.com/SamCH93/BayesRepDesign}.
 
   Correspondence concerning this article should be addressed to Samuel Pawel,
   Epidemiology, Biostatistics and Prevention Institute, University of Zurich,
@@ -77,6 +99,7 @@
 \volume{X}
 \ccoppy{X}
 \copnum{X}
+
 
 %% Definitions
 %% ----------------------------------------------------------------------------
@@ -2008,28 +2031,6 @@ probability of replication success based on the maximally possible sample size.
 Researchers can then judge whether or not such prior beliefs are scientifically
 sensible, and decide whether they should conduct the replication study with
 their limited resources.
-
-\section*{Software and data}
-The data from \citet{Protzko2020} were downloaded from
-\url{https://osf.io/42ef9/}. All analyses were conducted in the R programming
-language version \Sexpr{paste(version[["major"]], version[["minor"]], sep =
-  ".")} \citep{R}. The code to reproduce this manuscript is available at
-\url{https://github.com/SamCH93/BAtDRS}. A snapshot of the Git repository at the
-time of writing this article is archived at
-\url{https://doi.org/10.5281/zenodo.XXXXXX}. Methods for Bayesian SSD of
-replication studies are implemented in the R package \textbf{BayesRepDesign}
-which is available at \url{https://github.com/SamCH93/BayesRepDesign}. The
-Appendix %~\ref{app:package}
-illustrates basic usage of the package.
-
-\section*{Acknowledgments}
-This work was supported by the Swiss National Science Foundation(\#189295). The
-funder had no role in study design, data collection, data analysis, data
-interpretation, decision to publish, or preparation of the manuscript. We thank
-\citet{Protzko2020} for publicly sharing their data. We thank Charlotte
-Micheloud and Angelika Stefan for helpful comments on drafts of the manuscript.
-Our acknowledgment of these individuals does not imply their endorsement of
-this article.
 
 
 % Appendix
