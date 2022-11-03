@@ -20,8 +20,8 @@
    %    {\scriptsize $\theta \sim f(\theta \,|\, \text{original data, external
    %    knowledge})$}\\
    %       \end{tabular}};
-   \node (designPrior) [below right = 3.5em and 2.25em of oData]
-   {\begin{tabular}{c} \textbf{Design prior for model parameters} \\
+   \node (designPrior) [below right = 3.5em and 2em of oData]
+   {\begin{tabular}{c} \textbf{Design prior for model parameter} \\
       {\scriptsize $f(\theta \given x_{o}, \text{external
       knowledge})$}\\
     \end{tabular}};
@@ -33,8 +33,8 @@
   %    {\scriptsize -- data from other studies} \\
   %  {\scriptsize ~~ $\dots$} \end{tabular}};
 
-  \node[rectangle, draw, rounded corners = 0.2em] (external) [right = 20em of oData]
-  {\begin{tabular}{c} \textbf{Initial prior for model parameters} \\
+  \node[rectangle, draw, rounded corners = 0.2em] (external) [right = 17em of oData]
+  {\begin{tabular}{c} \textbf{Initial prior for model parameter} \\
      {\scriptsize $f(\theta \given \text{external knowledge})$} \\
      % {\scriptsize -- between-study heterogeneity} \\
      % {\scriptsize -- scepticism} \\
@@ -108,7 +108,7 @@
 
 \node[rectangle, draw, rounded corners = 0.2em] (sideCond) [below = 2.5em of nr]
 {\begin{tabular}{l}
-   \multicolumn{1}{c}{\textbf{Side constraints}} \\
+   \multicolumn{1}{c}{\textbf{Constraints}} \\
    {\scriptsize -- type-I error rate requirements} \\
    % {\scriptsize -- precision requirements} \\
    {\scriptsize -- cost/availability constraints} \\

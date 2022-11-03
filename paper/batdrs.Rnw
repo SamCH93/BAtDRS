@@ -1,6 +1,6 @@
 \PassOptionsToPackage{dvipsnames}{xcolor}
-\documentclass[a4paper, 11pt, man, natbib, floatsintext]{apa7}
-\usepackage[english]{babel} % english
+\documentclass[a4paper, 12pt, man, natbib, floatsintext]{apa7}
+\usepackage[english]{babel} % English
 \usepackage{amsmath, amssymb} % math
 
 %% fonts
@@ -40,18 +40,17 @@
   allows researchers to combine the original data and external knowledge in a
   design prior distribution for the underlying parameters. We investigate sample
   size determination for design priors in the normal-normal hierarchical model
-  where analytical results are available. In this framework no Monte Carlo
-  simulation is required, and frequentist sample size determination is a special
-  case where the uncertainty from the original data is ignored. Based on a
-  design prior, predictions about the replication data can be made, and the
-  replication sample size can be chosen to ensure a sufficiently high
-  probability of replication success. Replication success may be defined through
-  Bayesian or non-Bayesian criteria, and different criteria may also be combined
-  to meet distinct stakeholders and allow conclusive inferences based on
-  multiple analysis approaches. We illustrate with application to data from a
-  multisite replication project in Psychology how Bayesian approaches help to
-  design informative and cost-effective replication studies. Our methods are
-  available in the R package BayesRepDesign.}
+  where analytical results are available and traditional sample size
+  determination is a special case where the uncertainty from the original data
+  is ignored. Based on a design prior, predictions about the replication data
+  can be made, and the replication sample size can be chosen to ensure a
+  sufficiently high probability of replication success. Replication success may
+  be defined through Bayesian or non-Bayesian criteria, and different criteria
+  may also be combined to meet distinct stakeholders and allow conclusive
+  inferences based on multiple analysis approaches. We illustrate with
+  application to data from a multisite replication project in Psychology how
+  Bayesian approaches help to design informative and cost-effective replication
+  studies. Our methods are available in the R package BayesRepDesign.}
 
 \keywords{Bayesian design, design prior, multisite replication, sample size
   determination}
@@ -197,7 +196,7 @@ goal is therefore to complement their article by developing a unified framework
 of replication SSD (schematically illustrated in Figure~\ref{fig:SSDschema})
 based on principles from Bayesian design approaches \citep{Spiegelhalter1986b,
   Spiegelhalter1986c, Weiss1997, OHagan2001b, Gelfand2002, DeSantis2004,
-  Spiegelhalter2004, Schoenbrodt2017, Pek2019,
+  Spiegelhalter2004, Schoenbrodt2017, Pek2019, Park2022,
   Grieve2022}. % , which applies to any kind of data model
 % and analysis method.
 We aim to provide both a theoretical basis for methodologists developing new
@@ -209,7 +208,12 @@ planning a replication study.
   \centering
   \input{tikzcode.tex}
   \caption{Schematic illustration of Bayesian sample size determination for
-    replication studies.}
+    replication studies. The original and replication data are denoted by
+    $x_{o}$ and $x_{r}$, respectively. Both are assumed to come from a
+    distribution with density/probability mass function denoted by
+    $f(x_{i} \given \theta)$ for $i \in \{o, r\}$. An initial prior with density
+    function $f(\theta \given \text{external knowledge})$ is assigned to the
+    model parameter $\theta$.}
 \label{fig:SSDschema}
 \end{figure}
 
@@ -219,8 +223,8 @@ updating as it allows to combine uncertain information from different sources
 so-called \emph{design prior} distribution for the underlying model parameters.
 If the analysis of the replication data is also Bayesian, the design prior may
 be different from the so-called \emph{analysis prior} which, unlike the design
-prior, is usually desired to be objective or uninformative, in some sense
-% , whereas the design prior should represent the resarchers best bet on the
+prior, is usually desired to be objective or ``uninformative''
+% , whereas the design prior should represent the researchers best bet on the
 % replication outcome
 \citep{OHagan2001b}. Based on the design prior, predictions about the
 replication data can then be made, and the sample size can be chosen such that
@@ -230,15 +234,15 @@ replication study is non-Bayesian, which is the more common situation in
 practice. Bayesian design based on a frequentist analysis is known under various
 names, such as ``hybrid classical-Bayesian design'' \citep{Spiegelhalter2004} or
 ``Bayesian assurance'' \citep{OHagan2005}, and has also been used before for
-psychological applications \citep{Pek2019} and replication studies
+psychological applications \citep{Pek2019, Park2022} and replication studies
 \citep{Anderson2017, Micheloud2020}.
 
 This paper is structured as follows: We start with presenting a general
 framework for Bayesian SSD of replication studies which applies to any kind of
 data model and analysis method. %(Section~\ref{sec:GFW}),
 We then investigate design priors and SSD in the normal-normal hierarchical
-model framework which provides flexibility for incorporating the original data
-and external knowledge in replication design. %(Section~\ref{sec:SS}).
+model framework which provides sufficient flexibility for incorporating the
+original data and external knowledge in replication design. %(Section~\ref{sec:SS}).
 No advanced computational methods, such as (Markov Chain) Monte Carlo sampling,
 are required for conducting Bayesian SSD in this framework, and in many cases
 there are even simple formulae which generalize classical power and sample size
@@ -246,7 +250,7 @@ calculations. We illustrate the methodology for several Bayesian and
 non-Bayesian analysis methods, and for both singlesite and multisite replication
 studies. Since multisite replication studies are becoming increasingly popular
 in psychology \citep[\eg{}][]{Klein2018}, we also discuss how to choose the
-optimum allocation of samples within and between sites, from a Bayesian design
+optimum allocation of samples within and between sites from a Bayesian design
 point of view. As a running example we use data from a multisite replication
 project in psychology \citep{Protzko2020}. Finally, we close with concluding
 remarks, limitations, and open questions. %(Section \ref{sec:discussion}).
@@ -324,13 +328,13 @@ quantifying evidence against a null hypothesis). In this case, the sample size
 may be chosen such that the probability of replication success is as large as
 desired for all planned analysis methods.
 
-There may sometimes be side constraints which the replication sample size needs
-to satisfy. For instance, in most cases there is an upper limit on the possible
-sample size due to limited resources and/or availability of samples. Moreover,
-funders and regulators may also require methods to be \emph{calibrated}
-\citep{Grieve2016}, that is, to have appropriate type I error rate control. The
-sample size $n_r^*$ may thus also need to satisfy a type I error rate not larger
-than some required level.
+There may sometimes be certain constraints which the replication sample size
+needs to satisfy. For instance, in most cases there is an upper limit on the
+possible sample size due to limited resources and/or availability of samples.
+Moreover, funders and regulators may also require methods to be
+\emph{calibrated} \citep{Grieve2016}, that is, to have appropriate type I error
+rate control. The sample size $n_r^*$ may thus also need to satisfy a type I
+error rate not larger than some required level.
 % Similarly, it may be reasonable to have \emph{precision} constraints, \eg{} to
 % require that a confidence interval for the replication effect estimate has to be
 % at least as tight as the confidence interval estimated in the original study.
@@ -490,13 +494,13 @@ At least three common types of external knowledge can be distinguished in the
 replication setting: (i) expected heterogeneity between original and replication
 study due to differences in study design, execution, and population, (ii) prior
 knowledge about the effect size either from theory or from related studies,
-(iii) scepticism regarding the original study due to the possibility of
+(iii) skepticism regarding the original study due to the possibility of
 exaggerated results. % The between-study heterogeneity variance $\tau^{2}$, the
 % effect size mean $\mutheta$, and the effect size variance
 % $\sigmatheta^2$ provide a means for incorporating these
 % information in SSD of the replication study.
 
-<< "prior-eliciation-values", fig.height = 3.5 >>=
+<< "prior-elicitation-values", fig.height = 3.5 >>=
 ## absolute approach
 drange <- 0.2
 tauAbs <- drange/(2*qnorm(p = 0.975))
@@ -636,7 +640,7 @@ same lab (a \emph{self-replication}) and three by the other three labs (three
 \emph{external-replications}).
 
 \begin{figure}[!htb]
-<< "analyse-protzko", fig.height = 8.75 >>=
+<< "analysis-protzko", fig.height = 8.25 >>=
 ## compute heterogeneity estimates for external replications
 MAerDF <- lapply(X = unique(protzko$Study), FUN = function(study) {
     dat <- subset(protzko, Study == study & Type == "Replication")
@@ -870,7 +874,7 @@ $\hat{\theta}_{o} = \Sexpr{round(study[,"dr"], 3)}$ with variance
 $\sigma^{2}_{o} = \Sexpr{round(sqrt(study[,"vr"]), 2)}^{2}$ for a
 self-replication, and with variance
 $\sigma^{2}_{o} + \tau^{2} = \Sexpr{round(sqrt(study[,"vr"]), 2)}^{2} + \Sexpr{round(tauAbs, 2)}^{2} \approx \Sexpr{round(sqrt(varDPhet), 2)}^{2}$
-for an external-replication. Figure~\ref{fig:dpexample} (dark-grey solid lines)
+for an external-replication. Figure~\ref{fig:dpexample} (dark-gray solid lines)
 shows the densities of the two priors.
 % Note that power
 % calculations under the former prior have been termed ``predictive power''
@@ -883,7 +887,7 @@ believe that the original result might be exaggerated, we could have specified
 an initial shrinkage prior ($\mutheta = 0$ and $\sigmatheta^{2} < \infty$). For
 instance, the empirical Bayes estimate for the prior variance $\sigmatheta^{2}$
 from~\eqref{eq:EBestimate} leads to a prior whose mean and variance are shrunken
-towards zero by $\Sexpr{round((1 - shrinkEBhet)*100, 0)}$\% (medium-grey
+towards zero by $\Sexpr{round((1 - shrinkEBhet)*100, 0)}$\% (medium-gray
 dashed lines in Figure~\ref{fig:dpexample}). In contrast, if we had prior
 knowledge about the effect size $\theta$ from another study, we could have
 specified an initial ``optimistic'' prior. For example, if the self-replication
@@ -892,7 +896,7 @@ effect estimate $\hat{\theta}_{p} = \Sexpr{round(extstudy[,"dr"], 3)}$ and
 standard error $\sigma_{p} = \Sexpr{round(sqrt(extstudy[,"vr"]), 2)}$ to specify
 the initial prior, this would lead to a design prior centered around the
 weighted mean of original and pilot study, and a prior precision equal to the
-sum of the precision of both estimates (light-grey dot-dashed lines in
+sum of the precision of both estimates (light-gray dot-dashed lines in
 Figure~\ref{fig:dpexample}). Due to the inclusion of the external data, this
 design prior is much more concentrated than the other two.
 
@@ -1062,7 +1066,7 @@ the success region~\eqref{eq:equivalence} becomes the empty set meaning that
 replication success is impossible.
 % Typically the original study is already conducted but the standard error of the
 % replication study can still be changed
-% Wether or
+% Whether or
 % not replication success is achievable depends on the standard error of the
 % original estimate $\sigma_{o}$, and in particular when the margin is chosen too
 % small ($\Delta \leq \zalphatwo \sigma_{o}$), replication success is impossible
@@ -1160,13 +1164,13 @@ and root finding algorithms can be used to numerically determine the required
 standard error $\sigma^{*}_{r}$ for achieving a target probability of
 replication success $1 - \beta < \text{limPr}_{\scriptscriptstyle \BFr}$.
 
-\subsubsection{The sceptical \textit{p}-value}
+\subsubsection{The skeptical \textit{p}-value}
 \citet{Held2020} proposed a reverse-Bayes approach for quantifying replication
-success. The main idea is to determine the variance of a ``sceptical'' zero-mean
+success. The main idea is to determine the variance of a ``skeptical'' zero-mean
 normal prior the effect size $\theta$ such that its posterior distribution based
 on the original study is no longer credible. Replication success is then
-achieved if the replication data are in conflict with the sceptical prior. The
-procedure can be summarized by a ``sceptical $p$-value'' $\ps$, and the lower
+achieved if the replication data are in conflict with the skeptical prior. The
+procedure can be summarized by a ``skeptical $p$-value'' $\ps$, and the lower
 the $p$-value the higher the degree of replication success. \citet[Section
 2.1]{Held2021} showed that the success region for replication success defined by
 $\ps \leq \alpha$ is given by
@@ -1203,11 +1207,11 @@ with
 \end{align*}
 
 
-\subsubsection{The sceptical Bayes factor}
+\subsubsection{The skeptical Bayes factor}
 \citet{Pawel2022b} modified the previously described reverse-Bayes assessment of
 replication success from \citet{Held2020} to work with Bayes factors instead of
 tail probabilities as measures of evidence and prior data conflict. Again, the
-procedure can be summarized in a single measure termed the ``sceptical Bayes
+procedure can be summarized in a single measure termed the ``skeptical Bayes
 factor'' $\BFs$, with lower values of $\BFs$ pointing to higher degrees of
 replication success. Also for this method, the success region and the
 probability of replication success can be expressed in closed-form but the
@@ -1242,12 +1246,12 @@ method is based on two data sets rather than one. We use a
 $1 - \alpha = \Sexpr{confLevel*100}\%$ confidence interval which is
 conventionally used in equivalence testing, along with a margin
 $\Delta = \Sexpr{margin}$ corresponding to a small SMD effect size according to
-the classification from \citet{Cohen1992}. For the sceptical $p$-value we use
+the classification from \citet{Cohen1992}. For the skeptical $p$-value we use
 the recommended ``golden'' level $\alpha = \Sexpr{round(levelPs, 3)}$ as it
 guarantees that for original studies which where just significant at
 $\alpha = 0.025$ replication success is only possible if the replication effect
 estimate is larger than the original one \citep{Held2021}. Finally, for the
-replication Bayes factor and the sceptical Bayes factor we use the ``strong
+replication Bayes factor and the skeptical Bayes factor we use the ``strong
 evidence'' level $\gamma = 1/\Sexpr{1/levelBFr}$ from \citet{Jeffreys1961}.
 
 
@@ -1262,8 +1266,8 @@ applyGrid <- rbind(applyGrid1, data.frame(tau = 0, sp = 0))
 
 methodLabs <- c("'Two-trials rule'", "'Replication Bayes factor'",
                 "'Meta-analysis'", "'Equivalence'",
-                "'Sceptical' ~ italic(p) * '-value'",
-                "'Sceptical Bayes factor'")
+                "'Skeptical' ~ italic(p) * '-value'",
+                "'Skeptical Bayes factor'")
 plotDF <- do.call("rbind", lapply(X = seq(1, nrow(applyGrid)), FUN = function(i) {
     tau <- applyGrid$tau[i]
     sp <- applyGrid$sp[i]
@@ -1356,8 +1360,8 @@ ssbfs2 <- ssdBFs(level = levelBFs, dprior = dprior2, power = power)
   Bayes factor at level $\gamma = 1/\Sexpr{1/levelBFr}$, fixed effects-meta
   analysis at level $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$, effect size
   equivalence based on $\Sexpr{confLevel*100}\%$ confidence interval and with
-  margin $\Delta = \Sexpr{margin}$, sceptical $p$-value at level
-  $\alpha = \Sexpr{round(levelPs, 3)}$, and sceptical Bayes factor at level
+  margin $\Delta = \Sexpr{margin}$, skeptical $p$-value at level
+  $\alpha = \Sexpr{round(levelPs, 3)}$, and skeptical Bayes factor at level
   $\gamma = 1/\Sexpr{1/levelBFs}$.}
 \label{fig:example}
 \end{figure}
@@ -1385,8 +1389,8 @@ replication success for meta-analysis. If heterogeneity is taken into account
 all methods but the equivalence test, reflecting the larger uncertainty about
 the effect size $\theta$. To achieve $\Sexpr{round(power*100, 2)}\%$ probability
 of replication success the fewest samples are required with meta-analysis,
-followed by the sceptical $p$-value, the two-trials rule, the replication Bayes
-factor, the sceptical Bayes factor, and lastly the equivalence test. If the
+followed by the skeptical $p$-value, the two-trials rule, the replication Bayes
+factor, the skeptical Bayes factor, and lastly the equivalence test. If the
 chosen sample size should guarantee a sufficiently conclusive replication study
 with all these methods, the replication sample size has to be slightly larger
 than the original one in the situation of no heterogeneity ($\tau^{2} = 0$),
@@ -1405,21 +1409,21 @@ $\alpha = \Sexpr{round(levelSig, 3)}$, as expected by definition of the method.
 In contrast, the type I error rates of the other methods vary with the relative
 sample size $c$ but most of them stay below
 $\alpha = \Sexpr{round(levelSig, 3)}$ for all $c$ with the exception of
-meta-analysis and the sceptical $p$-value. Meta-analysis (light blue) has an
+meta-analysis and the skeptical $p$-value. Meta-analysis (light blue) has an
 extremely high type I error rate as the pooling with the highly significant
 original data leads to replication success if the replication sample size is not
-drastically increased. The type I error rate of the sceptical $p$-value (yellow)
+drastically increased. The type I error rate of the skeptical $p$-value (yellow)
 is only slightly larger than $\alpha = \Sexpr{round(levelSig, 3)}$ which is
 expected since the level $\alpha = \Sexpr{round(levelPs, 3)}$ is used for
-declaring replication success with the sceptical $p$-value, and its type I error
+declaring replication success with the skeptical $p$-value, and its type I error
 rate is always smaller than the level for thresholding it \citep{Held2020}. The
-type I error rate of the sceptical $p$-value decreases to values smaller than
+type I error rate of the skeptical $p$-value decreases to values smaller than
 $\alpha = \Sexpr{round(levelSig, 3)}$ of the two-trials rule at approximately
 $c = 3$.
 
 
 << "sample-size-all-protzko", results = FALSE >>=
-## compute sample size for all studies with significant origianl study
+## compute sample size for all studies with significant original study
 dataSSD <- protzkolong %>%
     mutate(zo = dr/sqrt(vr)) %>%
     filter(Type == "Original")
@@ -1588,8 +1592,8 @@ ggpubr::ggarrange(plotA, plotB, common.legend = TRUE,
   replication Bayes factor at level $\gamma = 1/\Sexpr{1/levelBFr}$, fixed
   effects-meta analysis at level $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$,
   effect size equivalence at level $\alpha = \Sexpr{1 - confLevel}$ with margin
-  $\Delta = \Sexpr{margin}$, sceptical $p$-value at level
-  $\alpha = \Sexpr{round(levelPs, 3)}$, and sceptical Bayes factor at level
+  $\Delta = \Sexpr{margin}$, skeptical $p$-value at level
+  $\alpha = \Sexpr{round(levelPs, 3)}$, and skeptical Bayes factor at level
   $\gamma = 1/\Sexpr{1/levelBFs}$ for data from the replication project by
   \citet{Protzko2020}. A flat initial prior
   ($\mutheta = 0, \sigmatheta^{2} = \infty$) is used for the effect size
@@ -1627,9 +1631,9 @@ We also see that taking into account heterogeneity (triangle) increases the
 required sample size for all methods compared to not taking it into account
 (dot). At the same time, a larger required sample size reduces the type I error
 rate for most methods. We see again the pattern that the type I error rate of
-the equivalence test and the sceptical $p$-value is larger than the type I error
+the equivalence test and the skeptical $p$-value is larger than the type I error
 rate 2.5\% of the two-trials rule. However, while the type I error rate of the
-sceptical $p$-value decreases when replication studies require larger sample
+skeptical $p$-value decreases when replication studies require larger sample
 sizes, the type I error rate of the equivalence test may also be large if the
 replication requires very large sample sizes (\eg{} for the experiment ``FSD'')
 since it depends on whether the original effect estimate $\that_{o}$ is
@@ -1651,7 +1655,7 @@ studies. In some cases these are unrealistically large (\eg{} in the experiment
 ``Prediction'' an almost 30 times increase in sample size for the replication
 Bayes factor), but in other cases they seem more realistic and could be
 reallocated from the other studies which require fewer samples (\eg{} in the
-experiment ``Referrals'' an almost three times increase for the sceptical Bayes
+experiment ``Referrals'' an almost three times increase for the skeptical Bayes
 factor). On the other hand, the equivalence test typically requires larger
 sample sizes in the replication because the original standard errors are large
 relative to the specified margin. If one anticipates to analyze the original and
@@ -1957,17 +1961,18 @@ respectively, $m = 4$ (counting also the internal-replication).
 \label{sec:discussion}
 
 We showed how Bayesian approaches can be used to determine the sample size of
-replication studies. The Bayesian framework allows to make use of all the
-available information, and to take into account the associated uncertainty. A
-key strength of the approach is that it can be applied to any kind of
+replication studies based on all the available information and the associated
+uncertainty. % The Bayesian framework allows to make use of all the available
+% information, and to take into account the associated uncertainty.
+A key strength of the approach is that it can be applied to any kind of
 replication analysis method, Bayes or non-Bayes, as long as there is a
 well-defined success region for the replication effect estimate. Methods for
 assessing replication success which have not yet been adapted to Bayesian design
 approaches in the normal-normal hierarchical model (or which have not even been
-proposed) can thus benefit from our methodology. For instance, our methods
-could be straightforwardly applied to the ``dual-criterion'' from
+proposed) can thus benefit from our methodology. For instance, our methods could
+be straightforwardly applied to the ``dual-criterion'' from
 \citet{Rosenkranz2021} which defines replication success via simultaneous
-statistical significance and clinical relevance of the effect estimates from
+statistical significance and practical relevance of the effect estimates from
 original and replication study.
 
 There are some limitations and possible extensions: we have developed the
@@ -2005,7 +2010,7 @@ sensible, and decide whether they should conduct the replication study with
 their limited resources.
 
 \section*{Software and data}
-The data from \citet{Protzko2020} were  downloaded from
+The data from \citet{Protzko2020} were downloaded from
 \url{https://osf.io/42ef9/}. All analyses were conducted in the R programming
 language version \Sexpr{paste(version[["major"]], version[["minor"]], sep =
   ".")} \citep{R}. The code to reproduce this manuscript is available at
@@ -2014,7 +2019,8 @@ time of writing this article is archived at
 \url{https://doi.org/10.5281/zenodo.XXXXXX}. Methods for Bayesian SSD of
 replication studies are implemented in the R package \textbf{BayesRepDesign}
 which is available at \url{https://github.com/SamCH93/BayesRepDesign}. The
-Appendix~\ref{app:package} illustrates basic usage of the package.
+Appendix %~\ref{app:package}
+illustrates basic usage of the package.
 
 \section*{Acknowledgments}
 This work was supported by the Swiss National Science Foundation(\#189295). The
@@ -2022,7 +2028,7 @@ funder had no role in study design, data collection, data analysis, data
 interpretation, decision to publish, or preparation of the manuscript. We thank
 \citet{Protzko2020} for publicly sharing their data. We thank Charlotte
 Micheloud and Angelika Stefan for helpful comments on drafts of the manuscript.
-Our acknowledgement of these individuals does not imply their endorsement of
+Our acknowledgment of these individuals does not imply their endorsement of
 this article.
 
 

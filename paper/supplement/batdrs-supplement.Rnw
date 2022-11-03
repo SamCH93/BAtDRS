@@ -236,8 +236,8 @@ levelBFs <- 1/10
 cseq <- exp(seq(log(1/11), log(11), length.out = 100))
 methodLabs <- c("'Two-trials rule'", "'Replication Bayes factor'",
                 "'Meta-analysis'", "'Equivalence'",
-                "'Sceptical' ~ italic(p) * '-value'",
-                "'Sceptical Bayes factor'")
+                "'Skeptical' ~ italic(p) * '-value'",
+                "'Skeptical Bayes factor'")
 
 ## prior density
 fprior <- function(tau2) dnorm(x = sqrt(tau2), sd = priorsd)/sqrt(tau2)
@@ -332,8 +332,8 @@ ggplot(data = plotDF, aes(x = c, y = pow, color = method)) +
   Bayes factor at level $\gamma = 1/\Sexpr{1/levelBFr}$, fixed effects-meta
   analysis at level $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$, effect size
   equivalence based on $\Sexpr{confLevel*100}\%$ confidence interval and with
-  margin $\Delta = \Sexpr{margin}$, sceptical $p$-value at level
-  $\alpha = \Sexpr{round(levelPs, 3)}$, and sceptical Bayes factor at level
+  margin $\Delta = \Sexpr{margin}$, skeptical $p$-value at level
+  $\alpha = \Sexpr{round(levelPs, 3)}$, and skeptical Bayes factor at level
   $\gamma = 1/\Sexpr{1/levelBFs}$.}
 \label{fig:exampletaurandom}
 \end{figure}
@@ -420,7 +420,7 @@ pooled effect estimate $\that_{m}$ and standard error $\sigma_{m}$ which are
 which are also equivalent to the mean and standard deviation of a posterior
 distribution for the effect size $\theta$ based on the data from original and
 replication study and an initial flat prior for $\theta$. Fixed effects
-meta-analyis is typically used because estimating a heterogeneity variance from
+meta-analysis is typically used because estimating a heterogeneity variance from
 two studies is highly unstable. Replication success at level $\alpha$ is
 established if the one-sided meta-analytic $p$-value (in the direction of the
 original effect estimate $\that$) is significant at level $\alpha$, \ie{}
@@ -445,7 +445,7 @@ given by
 
 \section{Effect size equivalence}
 The effect size equivalence approach \citep{Anderson2016} defines replication
-success via comptability of the effect estimates from both studies. Under
+success via compatibility of the effect estimates from both studies. Under
 normality we may assume the data model
 $\that_{i} \given \theta_{i} \sim \Nor(\theta_{i}, \sigma^{2}_{i})$ for study
 $i \in \{o, r\}$, and we are interested in the true effect size difference
@@ -458,7 +458,7 @@ $\delta$ is then given by
 Effect size equivalence is established if the confidence interval is fully
 included in an equivalence region $C_{\alpha} \subseteq [-\Delta, \Delta]$ with
 $\Delta > 0$ a pre-specified margin. Applying some algebraic manipulations to
-the success condtions one can show that the equivalence test replication success
+the success conditions one can show that the equivalence test replication success
 criterion implies a success region $\SEqu$ for the replication estimate
 $\that_{r}$ given by
 \begin{align*}
@@ -482,7 +482,7 @@ model $\that_{i} \given \theta \sim \Nor(\theta, \sigma^{2}_{i})$ with
 $\that_{i}$ an estimate of the effect size $\theta$ from study $i \in \{o, r\}$
 and $\sigma_{i}$ the corresponding standard error (assumed to be know), and that
 we use the alternative $H_{1} \colon \Nor(\that_{o}, \sigma^{2}_{o})$ which
-arises from updating an inital flat prior for $\theta$ the original data
+arises from updating an initial flat prior for $\theta$ the original data
 $x_{o} = \{\that_{o}, \sigma_{o}\}$. The replication Bayes factor is then
 \begin{align}
   \label{eq:bfr}
@@ -516,7 +516,7 @@ where $\bone_{m}$ is a vector of $m$ ones and $\tau^{2}_{r}$ is a heterogeneity
 variance for the replication effect sizes (not to be confused with the
 heterogeneity variance $\tau^{2}$ used in the design prior).
 
-As in the singlsite case, the replication Bayes factor quantifies the evidence
+As in the singlesite case, the replication Bayes factor quantifies the evidence
 that the data provide for the null hypothesis $H_{0}\colon \theta = 0$ relative
 to the alternative hypothesis
 $H_{1} \colon \theta \sim \Nor(\that_{o}, \sigma^{2}_{o})$. The marginal density
@@ -555,7 +555,7 @@ heterogeneity $\tau^{2}_{r}$ and its variance. The marginal density is then
     \sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \hat{\theta}_{r*})^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}} + \frac{(\hat{\theta}_{r*} - \that_{o})^{2}}{\sigma^{2}_{r*} + \sigma^{2}_{o}}\right\}\right].
 \end{align*}
 Dividing the marginal density of $\bthat_{r}$ under $H_{0}$ by the marginal
-density of $\bthat_{r}$ under $H_{1}$ leads to cancelation of several terms, and
+density of $\bthat_{r}$ under $H_{1}$ leads to cancellation of several terms, and
 produces the replication Bayes factor
 \begin{align*}
   \BF_{01}(\hat{\theta}_{r})
@@ -569,26 +569,26 @@ replication Bayes factor from~\eqref{eq:bfr} but using the weighted average
 $\that_{r*}$ and its standard error $\sigma_{r*}$ as the replication effect
 estimate $\that_{r}$ and standard error $\sigma_{r}$.
 
-\section{The sceptical \textit{p}-value}
+\section{The skeptical \textit{p}-value}
 \citet{Held2020} proposed a reverse-Bayes approach for assessing replicability.
 One assumes again the data model
 $\that_{i} \given \theta \sim \Nor(\theta, \sigma^{2}_{i})$ with
-$i \in \{o, r\}$, along with a zero-mean ``sceptical'' prior
+$i \in \{o, r\}$, along with a zero-mean ``skeptical'' prior
 $\theta \sim \Nor(0, \sigma^{2}_{s})$ for the effect size. In a first step, a
 level $\alpha \geq p_{o} = 1 - \Phi(|\that_{o}|/\sigma_{o})$ is fixed and the
-``sufficiently sceptical'' prior variance $\sigma^{2}_{s}$ is computed
+``sufficiently skeptical'' prior variance $\sigma^{2}_{s}$ is computed
 \begin{align*}
   \sigma^{2}_{s} = \frac{\sigma^{2}_{o}}{(z_{o}^{2}/\zalpha^{2}) - 1}
 \end{align*}
-where $z_{o} = \that_{o}/\sigma_{o}$. The sufficiently sceptical prior variance
+where $z_{o} = \that_{o}/\sigma_{o}$. The sufficiently skeptical prior variance
 $\sigma^{2}_{s}$ has the property that it renders the resulting posterior of
 $\theta$ no longer ``credible'' at level $\alpha$, that is, the posterior tail
 probability is fixed to
 $\Pr(\theta \geq 0 \given \that_{o}, \sigma_{o}, \sigma_{s}) = 1 - \alpha$ for
 positive estimates and
 $\Pr(\theta \leq 0 \given \that_{o}, \sigma_{o}, \sigma_{s}) = 1 - \alpha$ for
-negative estimates. In a second step, the conflict between the sceptical prior
-and the obsereved replication data is quantified, larger conflict indicating a
+negative estimates. In a second step, the conflict between the skeptical prior
+and the observed replication data is quantified, larger conflict indicating a
 higher degree of replication success. For doing so, a prior predictive tail
 probability
 \begin{align*}
@@ -602,10 +602,10 @@ probability
 \end{align*}
 is computed and replication success at level $\alpha$ is declared if
 $p_{\text{Box}} \leq \alpha$. The smallest level $\alpha$ at which replication
-success is achieved is called the \emph{the sceptical $p$-value} $\ps$ and
+success is achieved is called the \emph{the skeptical $p$-value} $\ps$ and
 replication success at level $\alpha$ is equivalent with $\ps \leq \alpha$
 \citep[see][for more details on $\ps$]{Held2020, Held2021}. By applying some
-algebraic maniputations to the condition $p_{\text{Box}} \leq \alpha$, one can
+algebraic manipulations to the condition $p_{\text{Box}} \leq \alpha$, one can
 show that it is equivalent to the replication effect estimate $\that_{r}$
 falling in the success region
 \begin{align*}
@@ -620,7 +620,7 @@ falling in the success region
     \end{cases}
 \end{align*}
 
-\section{The sceptical Bayes factor}
+\section{The skeptical Bayes factor}
 \label{sec:BFs}
 \citet{Pawel2022b} modified the reverse-Bayes assessment of replication success
 from \citet{Held2020} to use Bayes factors \citep{Jeffreys1961, Kass1995}
@@ -629,7 +629,7 @@ The procedure assumes again the data model
 $\that_{i} \given \theta \sim \Nor(\theta, \sigma^{2}_{i})$ for study
 $i \in \{o, r\}$. In the first step the original data are used to contrast the
 evidence for the point null hypothesis $H_{0} \colon \theta = 0$ relative to the
-``sceptical'' alternative $H_{S} \colon \theta \sim \Nor(0, \sigma^{2}_{s})$
+``skeptical'' alternative $H_{S} \colon \theta \sim \Nor(0, \sigma^{2}_{s})$
 with the Bayes factor
 \begin{align*}
   \BF_{0S}
@@ -638,9 +638,9 @@ with the Bayes factor
   \, \frac{z_{o}^{2}}{2(1 + \sigma^{2}_{o}/\sigma^{2}_{s})}\right\}.
 \end{align*}
 where $z_{o} = \that/\sigma^{2}_{o}$. One then determines the sufficiently
-sceptical prior variance $\sigma^{2}_{s}$ so that the Bayes factor is fixed to a
+skeptical prior variance $\sigma^{2}_{s}$ so that the Bayes factor is fixed to a
 level $\gamma \in (0, 1)$ meaning that there is no longer evidence against the
-null hypothesis at level $\gamma$. The sufficiently sceptical prior variance can
+null hypothesis at level $\gamma$. The sufficiently skeptical prior variance can
 be computed by
 \begin{align}
   \label{eq:ssv}
@@ -655,8 +655,8 @@ be computed by
 with $\lw{-1}(\cdot)$ the branch of the
 Lambert W function with $\text{W}(y) \leq -1$ for $y \in [-1/e, 0)$.
 
-In a second step the conflict between the sceptical prior and the replication
-data is quantified. To do so, the sceptic is contrasted to the ``advocacy''
+In a second step the conflict between the skeptical prior and the replication
+data is quantified. To do so, the skeptic is contrasted to the ``advocacy''
 alternative $H_{A} \colon \theta \sim \Nor(\that_{o}, \sigma^{2}_{o})$ which
 represents the position of an advocate as the prior corresponds to the posterior
 distribution based on the original data $\{\that_{o}, \sigma_{o}\}$ and a flat
@@ -670,12 +670,12 @@ prior for the effect size $\theta$. This is done by computing the Bayes factor
   \sigma^{2}_{r}}\right\}\right]
 \end{align*}
 and replication success at level $\gamma$ is defined by $\BF_{SA} \leq \gamma$
-as the data favor the advocate over the sceptic at a higher level than the
-sceptic's initial objection to the null hypothesis. The smallest level $\gamma$
-at which replication success is achievable is then called \emph{the sceptical
+as the data favor the advocate over the skeptic at a higher level than the
+skeptic's initial objection to the null hypothesis. The smallest level $\gamma$
+at which replication success is achievable is then called \emph{the skeptical
   Bayes factor} $\BFs$, and replication success at level $\gamma$ is equivalent
 to $\BFs \leq \gamma$ \citep[see][for details on how to compute
-$\BFs$]{Pawel2022b}. To derive the success region of the sceptical Bayes factor
+$\BFs$]{Pawel2022b}. To derive the success region of the skeptical Bayes factor
 one can apply algebraic manipulations to $\BF_{SA} \leq \gamma$, the condition
 for replication success at level $\gamma$, which leads to
 \begin{align}
@@ -697,7 +697,7 @@ with
        - \sigma^{2}_{s}} \\
   M &= \frac{\that_{o} (\sigma^{2}_{s} + \sigma^{2}_{r})}{\sigma^{2}_{o} - \sigma^{2}_{s}}
 \end{align*}
-and the sufficiently sceptical prior variance $\sigma^{2}_{s}$ computed
+and the sufficiently skeptical prior variance $\sigma^{2}_{s}$ computed
 by~\eqref{eq:ssv}.
 
 \section{Optimal number of sites}
@@ -739,12 +739,12 @@ levelBFr <- 1/10
 levelBFs <- 1/10
 methodLabs <- c("'Two-trials rule'", "'Replication Bayes factor'",
                 "'Meta-analysis'", "'Equivalence'",
-                "'Sceptical' ~ italic(p) * '-value'",
-                "'Sceptical Bayes factor'")
+                "'Skeptical' ~ italic(p) * '-value'",
+                "'Skeptical Bayes factor'")
 cols <- palette.colors(n = length(methodLabs), palette = "Okabe-Ito")
 names(cols) <- methodLabs
 
-## compute sample size for all studies with significant origianl study
+## compute sample size for all studies with significant original study
 dataSSD <- protzkolong %>%
     mutate(zo = dr/sqrt(vr)) %>%
     filter(Type == "Original")
@@ -906,8 +906,8 @@ ggpubr::ggarrange(plotA, plotB, common.legend = TRUE,
   replication Bayes factor at level $\gamma = 1/\Sexpr{1/levelBFr}$, fixed
   effects-meta analysis at level $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$,
   effect size equivalence at level $\alpha = \Sexpr{1 - confLevel}$ with margin
-  $\Delta = \Sexpr{margin}$, sceptical $p$-value at level
-  $\alpha = \Sexpr{round(levelPs, 3)}$, and sceptical Bayes factor at level
+  $\Delta = \Sexpr{margin}$, skeptical $p$-value at level
+  $\alpha = \Sexpr{round(levelPs, 3)}$, and skeptical Bayes factor at level
   $\gamma = 1/\Sexpr{1/levelBFs}$ for data from the replication project by
   \citet{Protzko2020}. An adaptive shrinkage prior is used for the effect size
   $\theta$ either without ($\tau = 0$) or with between-study heterogeneity
