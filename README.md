@@ -18,11 +18,10 @@ directory of the repository
 ``` sh
 ## packages from CRAN
 R -e 'install.packages(read.delim("CRANpackages.txt", header = FALSE)[,1])'
-## requires remotes package, install with
-## install.packages("remotes")
-remotes::install_gitlab(repo = "samuel.pawel/BayesRep", subdir = "pkg",
-                        host = "gitlab.uzh.ch")
-remotes::install_github(repo = "SamCH93/BayesRepDesign")
+## requires remotes package, also available on CRAN
+R -e 'remotes::install_gitlab(repo = "samuel.pawel/BayesRep", subdir = "pkg",
+                              host = "gitlab.uzh.ch")'
+R -e 'remotes::install_github(repo = "SamCH93/BayesRepDesign")'
 ```
 
 Then run
