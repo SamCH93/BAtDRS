@@ -791,9 +791,9 @@ for the not yet conducted replication studies. We start by specifying the design
 priors (one for each replication). Since the original studies have been
 preregistered, we do not expect an exaggeration of their effect estimates due to
 selective reporting or other questionable research practices. Therefore, we
-choose an uninformative initial prior ($g \to \infty$), which leads to design
-prior and predictive distribution both centered around the original effect
-estimate $\that_{o}$.
+choose an uninformative initial prior ($\sigmatheta^{2} \to \infty$), which
+leads to design prior and predictive distribution both centered around the
+original effect estimate $\that_{o}$.
 
 For specifying the between-study heterogeneity variance $\tau^{2}$, a
 distinction needs to be made between self-replications and
@@ -803,8 +803,8 @@ experimental conditions will be nearly identical in both studies. In contrast,
 one would expect some between-study heterogeneity for external-replications as
 the experimental conditions may slightly differ between the labs. In the
 following, we will use $\tau^{2} = \Sexpr{round(tauAbs, 2)}^{2}$ elicited via
-the ``absolute'' approach as discussed in previously,
-% Section~\ref{sec:heterogeneity},
+the ``absolute'' approach as discussed previously,
+% in Section~\ref{sec:heterogeneity},
 so that the range between the 2.5\% and the 97.5\% quantile of the study
 specific effect size distribution is equal to a small effect size $d = 0.2$.
 % since it is independent of the sample size of the original study.
@@ -1394,7 +1394,7 @@ ssbfs2 <- ssdBFs(level = levelBFs, dprior = dprior2, power = power)
 Figure~\ref{fig:example} shows the probability of replication success as a
 function of the relative sample size $c = n_{r}/n_{o}$ and for different initial
 priors. The left and middle plot are based on an uninformative prior for the
-effect size ($\sigmatheta^{2} = \infty$) without heterogeneity ($\tau^{2} = 0$)
+effect size ($\sigmatheta^{2} \to \infty$) without heterogeneity ($\tau^{2} = 0$)
 and with heterogeneity ($\tau^{2} = \Sexpr{round(tauAbs, 2)}^{2}$),
 respectively. The right plot shows the prior corresponding to the ``fixed
 effects null hypothesis'' $H_{0} \colon \theta = 0, \tau^{2} =
@@ -1410,17 +1410,18 @@ because the original study was already highly significant so that the pooled
 effect estimate is significant even for replication studies with very small
 sample size \citep{Micheloud2020}. The uncertainty regarding the replication
 effect estimate $\that_{r}$ may therefore even reduce the probability of
-replication success for meta-analysis. If heterogeneity is taken into account
-(middle plot) the probability of replication success becomes closer to 50\% for
-all methods but the equivalence test, reflecting the larger uncertainty about
-the effect size $\theta$. To achieve $\Sexpr{round(power*100, 2)}\%$ probability
-of replication success the fewest samples are required with meta-analysis,
-followed by the skeptical $p$-value, the two-trials rule, the replication Bayes
-factor, the skeptical Bayes factor, and lastly the equivalence test. If the
-chosen sample size should guarantee a sufficiently conclusive replication study
-with all these methods, the replication sample size has to be slightly larger
-than the original one in the situation of no heterogeneity ($\tau^{2} = 0$),
-while it has to be increased more than ten-fold if there is heterogeneity
+replication success for meta-analysis if the sample size is increased. If
+heterogeneity is taken into account (middle plot) the probability of replication
+success becomes closer to 50\% for all methods but the equivalence test,
+reflecting the larger uncertainty about the effect size $\theta$. To achieve
+$\Sexpr{round(power*100, 2)}\%$ probability of replication success the fewest
+samples are required with meta-analysis, followed by the skeptical $p$-value,
+the two-trials rule, the replication Bayes factor, the skeptical Bayes factor,
+and lastly the equivalence test. If the chosen sample size should guarantee a
+sufficiently conclusive replication study with all these methods, the
+replication sample size has to be slightly larger than the original one in the
+situation of no heterogeneity ($\tau^{2} = 0$), while it has to be increased
+more than ten-fold if there is heterogeneity
 ($\tau^{2} = \Sexpr{round(taus[2], 2)}^{2}$). However, this is mostly due to the
 equivalence test which requires by far the most samples. If the equivalence test
 sample size is ignored, the relative sample size
@@ -1622,7 +1623,7 @@ ggpubr::ggarrange(plotA, plotB, common.legend = TRUE,
   $\alpha = \Sexpr{round(levelPs, 3)}$, and skeptical Bayes factor at level
   $\gamma = 1/\Sexpr{1/levelBFs}$ for data from the replication project by
   \citet{Protzko2020}. A flat initial prior
-  ($\mutheta = 0, \sigmatheta^{2} = \infty$) is used for the effect size
+  ($\mutheta = 0, \sigmatheta^{2} \to \infty$) is used for the effect size
   $\theta$ is used either without ($\tau = 0$) or with heterogeneity
   ($\tau = \Sexpr{round(taus[2], 2)}$). The right plot shows the type I error
   rate associated with the required sample size. Experiments are ordered (top to
@@ -1737,13 +1738,13 @@ $(\tau^2+\sigma^{2}_{o})/(1 + 1/g)$ in the off-diagonal entries.
 
 Often the assessment of replication success can be formulated in terms of a
 weighted average of the replication effect estimates
-$\hat{\theta}_{r*} = (\sum_{i = 1}^{m} w_{i} \hat{\theta}_{ri})/(\sum_{i = 1}^{m} w_{i}$).
-For instance, several multisite replication projects \citep[\eg][]{Klein2018}
-have defined replication success by the fixed or random effects meta-analytic
-effect estimate of the replication effect estimates achieving statistical
-significance. Based on the predictive distribution of the replication effect
-estimate vector~\eqref{eq:ftrmulti}, the predictive distribution of the weighted
-average $\hat{\theta}_{r*}$ is given by
+$\hat{\theta}_{r*} = (\sum_{i = 1}^{m} w_{i} \hat{\theta}_{ri})/(\sum_{i = 1}^{m} w_{i})$
+with $w_{i}$ the weight of replication $i$. For instance, several multisite
+replication projects \citep[\eg][]{Klein2018} have defined replication success
+by the fixed or random effects meta-analytic effect estimate of the replication
+effect estimates achieving statistical significance. Based on the predictive
+distribution of the replication effect estimate vector~\eqref{eq:ftrmulti}, the
+predictive distribution of the weighted average $\hat{\theta}_{r*}$ is given by
 \begin{align}
   \hat{\theta}_{r*} \given \hat{\theta}_o, \sigma^{2}_{o}, \bsigma^{2}_{r}
   \sim \Nor\Biggl\{
@@ -1979,9 +1980,9 @@ the replication Bayes factor. If an additional site is more costly the optimal
 number of sites is lower, \eg{} if the cost ratio is $K_{S}/K_{c} = 300$,
 % (purple),
 the optimal number of sites is $m = 2$ for the two trials rule and $m = 3$ for
-the replication Bayes factor, while the number of sites in the actually used by
-\citet{Protzko2020} was $m = 3$ (counting only external-replications),
-respectively, $m = 4$ (counting also the internal-replication).
+the replication Bayes factor. This is similar to the actually used number of
+sites $m = 3$ (counting only external-replications), respectively, $m = 4$
+(counting also the internal-replication) from \citet{Protzko2020}.
 
 \section{Discussion}
 \label{sec:discussion}
