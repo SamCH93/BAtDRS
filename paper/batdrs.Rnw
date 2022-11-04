@@ -76,7 +76,7 @@
   Code to reproduce this manuscript is available at
   \href{https://github.com/SamCH93/BAtDRS}{https://github.com/SamCH93/BAtDRS}. A
   snapshot of the Git repository at the time of writing is archived at
-  \href{https://doi.org/10.5281/zenodo.XXXXXX}{https://doi.org/10.5281/zenodo.X}.
+  \href{https://doi.org/10.5281/zenodo.7291076}{https://doi.org/10.5281/zenodo.7291076}.
   Methods for Bayesian design of replication studies are implemented in the R
   package BayesRepDesign which is available at
   \href{https://github.com/SamCH93/BayesRepDesign}{https://github.com/SamCH93/BayesRepDesign}.
