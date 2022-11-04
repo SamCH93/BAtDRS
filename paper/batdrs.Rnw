@@ -38,19 +38,19 @@
   could be allocated better in other studies. Here we show how Bayesian
   approaches can be used for tackling this problem. The Bayesian framework
   allows researchers to combine the original data and external knowledge in a
-  design prior distribution for the underlying parameters. We investigate sample
-  size determination for design priors in the normal-normal hierarchical model
-  where analytical results are available and traditional sample size
-  determination is a special case where the uncertainty from the original data
-  is ignored. Based on a design prior, predictions about the replication data
-  can be made, and the replication sample size can be chosen to ensure a
-  sufficiently high probability of replication success. Replication success may
-  be defined through Bayesian or non-Bayesian criteria, and different criteria
-  may also be combined to meet distinct stakeholders and allow conclusive
-  inferences based on multiple analysis approaches. We illustrate with
-  application to data from a multisite replication project in Psychology how
+  design prior distribution for the underlying parameters. Based on a design
+  prior, predictions about the replication data can be made, and the replication
+  sample size can be chosen to ensure a sufficiently high probability of
+  replication success. Replication success may be defined through Bayesian or
+  non-Bayesian criteria, and different criteria may also be combined to meet
+  distinct stakeholders and allow conclusive inferences based on multiple
+  analysis approaches. We investigate sample size determination in the
+  normal-normal hierarchical model where analytical results are available and
+  traditional sample size determination is a special case where the uncertainty
+  on parameter values is not accounted for. An application to data from a
+  multisite replication project of social-behavioral experiments illustrates how
   Bayesian approaches help to design informative and cost-effective replication
-  studies. Our methods are available in the R package BayesRepDesign.}
+  studies. Our methods can be used through the R package BayesRepDesign.}
 
 \keywords{Bayesian design, design prior, multisite replication, sample size
   determination}
@@ -61,10 +61,8 @@
   \addORCIDlink{Guido Consonni}{0000-0002-1252-5926}\\
   \addORCIDlink{Leonhard Held}{0000-0002-8686-5325}
 
-  Preprint version November 4,
-  2022. % don't forget to hard-code date when submitting to arXiv!
-  Licensed under CC-BY 4.0.
-  % (\href{https://creativecommons.org/licenses/by/4.0/}{https://creativecommons.org/licenses/by/4.0/}).
+  Preprint version November 4, 2022. Licensed under CC-BY 4.0
+  (\href{https://creativecommons.org/licenses/by/4.0/}{https://creativecommons.org/licenses/by/4.0/}).
 
   This research was not preregistered and has not been previously disseminated.
   We declare to have no conflicts of interest.
@@ -73,16 +71,9 @@
   The funder had no role in study design, data collection, data analysis, data
   interpretation, decision to publish, or preparation of the manuscript.
 
-  We thank \citet{Protzko2020} for publicly sharing their data. We thank
-  Charlotte Micheloud and Angelika Stefan for helpful comments on drafts of the
-  manuscript. Our acknowledgment of these individuals does not imply their
-  endorsement of this article.
-
-  The CC-By 4.0 licensed data were downloaded from
-  \href{https://osf.io/42ef9/}{https://osf.io/42ef9/}. Analyses were conducted
-  in the R programming language version \Sexpr{paste(version[["major"]],
-    version[["minor"]], sep = ".")} \citep{R}. Code to reproduce this manuscript
-  is available at
+  All our analyses were conducted in the R programming language version
+  \Sexpr{paste(version[["major"]], version[["minor"]], sep = ".")} \citep{R}.
+  Code to reproduce this manuscript is available at
   \href{https://github.com/SamCH93/BAtDRS}{https://github.com/SamCH93/BAtDRS}. A
   snapshot of the Git repository at the time of writing is archived at
   \href{https://doi.org/10.5281/zenodo.XXXXXX}{https://doi.org/10.5281/zenodo.X}.
@@ -90,15 +81,25 @@
   package BayesRepDesign which is available at
   \href{https://github.com/SamCH93/BayesRepDesign}{https://github.com/SamCH93/BayesRepDesign}.
 
+  We thank Charlotte Micheloud and Angelika Stefan for helpful comments on
+  drafts of the manuscript. Our acknowledgment of these individuals does not
+  imply their endorsement of this article.
+
+  We thank \citet{Protzko2020} for publicly sharing their data. Their CC-By 4.0
+  licensed data were downloaded from
+  \href{https://osf.io/42ef9/}{https://osf.io/42ef9/}. The R markdown script
+  ``Decline effects main analysis.Rmd'' was executed and the relevant variables
+  from the objects ``ES\_experiments'' and ``decline\_effects'' were saved.
+
   Correspondence concerning this article should be addressed to Samuel Pawel,
   Epidemiology, Biostatistics and Prevention Institute, University of Zurich,
   Hirschengraben 84, 8001 Zurich, Switzerland. E-mail: samuel.pawel@uzh.ch
 }
 
-\journal{Journal of XXX}
-\volume{X}
-\ccoppy{X}
-\copnum{X}
+% \journal{Journal of XXX}
+% \volume{X}
+% \ccoppy{X}
+% \copnum{X}
 
 
 %% Definitions
@@ -115,7 +116,7 @@ opts_chunk$set(fig.height = 4,
                echo = FALSE,
                warning = FALSE,
                message = FALSE,
-               cache = TRUE,
+               cache = FALSE,
                eval = TRUE,
                out.width = "\\textwidth")
 
@@ -201,25 +202,25 @@ methodology was developed. Since analysis and design of replication studies
 should be in accordance, a relatively small literature has emerged which
 specifically deals with replication study power calculations and SSD
 \citep{Bayarri2002, Goodman1992, Senn2002, Anderson2017, Micheloud2020,
-  vanZwet2022, Held2020, Pawel2022b, Hedges2021, Anderson2022}. However, most
-of these articles only deal with selected analysis methods and data
-models. % For
+  vanZwet2022, Held2020, Pawel2022b, Hedges2021, Anderson2022}.
+However, most of these articles only deal with selected analysis methods and
+data models. % For
 % instance, SSD for standardized mean difference effect sizes analyzed with Bayes
 % factors \citep{Bayarri2002}, SSD for statistical significance assessment of the
 % replication \citep{Goodman1992, Senn2002, Micheloud2020, vanZwet2022}, SSD for
 % reverse-Bayes assessment of replication studies \citep{Held2020, Pawel2022b}, or
 % SSD for meta-analysis of replication studies \citep{Hedges2021}.
-An exception is the excellent article from \citet{Anderson2022} who discuss more
-general principles of replication SSD in the context of psychological research,
-mostly from a frequentist perspective. As they state ``the literature on
-Bayesian sample size planning is still nascent, particularly with respect to
+An exception is the excellent article by \citet{Anderson2022} which discusses
+more general principles of replication SSD in the context of psychological
+research, mostly from a frequentist perspective. As they state ``the literature
+on Bayesian sample size planning is still nascent, particularly with respect to
 Bayes Factors \citep{Schoenbrodt2017}, and has not yet been clearly optimized
 for the context of most replication goals'' \citep[p. 18]{Anderson2022}. Our
 goal is therefore to complement their article by developing a unified framework
 of replication SSD (schematically illustrated in Figure~\ref{fig:SSDschema})
 based on principles from Bayesian design approaches \citep{Spiegelhalter1986b,
   Spiegelhalter1986c, Weiss1997, OHagan2001b, Gelfand2002, DeSantis2004,
-  Spiegelhalter2004, Schoenbrodt2017, Pek2019, Park2022,
+  Spiegelhalter2004, Schoenbrodt2017, Pek2019, Kunzmann2021, Park2022,
   Grieve2022}. % , which applies to any kind of data model
 % and analysis method.
 We aim to provide both a theoretical basis for methodologists developing new
@@ -255,7 +256,7 @@ the probability of replication success becomes sufficiently high. Importantly,
 Bayesian design approaches can also be used if the planned analysis of the
 replication study is non-Bayesian, which is the more common situation in
 practice. Bayesian design based on a frequentist analysis is known under various
-names, such as ``hybrid classical-Bayesian design'' \citep{Spiegelhalter2004} or
+names, such as ``hybrid classical-Bayesian design'' \citep{Spiegelhalter2004},
 ``Bayesian assurance'' \citep{OHagan2005}, and has also been used before for
 psychological applications \citep{Pek2019, Park2022} and replication studies
 \citep{Anderson2017, Micheloud2020}.
@@ -265,7 +266,8 @@ framework for Bayesian SSD of replication studies which applies to any kind of
 data model and analysis method. %(Section~\ref{sec:GFW}),
 We then investigate design priors and SSD in the normal-normal hierarchical
 model framework which provides sufficient flexibility for incorporating the
-original data and external knowledge in replication design. %(Section~\ref{sec:SS}).
+original data and external knowledge in replication
+design. %(Section~\ref{sec:SS}).
 No advanced computational methods, such as (Markov Chain) Monte Carlo sampling,
 are required for conducting Bayesian SSD in this framework, and in many cases
 there are even simple formulae which generalize classical power and sample size
@@ -275,8 +277,9 @@ studies. Since multisite replication studies are becoming increasingly popular
 in psychology \citep[\eg{}][]{Klein2018}, we also discuss how to choose the
 optimum allocation of samples within and between sites from a Bayesian design
 point of view. As a running example we use data from a multisite replication
-project in psychology \citep{Protzko2020}. Finally, we close with concluding
-remarks, limitations, and open questions. %(Section \ref{sec:discussion}).
+project of social-behavioral experiments \citep{Protzko2020}. Finally, we close
+with concluding remarks, limitations, and open
+questions. %(Section \ref{sec:discussion}).
 
 
 
@@ -334,10 +337,10 @@ it ($x_r \in S$), the replication is successful. The \emph{probability of
   replication success} can thus be computed by integrating the predictive
 density~\eqref{eq:ftr} over $S$. To ensure a sufficiently conclusive replication
 design, the sample size $n_{r}$ is determined such that the probability of
-replication success is at least as large as a desired target, here and
-henceforth denoted by $1 - \beta$. The required sample size $n_r^*$ is then the
-smallest sample size which leads to a probability of replication success of at
-least $1 - \beta$, \ie{}
+replication success is at least as large as a desired target probability of
+success, here and henceforth denoted by $1 - \beta$. The required sample size
+$n_r^*$ is then the smallest sample size which leads to a probability of
+replication success of at least $1 - \beta$, \ie{}
 \begin{align}
   \label{eq:nr}
   n_r^* = \inf \left\{n_r : \Pr(X_{r} \in S \given
@@ -377,18 +380,18 @@ It is pragmatic to adopt a meta-analytic perspective and use only study level
 summary statistics instead of the raw study data since the raw data from the
 original study are not always available to the replicators. Typically, the
 underlying parameter $\theta$ is a univariate effect size quantifying the effect
-of an independent variable on the outcome variable (\eg{} a mean difference, a
-log odds ratio, or a log hazard ratio). The original and replication study can
-then be summarized through an effect estimate $\that$, possibly the maximum
-likelihood estimate, and a corresponding standard error $\sigma$, \ie{}
-$x_{o} = \{\that_{o}, \sigma_{o}\}$ and $x_{r} = \{\that_{r}, \sigma_{r}\}$.
-Effect estimates and standard errors are routinely reported in research articles
-or can, under some assumptions, be computed from $p$-values and confidence
-intervals. As in the conventional meta-analytic framework \citep{Sutton2001}, we
-further assume that for study $k \in \{o, r\}$ the (suitably transformed) effect
-estimate $\hat{\theta}_k$ is approximately normally distributed around a study
-specific effect size $\theta_k$ and with (known) variance equal to its squared
-standard error $\sigma_k^2$, here and henceforth denoted by
+on the outcome variable (\eg{} a mean difference, a log odds ratio, or a log
+hazard ratio). The original and replication study can then be summarized through
+an effect estimate $\that$, possibly the maximum likelihood estimate, and a
+corresponding standard error $\sigma$, \ie{} $x_{o} = \{\that_{o}, \sigma_{o}\}$
+and $x_{r} = \{\that_{r}, \sigma_{r}\}$. Effect estimates and standard errors
+are routinely reported in research articles or can, under some assumptions, be
+computed from $p$-values and confidence intervals. As in the conventional
+meta-analytic framework \citep{Sutton2001}, we further assume that for study
+$k \in \{o, r\}$ the (suitably transformed) effect estimate $\hat{\theta}_k$ is
+approximately normally distributed around a study specific effect size
+$\theta_k$ and with (known) variance equal to its squared standard error
+$\sigma_k^2$, here and henceforth denoted by
 $\hat{\theta}_k \given \theta_k \sim \Nor(\theta_k, \sigma_k^2)$. The standard
 error $\sigma_k$ is typically of the form $\sigma_k = \lambda/\sqrt{n_k}$ with
 $\lambda^{2}$ some unit variance and $n_{k}$ the sample size. The ratio of the
@@ -400,7 +403,7 @@ original sample size
 which is often the main focus of SSD as it quantifies how much the replication
 sample $n_{r}$ size needs to be changed compared to the original sample size
 $n_{o}$. Depending on the effect size type, this framework might require slight
-modifications \citep[see \eg{}][Chapter 2.4]{Spiegelhalter2004}.
+modifications \citep[see \eg{}][ch. 2.4]{Spiegelhalter2004}.
 
 Assuming a normal sampling model for the effect
 estimates~\eqref{eq:hat_theta_k}, as described previously, and specifying an
@@ -438,7 +441,7 @@ for SSD of the replication study.
 \label{sec:designpredictive}
 The observed original data $x_{o} = \{\that_{o}, \sigma_{o}\}$ can be combined
 with the initial prior~\eqref{eq:theta2} %by Bayes' theorem~\eqref{eq:dp}
-by standard Bayesian theory for normal prior and likelihood \citep[Section
+by standard Bayesian theory for normal prior and likelihood \citep[ch.
 3.7]{Spiegelhalter2004} to obtain a posterior distribution for the effect size
 $\theta$
 \begin{align}
@@ -483,7 +486,7 @@ prior density, leading to
   \frac{\hat{\theta}_o}{1 + 1/g} + \frac{\mutheta}{1 + g}, \sigmathatr^{2} =
   \, \sigma^2_r + \tau^2 + \frac{\sigma^2_o + \tau^2}{1 + 1/g}\right)
 \end{align}
-which can again be shown using standard Bayesian theory \citep[Section
+which can again be shown using standard Bayesian theory \citep[ch.
 3.13.3]{Spiegelhalter2004}.
 % For some analysis methods, replication success is more naturally defined via the
 % replication $z$-value $z_{r} = \that_{r}/\sigma_{r}$. In these cases, it can be
@@ -549,7 +552,7 @@ specify an upper limit of ``tolerable heterogeneity''. This approach is similar
 to specifying a minimal clinically relevant difference in classical power
 analysis in the sense that a true replication effect size which is intolerably
 heterogeneous from the original effect size is not relevant to be detected. An
-absolute \citep[Chapter 5.7.3]{Spiegelhalter2004} and a relative approach
+absolute \citep[ch. 5.7.3]{Spiegelhalter2004} and a relative approach
 \citep{Held2020c} can be considered. In the absolute approach, a value of
 $\tau^{2}$ is chosen such that a suitable range of study-specific effect sizes
 is not larger than an effect size difference considered negligible. For example,
@@ -571,13 +574,13 @@ $\tau^{2} = \sigma^{2}_{o}/(1/I^{2} - 1) = (2\sigma^{2}_{o})/3$.
 
 We note that one can also assign a prior distribution to $\tau^2$ \citep[for an
 overview of prior distributions for heterogeneity variances in the normal-normal
-hierarchical model see][]{Rover2021}. In this case there are is no closed-form
+hierarchical model see][]{Rover2021}. In this case there is no closed-form
 expression for the predictive distribution of the replication effect estimate
 but numerical or Monte Carlo integration need to be used. % To
 % gain more insight, we will thus only consider fixed $\tau^{2}$ in the remaining
 % part of the paper.
 We illustrate in the supplement how the probability of replication success can
-in this case be computed. The derived closed-form expression conditional on
+in this case be computed. The derived closed-form expressions conditional on
 $\tau^{2}$ are still useful as they enable computation of the predictive
 distribution up to a single one-dimensional integral which can be computed
 numerically.
@@ -654,7 +657,7 @@ submitted four original findings to be replicated. For instance, the original
 finding from the ``Labels'' experiment was: ``When a researcher uses a label to
 describe people who hold a certain opinion, he or she is interpreted as
 disagreeing with those attributes when a negative label is used and agreeing
-with those attributes when a positive label is used'' \citep[Page
+with those attributes when a positive label is used'' \citep[p.
 17]{Protzko2020}, which was based on an effect estimate
 $\that_{o} = \Sexpr{round(do, 3)}$ with 95\% confidence interval from
 $\Sexpr{round(cio[1], 2)}$ to $\Sexpr{round(cio[2], 2)}$. For each submitted
@@ -941,11 +944,11 @@ for all analysis methods discussed in the following.
 
 
 \subsubsection{The two-trials rule}
-The most common approach for analysis of replication studies is to declare
+The most common approach for the analysis of replication studies is to declare
 replication success when both the original and replication study lead to a
-$p$-value for testing the null hypothesis $H_{0} \colon \theta = 0$ smaller than a
-pre-specified threshold $\alpha$, usually $\alpha = 5\%$ for two-sided tests and
-$\alpha = 2.5\%$ for one-sided tests. This procedure is known as the
+$p$-value for testing the null hypothesis $H_{0} \colon \theta = 0$ smaller than
+a pre-specified threshold $\alpha$, usually $\alpha = 5\%$ for two-sided tests
+and $\alpha = 2.5\%$ for one-sided tests. This procedure is known as the
 \emph{two-trials rule} in drug regulation \citep{Senn2008}.
 
 We now assume that the one-sided original $p$-value was significant at some
@@ -1001,7 +1004,7 @@ Moreover, by assuming a standard error of the form
 $\sigma_{r} = \lambda/\sqrt{n_{r}}$ and plugging in the parameters of the
 ``conditional'' design prior %from Section~\ref{sec:designpredictive}
 ($\tau^{2} = 0$, $\mutheta = \that_{o}$, $g \downarrow 0$), we obtain the
-well-known sample size formula \citep[chapter 3.3]{Matthews2006}
+well-known sample size formula \citep[ch. 3.3]{Matthews2006}
 \begin{align*}
   n_{r}^{*} = \frac{(\zalpha + \zbeta)^{2}}{(\that_{o}/\lambda)^{2}}
 \end{align*}
@@ -1013,9 +1016,9 @@ types of external knowledge.
 
 
 \subsubsection{Fixed effects meta-analysis}
-The data from original and replication are sometimes pooled via fixed-effects
-meta-analysis. The pooled effect estimate $\that_{m}$ and standard error
-$\sigma_{m}$ are then given by
+The data from the original and replication studies are sometimes pooled via
+fixed-effects meta-analysis. The pooled effect estimate $\that_{m}$ and standard
+error $\sigma_{m}$ are then given by
 \begin{align*}
   &\that_{m} =
     \left(\that_{o}/\sigma_{o}^{2} + \that_{r}/\sigma^{2}_{r}\right)\sigma^{2}_{m}&
@@ -1190,11 +1193,11 @@ replication success $1 - \beta < \text{limPr}_{\scriptscriptstyle \BFr}$.
 \subsubsection{The skeptical \textit{p}-value}
 \citet{Held2020} proposed a reverse-Bayes approach for quantifying replication
 success. The main idea is to determine the variance of a ``skeptical'' zero-mean
-normal prior the effect size $\theta$ such that its posterior distribution based
-on the original study is no longer credible. Replication success is then
+normal prior for the effect size $\theta$ such that its posterior distribution
+based on the original study is no longer credible. Replication success is then
 achieved if the replication data are in conflict with the skeptical prior. The
 procedure can be summarized by a ``skeptical $p$-value'' $\ps$, and the lower
-the $p$-value the higher the degree of replication success. \citet[Section
+the $p$-value the higher the degree of replication success. \citet[sec.
 2.1]{Held2021} showed that the success region for replication success defined by
 $\ps \leq \alpha$ is given by
 \begin{align}
@@ -1776,7 +1779,7 @@ A key challenge in SSD for multisite replication studies is the optimal
 allocation of samples within and between sites, that is, how many sites $m$ and
 how many samples $n_{ri}$ per site $i$ should be used. A similar problem exists
 in SSD for cluster randomized trials and we can adapt the common solution based
-on cost functions \citep{Raudenbush1997}. %\citep[Chapter 9.6]{Cochran1977}.
+on cost functions \citep{Raudenbush1997}. %\citep[ch. 9.6]{Cochran1977}.
 That is, the optimal configuration is determined so that the probability of
 replication success is maximized subject to a constrained cost function which
 accounts for the (typically different) costs of additional samples and sites.
