@@ -256,7 +256,7 @@ the probability of replication success becomes sufficiently high. Importantly,
 Bayesian design approaches can also be used if the planned analysis of the
 replication study is non-Bayesian, which is the more common situation in
 practice. Bayesian design based on a frequentist analysis is known under various
-names, such as ``hybrid classical-Bayesian design'' \citep{Spiegelhalter2004},
+names, such as ``hybrid classical-Bayesian design'' \citep{Spiegelhalter2004} or
 ``Bayesian assurance'' \citep{OHagan2005}, and has also been used before for
 psychological applications \citep{Pek2019, Park2022} and replication studies
 \citep{Anderson2017, Micheloud2020}.
