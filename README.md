@@ -4,7 +4,7 @@ This repository contains code and data related to the preprint
 
 Pawel, S., Consonni, G., and Held, L. (2022). Bayesian approaches to designing
 replication studies
-[doi:10.48550/arXiv.XXXX.XXXXX](https://doi.org/10.48550/arXiv.XXXX.XXXX)
+[doi:10.48550/arXiv.2211.02552](https://doi.org/10.48550/arXiv.2211.02552)
 
 ## Reproducing the results
 
