@@ -481,7 +481,7 @@ posterior distribution based on the original data $x_{o}$. Assume again a normal
 model $\that_{i} \given \theta \sim \Nor(\theta, \sigma^{2}_{i})$ with
 $\that_{i}$ an estimate of the effect size $\theta$ from study $i \in \{o, r\}$
 and $\sigma_{i}$ the corresponding standard error (assumed to be know), and that
-we use the alternative $H_{1} \colon \Nor(\that_{o}, \sigma^{2}_{o})$ which
+we use the alternative $H_{1} \colon \theta \sim \Nor(\that_{o}, \sigma^{2}_{o})$ which
 arises from updating an initial flat prior for $\theta$ the original data
 $x_{o} = \{\that_{o}, \sigma_{o}\}$. The replication Bayes factor is then
 \begin{align}
@@ -536,8 +536,8 @@ $\sigma^{2}_{r*} = 1/\left\{\sum_{i=1}^{n}1/(\sigma^{2}_{ri} + \tau^{2}_{r})\rig
 heterogeneity $\tau^{2}_{r}$ and its variance. The marginal density is then
 
 \begin{align*}
-        f(\hat{\theta}_{r} \given H_{1})
-        &= \int f(\hat{\theta}_{r} \given \theta) f(\theta \given H_{1})
+        f(\bthat_{r} \given H_{1})
+        &= \int f(\bthat_{r} \given \theta) f(\theta \given H_{1})
                         \, \text{d}\theta \\
               &= \int \frac{\exp\left[-\frac{1}{2} \left\{\sum_{i=1}^{n} \frac{(\hat{\theta}_{ri} - \theta)^{2}}{\sigma^{2}_{ri} + \tau^{2}_{r}} +
                   \frac{(\theta - \that_{o})^{2}}{\sigma^{2}_{o}}\right\} \right]}{
@@ -558,8 +558,8 @@ Dividing the marginal density of $\bthat_{r}$ under $H_{0}$ by the marginal
 density of $\bthat_{r}$ under $H_{1}$ leads to cancellation of several terms, and
 produces the replication Bayes factor
 \begin{align*}
-  \BF_{01}(\hat{\theta}_{r})
-  &= \frac{f(\hat{\theta}_{r} \given H_{0})}{f(\hat{\theta}_{r} \given H_{1})}
+  \BF_{01}(\bthat_{r})
+  &= \frac{f(\bthat_{r} \given H_{0})}{f(\bthat_{r} \given H_{1})}
     = \sqrt{1 + \sigma^{2}_{o}/\sigma^{2}_{r*}}  \exp\left[-\frac{1}{2}\left\{
     \frac{\hat{\theta}_{r*}^{2}}{\sigma^{2}_{r*}} -
     \frac{(\hat{\theta}_{r*} - \hat{\theta}_{o})^{2}}{\sigma^{2}_{r*} + \sigma^{2}_{o}}\right\}\right].
