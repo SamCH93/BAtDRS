@@ -1,4 +1,5 @@
 knitr
+BayesRepDesign
 ReplicationSuccess
 dplyr
 tidyr

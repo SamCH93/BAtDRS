@@ -69,9 +69,9 @@ to~\ref{sec:BFs}). For the two-trials rule and the replication Bayes factor
 methods we additionally provide derivations on how these methods can be
 generalized to the multisite replication setting. We show then how the optimal
 number of samples per site can be derived for multisite SSD
-(Section~\ref{sec:multi}). Finally, we show SSD for the \citet{Protzko2020}
-project but using an adaptive shrinkage prior instead of the flat prior as in
-the main manuscript (Section~\ref{sec:ssdprotzko}).
+(Section~\ref{sec:multi}). Finally, we show SSD for all studies from the
+\citet{Protzko2020} project using either a flat prior or an adaptive shrinkage
+prior for the effect size (Section~\ref{sec:ssdprotzko}).
 
 \section{Prior on the heterogeneity variance}
 \label{sec:priortau}
@@ -129,13 +129,14 @@ $\sigma_{o}^{2}$. If an improper uniform prior is assigned to $\theta$
     \frac{(\that_{o} - \mutheta)^{2}}{\tau^{2} + \sigma^{2}_{o} + \sigmatheta^{2}}}_{\downarrow 0} -
     \underbrace{\frac{(\that_{o} - \mutheta)^{2}}{\tau^{2}_{*} + \sigma^{2}_{o} +
     \sigmatheta^{2}}}_{\downarrow 0} \bigg\}\bigg] \, \text{d}\tau^{2}_{*} \\
-  &= f(\tau^{2}),
+  &= f(\tau^{2}).
 \end{align*}
-the limit can be interchanged with the integral because of the monotone
-convergence theorem. This means that with a uniform prior nothing can be learned
-about the variance $\tau^{2}$ which intuitively makes sense as estimation of a
-variance requires at least two observations. The phenomenon is illustrated in
-Figure~\ref{fig:margposttau2} for the data from the experiment ``Labels''
+% the limit can be interchanged with the integral because of the monotone
+% convergence theorem.
+This means that with a uniform prior nothing can be learned about the variance
+$\tau^{2}$ which intuitively makes sense as estimation of a variance requires at
+least two observations. The phenomenon is illustrated in
+Figure~\ref{fig:margposttau2} for the data from the ``Labels''experiment
 \citep{Protzko2020} as also used in the main manuscript. We see that as the
 prior standard deviation increases (making the prior more uniform), the marginal
 posterior density becomes closer to the prior density.
@@ -198,9 +199,9 @@ ggplot(data = posteriorDF, aes(x = tau, y = densitytau, linetype = type)) +
 ##           sp = 10, priorDens = priorDens)
 @
 \caption{Marginal posterior distribution of heterogeneity variance $\tau^{2}$
-  based on data from experiment ``Labels'' from \citet{Protzko2020} with
-  original effect estimate $\hat{\theta}_{o} = \Sexpr{round(to, 3)}$ and
-  standard error $\sigma_{o} = \Sexpr{round(so, 3)}$. A
+  based on data from ``Labels'' experiment \citep{Protzko2020} with original
+  effect estimate $\hat{\theta}_{o} = \Sexpr{round(to, 3)}$ and standard error
+  $\sigma_{o} = \Sexpr{round(so, 3)}$. A
   $\theta \sim \Nor(\Sexpr{mu}, \sigmatheta^{2})$ prior is assigned to the
   effect size $\theta$ and a half normal prior with standard deviation
   $\Sexpr{round(priorsd, 3)}$ is assigned to $\tau$.}
@@ -216,7 +217,7 @@ success as
   &= \int_{0}^{+\infty} \Pr(\that_{r} \in S \given \that_{o}, \sigma_{o}, \sigma_{r}, \tau^{2}) \,
     f(\tau^{2} \given \that_{o}, \sigma_{o}) \, \text{d}\tau^{2}. \\
 \end{align*}
-This mean computing the probability of replication success with a prior on
+This means computing the probability of replication success with a prior on
 $\tau^{2}$ requires two-dimensional numerical integration. However, in the
 common case when a uniform prior is assigned to $\theta$, the marginal posterior
 distribution of $\tau^{2}$ reduces to the prior, and only one numerical
@@ -322,7 +323,7 @@ ggplot(data = plotDF, aes(x = c, y = pow, color = method)) +
           panel.grid.minor = element_blank(), legend.text.align = 0)
 @
 \caption{Probability of replication success as a function of relative sample
-  size $c = n_{r}/n_{o}$ for experiment ``Labels'' with original effect estimate
+  size $c = n_{r}/n_{o}$ for ``Labels'' experiment with original effect estimate
   $\hat{\theta}_{o} = \Sexpr{round(to, 3)}$ and standard error
   $\sigma_{o} = \Sexpr{round(so, 3)}$ for uniform initial prior for effect size
   $\theta$ and either fixed $\tau = \Sexpr{round(tauAbs, 2)}$ (as in main
@@ -348,7 +349,6 @@ the fixed heterogeneity $\tau = 0.05$ elicited in the main manuscript. We see
 that the probability of replication success is only slightly higher compared to
 the fixed $\tau = 0.05$ from the main manuscript.
 
-
 \section{The two-trials rule}
 \label{sec:2TR}
 The two-trials rule is the most common analysis approach for replication
@@ -373,7 +373,7 @@ $\that_{r}$ is contained in the success region
   S_{\text{2TR}} =
   \begin{cases}
     \left[\zalpha \, \sigma_{r}, \infty \right) & \text{for} ~ \that_{o} > 0 \\
-    \left[-\infty, -\zalpha \, \sigma_{r} \right) & \text{for} ~ \that_{o} < 0.
+    \left(-\infty, -\zalpha \, \sigma_{r} \right] & \text{for} ~ \that_{o} < 0.
   \end{cases}
 \end{align*}
 
@@ -401,7 +401,7 @@ effect estimate $\that_{r*}$ given by
   S_{\text{2TR}} =
   \begin{cases}
     \left[\zalpha \, \sigma_{r*}, \infty \right) & \text{for} ~ \that_{o} > 0 \\
-    \left[-\infty, -\zalpha \, \sigma_{r*} \right) & \text{for} ~ \that_{o} < 0.
+    \left(-\infty, -\zalpha \, \sigma_{r*} \right] & \text{for} ~ \that_{o} < 0.
   \end{cases}
 \end{align*}
 
@@ -723,8 +723,7 @@ respect to $n_{r}$, leads to the optimal sample size
 \end{align*}
 for a given cost ratio $K_{s}/K_{c}$.
 
-\begin{figure}[!htb]
-<< "sample-size-all-protzko", results = FALSE >>=
+<< "ssd-params" >>=
 ## ssd parameters
 drange <- 0.2
 tauAbs <- drange/(2*qnorm(p = 0.975))
@@ -737,6 +736,26 @@ confLevel <- 0.9
 margin <- 0.2
 levelBFr <- 1/10
 levelBFs <- 1/10
+@
+
+\section{Sample size determination for all studies from the replication project}
+\label{sec:ssdprotzko}
+Figure~\ref{fig:ssd-all} shows SSD for all studies from the \citet{Protzko2020}
+replication project using a flat prior for the effect size $\theta$. As for the
+illustrative subset in the main manuscript, for the majority of studies all
+methods except the equivalence test require fewer samples in the replication
+than in the original study.
+
+Figure~\ref{fig:ssd-all-shrink} shows the same analyses but using an ``adaptive
+shrinkage prior'' for $\theta$ (i.e., the variance of the shrinkage prior is
+estimated by empirical Bayes). We see that the required sample size increases
+for studies with large $p$-values compared to the analysis based on a flat prior
+for $\theta$, whereas it stays roughly the same for studies with small
+$p$-values. This is because studies with large $p$-values receive more shrinkage
+while the shrinkage disappears with decreasing $p$-value \citep{Pawel2020}.
+
+\begin{figure}[!htb]
+<< "sample-size-all-protzko1", results = FALSE >>=
 methodLabs <- c("'Two-trials rule'", "'Replication Bayes factor'",
                 "'Meta-analysis'", "'Equivalence'",
                 "'Skeptical' ~ italic(p) * '-value'",
@@ -744,6 +763,187 @@ methodLabs <- c("'Two-trials rule'", "'Replication Bayes factor'",
 cols <- palette.colors(n = length(methodLabs), palette = "Okabe-Ito")
 names(cols) <- methodLabs
 
+## compute sample size for all studies with significant original study
+dataSSD <- protzkolong %>%
+    mutate(zo = dr/sqrt(vr)) %>%
+    filter(Type == "Original")
+resSSDlong <- lapply(X = dataSSD$Study, FUN = function(study) {
+    study <- dataSSD[dataSSD$Study == study,]
+    lapply(X = taus, FUN = function(tau) {
+        ## design prior
+        sp <- Inf
+        mu <- 0
+        dprior <- designPrior(to = study$dr, so = sqrt(study$vr), mu = mu,
+                              sp = sp, tau = tau)
+        ## compute standard errors
+        sr2TR <- ssdSig(level = levelSig, dprior = dprior, power = power)$sr
+        srMeta <- ssdMeta(level = levelSigMeta, dprior = dprior, power = power)$sr
+        srBFr <- ssdBFr(level = levelBFr, dprior = dprior, power = power)$sr
+        srEqu <- ssdEqu(level = 1 - confLevel, dprior = dprior, margin = margin,
+                        power = power)$sr
+        srPs <- ssdPs(level = levelPs, dprior = dprior, power = power)$sr
+        srBFs <- ssdBFs(level = levelBFs, dprior = dprior, power = power)$sr
+        ## compute type I errors
+        dpriorH0 <- designPrior(to = study$dr, so = sqrt(study$vr), mu = 0,
+                                sp = 0, tau = 0)
+        if (!is.nan(sr2TR)) {
+            t1e2TR <- porsSig(level = levelSig, dprior = dpriorH0, sr = sr2TR)
+        } else t1e2TR <- NaN
+        if (!is.nan(srMeta)) {
+            t1eMeta <- porsMeta(level = levelSigMeta, dprior = dpriorH0, sr = srMeta)
+        } else t1eMeta <- NaN
+        if (!is.nan(srEqu)) {
+            t1eEqu <- porsEqu(1 - confLevel, dprior = dpriorH0, margin = margin,
+                               sr = srEqu)
+        } else t1eEqu <- NaN
+        if (!is.nan(srBFr)) {
+            t1eBFr <- porsBFr(level = levelBFr, dprior = dpriorH0, sr = srBFr)
+        } else t1eBFr <- NaN
+        if (!is.nan(srPs)) {
+            t1ePs <- porsPs(level = levelPs, dprior = dpriorH0, sr = srPs)
+        } else t1ePs <- NaN
+        if (!is.nan(srBFs)) {
+            t1eBFs <- porsBFs(level = levelBFs, dprior = dpriorH0, sr = srBFs)
+        } else t1eBFs <- NaN
+        ## return results
+        data.frame(study, tau = tau, mu = mu, sp = sp, sr_2TR = sr2TR, sr_Meta = srMeta,
+                   sr_BFr = srBFr, sr_Equ = srEqu, sr_Ps = srPs, sr_BFs = srBFs,
+                   t1e_2TR = t1e2TR, t1e_Meta = t1eMeta, t1e_Equ = t1eEqu,
+                   t1e_BFr = t1eBFr, t1e_Ps = t1ePs, t1e_BFs = t1eBFs)
+    }) %>%
+        bind_rows()
+}) %>%
+    bind_rows() %>%
+    rename(to = dr, vo = vr) %>%
+    ## convert to long format
+    pivot_longer(cols = c("sr_2TR", "sr_Meta", "sr_BFr", "sr_Equ", "sr_Ps",
+                          "sr_BFs", "t1e_2TR",  "t1e_Meta", "t1e_Equ",
+                          "t1e_BFr", "t1e_Ps", "t1e_BFs"), names_sep = "_",
+                 names_to = c("res", "Method"))
+resSSDt1e <- filter(resSSDlong, res == "t1e") %>%
+    rename(t1e = value) %>%
+    dplyr::select(-res)
+resSSDsr <- filter(resSSDlong, res == "sr") %>%
+    rename(sr = value) %>%
+    dplyr::select(-res)
+resSSD1 <- merge(resSSDt1e, resSSDsr) %>%
+    mutate(so = sqrt(vo), c = so^2/sr^2,
+           po = 1 - pnorm(abs(zo)),
+           poFormat = ifelse(po >= 0.0001, paste('italic(p[o]) ~ "=" ~',
+                                                 formatPval(p = po)),
+                             'italic(p[o]) ~ "<" ~ 0.0001'))
+@
+<< "ssd-protzko1", fig.height = 9 >>=
+## plot relative sample size and corresponding type I error rates
+resSSD2 <- resSSD1 %>%
+    mutate(dp = case_when(tau == 0 & sp == 0 ~ "italic('H')[0]",
+                          tau == 0 & sp == Inf ~ "tau == 0",
+                          tau > 0 & sp == Inf ~ paste("tau ==", round(tau, 2))),
+           Methodlab = factor(Method,
+                              levels = c("2TR", "BFr", "Meta", "Equ", "Ps", "BFs"),
+                              labels = methodLabs),
+           ## really ugly HACK to get correct spacing
+           Studylab = paste0('atop(NA, atop(NA, atop(atop(NA, atop(bold("', Study,
+                             '") ~ "(" * {', poFormat, '},  hat(theta)[italic(o)] ~ "=" ~',
+                             round(to, 2), '* "," ~ sigma[italic("o")] ~ "=" ~',
+                             round(so, 3), '* ")" )), NA)))'),
+           c = ifelse(Method == "2TR" & abs(zo) <= qnorm(p = 1 - levelSig), NaN, c),
+           t1e = ifelse(Method == "2TR" & abs(zo) <= qnorm(p = 1 - levelSig), NaN, t1e))
+resSSD <- resSSD2 %>%
+    mutate(Studylab = factor(Studylab,
+                             levels = unique(resSSD2$Studylab)[
+                                 rev(order(unique(abs(resSSD2$zo))))]))
+
+## plot of relative sample size
+cBreaks <- c(1/30, 1/10, 1/3, 1, 3, 10, 30, 100, 300)
+plotA <- ggplot(data = resSSD, aes(x = Studylab, y = c, color = Methodlab,
+                                   shape = dp)) +
+    geom_hline(yintercept = 1, lty = 2, alpha = 0.3) +
+    geom_vline(xintercept = seq(1.5, 15.5, 1), lty = 3, alpha = 0.1) +
+    geom_linerange(aes(ymin = pmin(c, 1), ymax = pmax(c, 1),
+                       color = Methodlab), position = position_dodge(width = 0.7),
+                   show.legend = FALSE, alpha = 0.5, size = 0.4) +
+    geom_point(position = position_dodge2(width = 0.7), size = 0.7) +
+    labs(x = "Experiment",
+         y = bquote("Relative sample size" ~ italic(c) == italic(n[r]/n[o])),
+         color = "", shape = "") +
+    guides(color = guide_legend(override.aes = list(size = 1.2)),
+           shape = guide_legend(override.aes = list(size = 1.2))) +
+    scale_color_manual(values = cols, labels = scales::parse_format()) +
+    scale_y_log10(breaks = cBreaks, labels = formatBF(cBreaks)) +
+    scale_x_discrete(labels = scales::label_parse()) +
+    scale_shape_discrete(labels = scales::label_parse()) +
+    theme_bw() +
+    coord_flip(ylim = c(1/40, 350)) +
+    theme(panel.grid.major.y = element_blank(),
+          panel.grid.minor = element_blank(),
+          legend.position = "top",
+          axis.text.y = element_text(hjust = 0, size = 10),
+          plot.margin = unit(c(0, 0, 0, 0), units = "mm"),
+          legend.text.align = 0)
+
+## plot of type I error rate
+mysqrt_trans <- function() {
+    trans_new("mysqrt",
+              transform = base::sqrt,
+              inverse = function(x) ifelse(x<0, 0, x^2),
+              domain = c(0, Inf))
+}
+t1eNominal <- 0.025
+t1eBks <- c(0, t1eNominal, 0.1, 0.25, 0.5, 1)
+plotB <- ggplot(data = resSSD,
+                aes(x = Studylab, y = t1e, color = Methodlab, shape = dp)) +
+    geom_hline(yintercept = t1eNominal, lty = 2, alpha = 0.3) +
+    geom_vline(xintercept = seq(1.5, 15.5, 1), lty = 3, alpha = 0.1) +
+    geom_linerange(aes(ymin = pmin(t1eNominal, t1e), ymax = pmax(t1eNominal, t1e),
+                       color = Methodlab), position = position_dodge(width = 0.7),
+                   show.legend = FALSE, alpha = 0.5, size = 0.4) +
+    geom_point(position = position_dodge2(width = 0.7), size = 0.7) +
+    guides(color = guide_legend(override.aes = list(size = 1.2)),
+           shape = guide_legend(override.aes = list(size = 1.2))) +
+    scale_color_manual(values = cols, labels = scales::parse_format()) +
+    scale_shape_discrete(labels = scales::label_parse()) +
+    labs(x = "", y = "Type I error rate", color = "",
+         shape = "") +
+    scale_y_continuous(trans="mysqrt", breaks = t1eBks,
+                       labels = scales::label_percent(accuracy = 0.1),
+                       limits = c(0, 1)) +
+    scale_x_discrete(labels = scales::label_parse()) +
+    theme_bw() +
+    coord_flip(ylim = c(0, 0.8)) +
+    theme(panel.grid.major.y = element_blank(),
+          panel.grid.minor = element_blank(),
+          legend.position = "top",
+          axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          plot.margin = unit(c(0, 0, 0, 0), units = "mm"),
+          legend.text.align = 0)
+
+ggpubr::ggarrange(plotA, plotB, common.legend = TRUE,
+                  align = "h", widths = c(2, 1))
+@
+\caption{The left plot shows the required relative sample size $c = n_r/n_o$ to
+  achieve a target probability of replication success of
+  $1 - \beta = \Sexpr{round(power*100, 2)}$\% (if possible). Replication success
+  is defined through the two-trials rule at level $\alpha = \Sexpr{levelSig}$,
+  replication Bayes factor at level $\gamma = 1/\Sexpr{1/levelBFr}$, fixed
+  effects-meta analysis at level $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$,
+  effect size equivalence at level $\alpha = \Sexpr{1 - confLevel}$ with margin
+  $\Delta = \Sexpr{margin}$, skeptical $p$-value at level
+  $\alpha = \Sexpr{round(levelPs, 3)}$, and skeptical Bayes factor at level
+  $\gamma = 1/\Sexpr{1/levelBFs}$ for data from the replication project by
+  \citet{Protzko2020}. A flat initial prior
+  ($\mutheta = 0, \sigmatheta^{2} \to \infty$) is used for the effect size
+  $\theta$ is used either without ($\tau = 0$) or with heterogeneity
+  ($\tau = \Sexpr{round(taus[2], 2)}$). The right plot shows the type I error
+  rate associated with the required sample size. Experiments are ordered (top to
+  bottom) by their original one-sided $p$-value
+  $p_{o} = 1 - \Phi(|\hat{\theta}_{o}|/\sigma_{o}$).}
+\label{fig:ssd-all}
+\end{figure}
+
+\begin{figure}[!htb]
+<< "sample-size-all-protzko2", results = FALSE >>=
 ## compute sample size for all studies with significant original study
 dataSSD <- protzkolong %>%
     mutate(zo = dr/sqrt(vr)) %>%
@@ -811,7 +1011,7 @@ resSSD1 <- merge(resSSDt1e, resSSDsr) %>%
                                                  formatPval(p = po)),
                              'italic(p[o]) ~ "<" ~ 0.0001'))
 @
-<< "ssd-protzko", fig.height = 7 >>=
+<< "ssd-protzko2", fig.height = 9 >>=
 ## plot relative sample size and corresponding type I error rates
 resSSD2 <- resSSD1 %>%
     mutate(dp = case_when(tau == 0 ~ "tau == 0",
@@ -918,17 +1118,6 @@ ggpubr::ggarrange(plotA, plotB, common.legend = TRUE,
 \label{fig:ssd-all-shrink}
 \end{figure}
 
-
-\section{Sample size determination with adaptive shrinkage prior}
-\label{sec:ssdprotzko}
-Figure~\ref{fig:ssd-all-shrink} shows sample size determination for all studies
-from the \citet{Protzko2020} project as in the main manuscript but using an
-``adaptive shrinkage prior'' for the effect size $\theta$ where the variance of
-the shrinkage prior is estimated by empirical Bayes. We see that the required
-sample size increases for studies with large $p$-values compared to the analysis
-based on a flat prior for $\theta$ as in the main manuscript, whereas it stays
-about the same for studies with small $p$-values. This is because studies with
-large $p$-values receive more shrinkage.
 
 \newpage
 %% Bibliography

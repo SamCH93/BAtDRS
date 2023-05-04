@@ -23,10 +23,19 @@ pdf2:
 	pdflatex $(FILE)
 
 ## clean
-clean:  
+clean:
 	rm $(FILE).aux  $(FILE).blg  $(FILE).log  $(FILE).tex  $(FILE).bbl \
-	$(FILE).out  $(FILE).brf  $(FILE).synctex.gz \
-	rm -r #./figure/
-
+	$(FILE).out $(FILE).brf $(FILE).synctex.gz \
+	$(FILE)Changes.aux  $(FILE)Changes.blg  $(FILE)Changes.log \
+	$(FILE)Changes.tex  $(FILE)Changes.bbl $(FILE)Changes.out $(FILE)Changes.brf \
+	$(FILE)Changes.synctex.gz; \
 cleanfig:
 	rm ./figure/
+
+## use texdiff to show difference to previous version
+texdiff: tex old/$(FILE).tex old/ld.cfg
+	latexdiff -c old/ld.cfg old/$(FILE).tex  $(FILE).tex > $(FILE)Changes.tex
+	-pdflatex $(FILE)Changes
+	-bibtex $(FILE)Changes
+	-pdflatex $(FILE)Changes
+	-pdflatex $(FILE)Changes

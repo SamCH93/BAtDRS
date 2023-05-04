@@ -1,5 +1,5 @@
 ## set R version (https://hub.docker.com/r/rocker/verse/tags)
-FROM rocker/verse:4.2
+FROM rocker/verse:4.3
 
 ## name of the manuscript (as in Makefile and paper/Makefile)
 ENV FILE=batdrs
@@ -24,11 +24,11 @@ WORKDIR /analysis
 RUN install2.r --error --skipinstalled --ncpus -4 \
     `cat CRANpackages.txt`
 
-## install R packages from GitHub (use @ for specific version/tag)
-## install from tar.gz in repository if this does not work anymore in the future
-RUN R -e "remotes::install_gitlab(repo = 'samuel.pawel/BayesRep', subdir = 'pkg', \
-    host = 'gitlab.uzh.ch', upgrade = 'never'); \
-    remotes::install_github(repo = 'SamCH93/BayesRepDesign@preprint1', upgrade = 'never')" --vanilla
+# ## install R packages from GitHub (use @ for specific version/tag)
+# ## install from tar.gz in repository if this does not work anymore in the future
+# RUN R -e "remotes::install_gitlab(repo = 'samuel.pawel/BayesRep', subdir = 'pkg', \
+#     host = 'gitlab.uzh.ch', upgrade = 'never'); \
+#     remotes::install_github(repo = 'SamCH93/BayesRepDesign@preprint1', upgrade = 'never')" --vanilla
 
 ## knit Rnw to tex and compile tex to PDF
 CMD if [ "$pdfdocker" = "false" ] ; then \
