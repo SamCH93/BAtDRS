@@ -330,8 +330,8 @@ ggplot(data = plotDF, aes(x = c, y = pow, color = method)) +
   manuscript) or half normal prior with standard deviation
   $\Sexpr{round(priorsd, 3)}$ assigned to $\tau$. Replication success is defined
   by the two-trials rule at level $\alpha = \Sexpr{levelSig}$, the replication
-  Bayes factor at level $\gamma = 1/\Sexpr{1/levelBFr}$, fixed effects-meta
-  analysis at level $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$, effect size
+  Bayes factor at level $\gamma = 1/\Sexpr{1/levelBFr}$, fixed effect
+  meta-analysis at level $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$, effect size
   equivalence based on $\Sexpr{confLevel*100}\%$ confidence interval and with
   margin $\Delta = \Sexpr{margin}$, skeptical $p$-value at level
   $\alpha = \Sexpr{round(levelPs, 3)}$, and skeptical Bayes factor at level
@@ -390,7 +390,7 @@ $\hat{\theta}_{r*} = \{\sum_{i = 1}^{m} \hat{\theta}_{ri}/(\sigma^{2}_{ri} + \ta
 with standard error
 $\sigma_{r*} = 1/\surd\{\sum_{i}^{m}1/(\sigma^{2}_{ri} + \tau^{2}_{r})\}$ can be
 computed. If the between-replication heterogeneity variance $\tau^{2}_{r}$ is
-set to zero this corresponds to the fixed effects estimate of $\theta$, while
+set to zero this corresponds to the fixed effect estimate of $\theta$, while
 estimating $\tau^{2}_{r}$ from the data corresponds to the random effects
 estimate. Replication success at level $\alpha$ is then established if the
 replication $p$-value is smaller than $\alpha$, \ie{}
@@ -405,30 +405,30 @@ effect estimate $\that_{r*}$ given by
   \end{cases}
 \end{align*}
 
-\section{Fixed effects meta-analysis}
+\section{Fixed effect meta-analysis}
 Assume again the data model
 $\that_{i} \given \theta \sim \Nor(\theta, \sigma^{2}_{i})$ where $\that_{i}$ is
 an estimate of the effect size $\theta$ from study $i \in \{o, r\}$ and
 $\sigma_{i}$ is the corresponding standard error (assumed to be know). In the
-fixed effects meta-analysis approach replicability is assessed in terms of the
+fixed effect meta-analysis approach replicability is assessed in terms of the
 pooled effect estimate $\that_{m}$ and standard error $\sigma_{m}$ which are
 \begin{align*}
   &\that_{m} =
     \left(\that_{o}/\sigma_{o}^{2} + \that_{r}/\sigma^{2}_{r}\right)\sigma^{2}_{m}&
-&\text{and}&                                                                                       &\sigma_{m} = \left(1/\sigma^{2}_{o} + 1/\sigma^{2}_{r}\right)^{-1/2},&
+  &\text{and}&
+  &\sigma_{m} = \left(1/\sigma^{2}_{o} + 1/\sigma^{2}_{r}\right)^{-1/2},&
 \end{align*}
 which are also equivalent to the mean and standard deviation of a posterior
 distribution for the effect size $\theta$ based on the data from original and
-replication study and an initial flat prior for $\theta$. Fixed effects
+replication study and a flat initial prior for $\theta$. Fixed effect
 meta-analysis is typically used because estimating a heterogeneity variance from
 two studies is highly unstable. Replication success at level $\alpha$ is
 established if the one-sided meta-analytic $p$-value (in the direction of the
 original effect estimate $\that$) is significant at level $\alpha$, \ie{}
 $p_{m} = 1 - \Phi(\that_{m}/\sigma_{m}) \leq \alpha$ for $\that_{o} > 0$ and
-$p_{m} = \Phi(\that_{m}/\sigma_{m}) \leq \alpha$ for $\that_{o} < 0$.
-With some algebraic manipulations one can show that this criterion implies a
-success region $S_{\text{MA}}$ for the replication effect estimate $\that_{r}$
-given by
+$p_{m} = \Phi(\that_{m}/\sigma_{m}) \leq \alpha$ for $\that_{o} < 0$. With some
+algebraic manipulations one can show that this criterion implies a success
+region $S_{\text{MA}}$ for the replication effect estimate $\that_{r}$ given by
 \begin{align*}
   \SMA
   =
@@ -481,8 +481,9 @@ posterior distribution based on the original data $x_{o}$. Assume again a normal
 model $\that_{i} \given \theta \sim \Nor(\theta, \sigma^{2}_{i})$ with
 $\that_{i}$ an estimate of the effect size $\theta$ from study $i \in \{o, r\}$
 and $\sigma_{i}$ the corresponding standard error (assumed to be know), and that
-we use the alternative $H_{1} \colon \theta \sim \Nor(\that_{o}, \sigma^{2}_{o})$ which
-arises from updating an initial flat prior for $\theta$ the original data
+we use the alternative
+$H_{1} \colon \theta \sim \Nor(\that_{o}, \sigma^{2}_{o})$ which arises from
+updating a flat initial prior for $\theta$ the original data
 $x_{o} = \{\that_{o}, \sigma_{o}\}$. The replication Bayes factor is then
 \begin{align}
   \label{eq:bfr}
@@ -927,7 +928,7 @@ ggpubr::ggarrange(plotA, plotB, common.legend = TRUE,
   $1 - \beta = \Sexpr{round(power*100, 2)}$\% (if possible). Replication success
   is defined through the two-trials rule at level $\alpha = \Sexpr{levelSig}$,
   replication Bayes factor at level $\gamma = 1/\Sexpr{1/levelBFr}$, fixed
-  effects-meta analysis at level $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$,
+  effect meta-analysis at level $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$,
   effect size equivalence at level $\alpha = \Sexpr{1 - confLevel}$ with margin
   $\Delta = \Sexpr{margin}$, skeptical $p$-value at level
   $\alpha = \Sexpr{round(levelPs, 3)}$, and skeptical Bayes factor at level
@@ -1104,7 +1105,7 @@ ggpubr::ggarrange(plotA, plotB, common.legend = TRUE,
   $1 - \beta = \Sexpr{round(power*100, 2)}$\% (if possible). Replication success
   is defined through the two-trials rule at level $\alpha = \Sexpr{levelSig}$,
   replication Bayes factor at level $\gamma = 1/\Sexpr{1/levelBFr}$, fixed
-  effects-meta analysis at level $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$,
+  effect meta-analysis at level $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$,
   effect size equivalence at level $\alpha = \Sexpr{1 - confLevel}$ with margin
   $\Delta = \Sexpr{margin}$, skeptical $p$-value at level
   $\alpha = \Sexpr{round(levelPs, 3)}$, and skeptical Bayes factor at level

@@ -62,7 +62,7 @@
   \addORCIDlink{Guido Consonni}{0000-0002-1252-5926}\\
   \addORCIDlink{Leonhard Held}{0000-0002-8686-5325}
 
-  Preprint version May 5, 2023. Licensed under CC-BY 4.0
+  Preprint version May 9, 2023. Licensed under CC-BY 4.0
   (\href{https://creativecommons.org/licenses/by/4.0/}{https://creativecommons.org/licenses/by/4.0/}).
 
   This research has not been pre-registered. A preprint has been previously
@@ -243,7 +243,7 @@ planning a replication study.
     $x_{o}$ and $x_{r}$, respectively. Both are assumed to come from a
     distribution with density/probability mass function denoted by
     $f(x_{i} \given \theta)$ for $i \in \{o, r\}$. An initial prior with density
-    function $f(\theta \given \text{external knowledge})$ is assigned to the
+    function $f(\theta \given \mathrm{external~knowledge})$ is assigned to the
     model parameter $\theta$.}
 \label{fig:SSDschema}
 \end{figure}
@@ -312,9 +312,9 @@ posterior distribution of $\theta$ based on the original data and an
 \emph{initial prior} for $\theta$
 \begin{align}
   \label{eq:dp}
-  f(\theta \given x_o, \text{external knowledge}) =
-  \frac{f(x_o \given \theta) \, f(\theta \given \text{external knowledge})}{f(x_o \given
-  \text{external knowledge})}.
+  f(\theta \given x_o, \mathrm{external~knowledge}) =
+  \frac{f(x_o \given \theta) \, f(\theta \given \mathrm{external~knowledge})}{f(x_o \given
+  \mathrm{external~knowledge})}.
 \end{align}
 The initial prior of $\theta$ may depend on external knowledge (e.g., data from
 other studies) and it represents the uncertainty about $\theta$ before observing
@@ -326,13 +326,13 @@ and, along with an assumed replication sample size $n_{r}$, it can be used to
 compute a predictive distribution for the replication data
 \begin{align}
   \label{eq:ftr}
-  f(x_r \given n_r, x_o, \text{external knowledge})
+  f(x_r \given n_r, x_o, \mathrm{external~knowledge})
   &= \int%_\Theta
-  % \underbrace{f(x_r \given n_{r}, \theta)}_{\text{likelihood}}
+  % \underbrace{f(x_r \given n_{r}, \theta)}_{\mathrm{likelihood}}
     f(x_r \given n_{r}, \theta)
-    % \, \underbrace{f(\theta \given x_o, \text{external knowledge})}_{\text{design prior}}
-    \, f(\theta \given x_o, \text{external knowledge})
-    \, \text{d}\theta.
+    % \, \underbrace{f(\theta \given x_o, \mathrm{external~knowledge})}_{\mathrm{design prior}}
+    \, f(\theta \given x_o, \mathrm{external~knowledge})
+    \, \mathrm{d}\theta.
 \end{align}
 
 After completion of the replication, the observed data $x_r$ will be analyzed in
@@ -351,7 +351,7 @@ replication success of at least $1 - \beta$, i.e.,
 \begin{align}
   \label{eq:nr}
   n_r^* = \inf \left\{n_r : \Pr(X_{r} \in S \given
-  n_r, x_{o}, \text{external knowledge}) \geq 1 - \beta \right\}.
+  n_r, x_{o}, \mathrm{external~knowledge}) \geq 1 - \beta \right\}.
 \end{align}
 
 Often, replication studies are analyzed using several methods which quantify
@@ -410,7 +410,7 @@ original sample size
 which is often the main focus of SSD as it quantifies how much the replication
 sample $n_{r}$ size needs to be changed compared to the original sample size
 $n_{o}$. Depending on the effect size type, this framework might require slight
-modifications \citep[see e.g.,][ch. 2.4]{Spiegelhalter2004}.
+modifications \citep[see e.g.,][section 2.4]{Spiegelhalter2004}.
 
 Assuming a normal sampling model for the effect
 estimates~\eqref{eq:hat_theta_k}, as described previously, and specifying an
@@ -448,7 +448,7 @@ for SSD of the replication study.
 \label{sec:designpredictive}
 The observed original data $x_{o} = \{\that_{o}, \sigma_{o}\}$ can be combined
 with the initial prior~\eqref{eq:theta2} %by Bayes' theorem~\eqref{eq:dp}
-by standard Bayesian theory for normal prior and likelihood \citep[ch.
+by standard Bayesian theory for normal prior and likelihood \citep[section
 3.7]{Spiegelhalter2004} to obtain a posterior distribution for the effect size
 $\theta$
 \begin{align}
@@ -493,7 +493,7 @@ prior density, leading to
   \frac{\hat{\theta}_o}{1 + 1/g} + \frac{\mutheta}{1 + g}, \sigmathatr^{2} =
   \, \sigma^2_r + \tau^2 + \frac{\sigma^2_o + \tau^2}{1 + 1/g}\right)
 \end{align}
-which can again be shown using standard Bayesian theory \citep[ch.
+which can again be shown using standard Bayesian theory \citep[section
 3.13.3]{Spiegelhalter2004}.
 % For some analysis methods, replication success is more naturally defined via the
 % replication $z$-value $z_{r} = \that_{r}/\sigma_{r}$. In these cases, it can be
@@ -548,7 +548,7 @@ variance $\tau^2$ in~\eqref{eq:theta_k}. As $\tau^{2}$ decreases, the study
 specific effect sizes become more similar, whereas for increasing $\tau^{2}$
 they become more unrelated. If the replicators do not expect any heterogeneity
 they can thus set $\tau^{2} = 0$ which will lead to the model collapsing to a
-fixed effects model.
+common effect model.
 
 If heterogeneity is expected, there are different approaches for specifying
 $\tau^{2}$. A domain expert may subjectively assess how much heterogeneity is to
@@ -559,7 +559,7 @@ specify an upper limit of ``tolerable heterogeneity''. This approach is similar
 to specifying a minimal clinically relevant difference in classical power
 analysis in the sense that a true replication effect size which is intolerably
 heterogeneous from the original effect size is not relevant to be detected. An
-absolute \citep[ch. 5.7.3]{Spiegelhalter2004} and a relative approach
+absolute \citep[section 5.7.3]{Spiegelhalter2004} and a relative approach
 \citep{Held2020c} can be considered. In the absolute approach, a value of
 $\tau^{2}$ is chosen such that a suitable range of study-specific effect sizes
 is not larger than an effect size difference considered negligible. For example,
@@ -579,9 +579,9 @@ $I^{2} = \tau^{2}/(\tau^{2} + \sigma^{2}_{o}) = 40\%$ is classified as
 ``negligible'', which translates to
 $\tau^{2} = \sigma^{2}_{o}/(1/I^{2} - 1) = (2\sigma^{2}_{o})/3$.
 
-We note that one can also assign a prior distribution to $\tau^2$ \citep[for an
+We note that one can also assign a prior distribution to $\tau^2$. For an
 overview of prior distributions for heterogeneity variances in the normal-normal
-hierarchical model see][]{Rover2021}. In this case there is no closed-form
+hierarchical model see \citet{Rover2021}. In this case there is no closed-form
 expression for the predictive distribution of the replication effect estimate
 but numerical or Monte Carlo integration need to be used. % To
 % gain more insight, we will thus only consider fixed $\tau^{2}$ in the remaining
@@ -678,7 +678,7 @@ same lab (a \emph{self-replication}) and three by the other three labs (three
 MAerDF <- lapply(X = unique(protzko$Study), FUN = function(study) {
     dat <- subset(protzko, Study == study & Type == "Replication")
     n <- nrow(dat) ## number of external replications
-    w <- 1/dat$vr ## fixed effects weights
+    w <- 1/dat$vr ## fixed effect weights
     dFE <- sum(dat$dr*w)/sum(w) ## fixed effects estimate
     dFEse <- sqrt(1/sum(w)) ## standard error
     Q <- sum(w*(dat$dr - dFE)^2) ## Q-statistic
@@ -759,12 +759,13 @@ protzkolong %>%
 \caption{Data from cross-laboratory replication project by \citet{Protzko2020}.
   Shown are standardized mean difference (SMD) effect estimates with 95\%
   confidence intervals stratified by experiment and laboratory. For each
-  replication study, the relative sample size $c = n_{r}/n_{o}$ % , the one-sided
+  replication study the relative sample size $c = n_{r}/n_{o}$ % , the one-sided
   % replication $p$-value $p_{r}$, the one-sided meta-analytic $p$-value $p_{m}$,
   % and the replication Bayes factor $\BFr$ are
-  is shown. Experiments are ordered (left to right, top to bottom) by their
-  original one-sided $p$-value
-  $p_{o} = 1 - \Phi(|\hat{\theta}_{o}|/\sigma_{o}$)}
+  is shown. % Experiments are ordered (left to right, top to bottom) by their
+  % original one-sided $p$-value
+  % $p_{o} = 1 - \Phi(|\hat{\theta}_{o}|/\sigma_{o}$)
+}
 \label{fig:data}
 \end{figure}
 
@@ -801,8 +802,8 @@ for the not yet conducted replication studies. We start by specifying the design
 priors (one for each replication). Since the original studies have been
 preregistered, we do not expect an exaggeration of their effect estimates due to
 selective reporting or other questionable research practices. Therefore, we
-choose an uninformative initial prior ($\sigmatheta^{2} \to \infty$), which
-leads to design prior and predictive distribution both centered around the
+choose a flat initial prior for $\theta$, % ($\sigmatheta^{2} \to \infty$),
+which leads to design prior and predictive distribution both centered around the
 original effect estimate $\that_{o}$.
 
 For specifying the between-study heterogeneity variance $\tau^{2}$, a
@@ -873,17 +874,18 @@ npriors <- length(unique(plotDF$initial))
 ggplot(data = plotDF, aes(x = theta, y = density, color = initial, lty = initial)) +
     geom_line(alpha = 0.9, size = 0.8) +
     facet_wrap(~ tau, labeller = label_bquote(tau == .(round(tau, 2)))) +
-    labs(x = bquote("Effect size" ~ theta ~ "(SMD)"),
+    labs(x = bquote("SMD effect size" ~ theta),
          y = "Density", color = "", linetype = "") +
     #scale_color_manual(values = colsPriors) +
     scale_color_grey() +
     scale_linetype_manual(values = c("uninformative" = 1, "shrinkage" = 2,
                                      "optimistic" = 4)) +
+    guides(linetype = guide_legend(override.aes = list(linewidth = 0.5))) +
     theme_bw() +
         theme(legend.position = "top", panel.grid.minor = element_blank())
 @
 
-\caption{Design priors for the effect size $\theta$ (SMD) in the
+\caption{Design priors for the SMD effect size $\theta$ in the
   ``\Sexpr{studyname}'' experiment based on the original effect estimate
   $\hat{\theta}_{o} = \Sexpr{round(study[,"dr"], 3)}$ with standard error
   $\sigma_{o} = \Sexpr{round(sqrt(study[,"vr"]), 3)}$. Shown are different
@@ -920,19 +922,20 @@ shows the densities of the two priors.
 While these two priors seem sensible for the \citet{Protzko2020} data, it is
 interesting to think about alternative scenarios. If there had been reasons to
 believe that the original result might be exaggerated, we could have specified
-an initial shrinkage prior ($\mutheta = 0$ and $\sigmatheta^{2} < \infty$). For
-instance, the empirical Bayes estimate for the prior variance $\sigmatheta^{2}$
-from~\eqref{eq:EBestimate} leads to a prior whose mean and variance are shrunken
-towards zero by $\Sexpr{round((1 - shrinkEBhet)*100, 0)}$\% (medium-gray
-dashed lines in Figure~\ref{fig:dpexample}). In contrast, if we had prior
-knowledge about the effect size $\theta$ from another study, we could have
-specified an initial ``optimistic'' prior. For example, if the self-replication
-of the ``\Sexpr{studyname}'' experiment had been a pilot study and we used its
-effect estimate $\hat{\theta}_{p} = \Sexpr{round(extstudy[,"dr"], 3)}$ and
-standard error $\sigma_{p} = \Sexpr{round(sqrt(extstudy[,"vr"]), 2)}$ to specify
-the initial prior, this would lead to a design prior centered around the
-weighted mean of original and pilot study, and a prior precision equal to the
-sum of the precision of both estimates (light-gray dot-dashed lines in
+an initial shrinkage prior. % ($\mutheta = 0$ and $\sigmatheta^{2} < \infty$).
+For instance, the empirical Bayes estimate for the prior variance
+$\sigmatheta^{2}$ from~\eqref{eq:EBestimate} leads to a prior whose mean and
+variance are shrunken towards zero by
+$\Sexpr{round((1 - shrinkEBhet)*100, 0)}$\% (medium-gray dashed lines in
+Figure~\ref{fig:dpexample}). In contrast, if we had prior knowledge about the
+effect size $\theta$ from another study, we could have specified an initial
+``optimistic'' prior. For example, if the self-replication of the
+``\Sexpr{studyname}'' experiment had been a pilot study and we used its effect
+estimate $\hat{\theta}_{p} = \Sexpr{round(extstudy[,"dr"], 3)}$ and standard
+error $\sigma_{p} = \Sexpr{round(sqrt(extstudy[,"vr"]), 2)}$ to specify the
+initial prior, this would lead to a design prior centered around the weighted
+mean of original and pilot study, and a prior precision equal to the sum of the
+precision of both estimates (light-gray dot-dashed lines in
 Figure~\ref{fig:dpexample}). Due to the inclusion of the external data, this
 design prior is much more concentrated than the other two.
 
@@ -949,7 +952,7 @@ computed from them. Some methods depend on the direction of the original effect
 estimate $\that_{o}$ and throughout we will assume that it was positive
 ($\that_{o} > 0$). Functions for computing the probability of replication
 success and the required sample size are implemented in the R package
-\textbf{BayesRepDesign} (see Appendix) %~\ref{app:package})
+BayesRepDesign (see Appendix) %~\ref{app:package})
 for all analysis methods discussed in the following.
 
 
@@ -959,7 +962,7 @@ replication success when both the original and replication study lead to a
 $p$-value for testing the null hypothesis $H_{0} \colon \theta = 0$ smaller than
 a pre-specified threshold $\alpha$, usually $\alpha = 5\%$ for two-sided tests
 and $\alpha = 2.5\%$ for one-sided tests. This procedure is known as the
-\emph{two-trials rule} in drug regulation \citep{Senn2008}.
+\emph{two-trials rule} in drug regulation \citep[section 12.2.8]{Senn2008}.
 
 We now assume that the one-sided original $p$-value was significant at some
 level $\alpha$, i.e., $p_{o} = 1 - \Phi(\that_{o}/\sigma_{o}) \leq \alpha$.
@@ -968,14 +971,14 @@ is then achieved if the replication $p$-value is also significant, i.e.,
 $p_{r} = 1 - \Phi(\that_{r}/\sigma_{r}) \leq \alpha$, which implies a success
 region
 \begin{align*}
-  S_{\scriptscriptstyle \text{2TR}}
+  S_{\scriptscriptstyle \mathrm{2TR}}
   = \left[\zalpha\, \sigma_{r}, \infty \right),
 \end{align*}
 where $\zalpha$ is the $1 - \alpha$ quantile of the standard
 normal distribution. The probability of replication success is thus given by
 \begin{align}
   \label{eq:2TRpros}
-  \Pr(\that_{r} \in S_{\scriptscriptstyle \text{2TR}} \given \that_{o}, \sigma_{o}, \sigma_{r})
+  \Pr(\that_{r} \in S_{\scriptscriptstyle \mathrm{2TR}} \given \that_{o}, \sigma_{o}, \sigma_{r})
   = % \Phi\left(\frac{\muthatr - \zalpha \, \sigma_{r}}{\sqrt{\sigma^{2}_{r} +
   % \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right)
   \Phi\left(\frac{\muthatr - \zalpha \, \sigma_{r}}{\sigmathatr}\right)
@@ -989,13 +992,13 @@ success~\eqref{eq:2TRpros} cannot become arbitrarily large but is bounded from
 above by
 \begin{align}
   \label{eq:limP2TR}
-  \text{limPr}_{\scriptscriptstyle \text{2TR}} =
+  \mathrm{limPr}_{\scriptscriptstyle \mathrm{2TR}} =
   \Phi\left(\frac{ \muthatr}{\sqrt{
 \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right).
 \end{align}
 The required replication standard error $\sigma_{r}^{*}$ to achieve a target
 probability of replication success
-$1 - \beta < \text{limPr}_{\scriptscriptstyle \text{2TR}}$ can now be obtained
+$1 - \beta < \mathrm{limPr}_{\scriptscriptstyle \mathrm{2TR}}$ can now be obtained
 by equating~\eqref{eq:2TRpros} to $1 - \beta$ and solving for $\sigma_{r}$. This
 leads to
 \begin{align}
@@ -1014,7 +1017,7 @@ Moreover, by assuming a standard error of the form
 $\sigma_{r} = \lambda/\sqrt{n_{r}}$ and plugging in the parameters of the
 ``conditional'' design prior %from Section~\ref{sec:designpredictive}
 ($\tau^{2} = 0$, $\mutheta = \that_{o}$, $g \downarrow 0$), we obtain the
-well-known sample size formula \citep[ch. 3.3]{Matthews2006}
+well-known sample size formula \citep[section 3.3]{Matthews2006}
 \begin{align*}
   n_{r}^{*} = \frac{(\zalpha + \zbeta)^{2}}{(\that_{o}/\lambda)^{2}}
 \end{align*}
@@ -1024,23 +1027,31 @@ thus generalizes standard sample size calculation to take into account the
 uncertainty of the original estimate, between-study heterogeneity and other
 types of external knowledge.
 
+%% %% for $\tau^{2} = 0$, $\mutheta = \that_{o}$, $g \downarrow 0$ have that
+%% $\sigma_r^{*} = \that_{o}(\zalpha - \zbeta)/(\zalpha^2 - \zbeta^{2})$
+%% %% assuming that $\sigma_r^{*} = \lambda/\sqrt{n_{r}^{*}}$ leads to
+% $n_r^*
+% = (\that_o/\lambda)^{-2} ((\zalpha^2 - \zbeta^2)/(\zalpha - \zbeta))^2
+% = (\that_o/\lambda)^{-2} ((\zalpha - \zbeta)(\zalpha + \zbeta)/(\zalpha - \zbeta))^{2}
+% = (\that_o/\lambda)^{-2} (\zalpha + \zbeta)^{2}$
 
-\subsubsection{Fixed effects meta-analysis}
+
+\subsubsection{Fixed effect meta-analysis}
 The data from the original and replication studies are sometimes pooled via
-fixed-effects meta-analysis. The pooled effect estimate $\that_{m}$ and standard
+fixed effect meta-analysis. The pooled effect estimate $\that_{m}$ and standard
 error $\sigma_{m}$ are then given by
 \begin{align*}
   &\that_{m} =
     \left(\that_{o}/\sigma_{o}^{2} + \that_{r}/\sigma^{2}_{r}\right)\sigma^{2}_{m}&
-&\text{and}&                                                                                       &\sigma_{m} = \left(1/\sigma^{2}_{o} + 1/\sigma^{2}_{r}\right)^{-1/2},&
+&\mathrm{and}&                                                                                       &\sigma_{m} = \left(1/\sigma^{2}_{o} + 1/\sigma^{2}_{r}\right)^{-1/2},&
 \end{align*}
 and they are also equivalent to the mean and standard deviation of a posterior
 distribution for the effect size $\theta$ based on the data from both studies
-and an initial flat prior for $\theta$. The success
+and a flat initial prior for $\theta$. The success
 region %for the replication effect estimate $\that_{r}$
 \begin{align}
   \label{eq:SMA}
-  S_{\scriptscriptstyle \text{MA}}
+  S_{\scriptscriptstyle \mathrm{MA}}
   = \left[\sigma_{r} \zalpha\sqrt{1 + \sigma^{2}_{r}/\sigma^{2}_{o}} -
   (\that_{o} \sigma^{2}_{r})/\sigma^{2}_{o},
   \infty \right)
@@ -1054,7 +1065,7 @@ Based on the success region~\eqref{eq:SMA} and an assumed standard error
 $\sigma_{r}$, the probability of replication success can be computed by
 \begin{align}
   \label{eq:MApros}
-  \Pr(\that_{r} \in S_{\scriptscriptstyle \text{MA}} \given \that_{o}, \sigma_{o}, \sigma_{r})
+  \Pr(\that_{r} \in S_{\scriptscriptstyle \mathrm{MA}} \given \that_{o}, \sigma_{o}, \sigma_{r})
   = % \Phi\left(\frac{\muthatr - \sigma_{r} \zalpha\sqrt{1 + \sigma^{2}_{r}/\sigma^{2}_{o}}
 %   + (\that_{o} \sigma^{2}_{r})/\sigma^{2}_{o}}{\sqrt{\sigma^{2}_{r} +
 %   \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right).
@@ -1063,11 +1074,11 @@ $\sigma_{r}$, the probability of replication success can be computed by
 \end{align}
 As for the two-trials rule, the probability~\eqref{eq:MApros} cannot be made
 arbitrarily large by decreasing the standard error $\sigma_{r}$ but is bounded
-from above by $\text{limPr}_{\text{2TR}}$ defined in~\eqref{eq:limP2TR}.
+from above by $\mathrm{limPr}_{\mathrm{2TR}}$ defined in~\eqref{eq:limP2TR}.
 % However, as the original data already provide some information, the
 % probability of replication success is also bounded from below.
 The required standard error $\sigma_{r}^{*}$ to achieve a target probability of
-replication success $1 - \beta < \text{limPr}_{\text{2TR}}$ can be computed
+replication success $1 - \beta < \mathrm{limPr}_{\mathrm{2TR}}$ can be computed
 numerically using root finding algorithms.
 
 
@@ -1091,7 +1102,7 @@ equivalence test, and it implies a success region for the replication effect
 estimate $\that_{r}$ given by
 \begin{align}
   \label{eq:equivalence}
-  S_{\scriptscriptstyle \text{E}}
+  S_{\scriptscriptstyle \mathrm{E}}
   = \left[\that_{o} - \Delta + \zalphatwo \sqrt{\sigma^{2}_{o} +
   \sigma^{2}_{r}}, \that_{o} + \Delta - \zalphatwo
   \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}}\right]
@@ -1113,7 +1124,7 @@ the probability
 of replication success can be computed by
 \begin{align}
   \label{eq:porsEqu}
-  \Pr(\that_{r} \in S_{\scriptscriptstyle \text{E}} \given \that_{o}, \sigma_{o}, \sigma_{r})
+  \Pr(\that_{r} \in S_{\scriptscriptstyle \mathrm{E}} \given \that_{o}, \sigma_{o}, \sigma_{r})
   &= % \Phi\left(\frac{\that_{o} + \Delta - \zalphatwo
 %   \sqrt{\sigma^{2}_{o} + \sigma^{2}_{r}} -\muthatr}{\sqrt{\sigma^{2}_{r} +
 %   \tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right) \nonumber \\
@@ -1131,7 +1142,7 @@ As with the previous methods, the probability~\eqref{eq:porsEqu} cannot be made
 arbitrarily large by decreasing the replication standard error $\sigma_{r}$, but
 is bounded by
 \begin{align*}
-  \text{limPr}_{\scriptscriptstyle \text{E}} =
+  \mathrm{limPr}_{\scriptscriptstyle \mathrm{E}} =
   \Phi\left(\frac{\that_{o} + \Delta - \zalphatwo\sigma_{o}
   -\muthatr}{\sqrt{\tau^{2} + (\sigma^{2}_{o} + \tau^{2})/(1 + 1/g)}}\right)
   -\Phi\left(\frac{\that_{o} - \Delta + \zalphatwo\sigma_{o}
@@ -1139,7 +1150,7 @@ is bounded by
 \end{align*}
 The required replication standard error $\sigma_{r}^{*}$ to achieve a target
 probability of replication success
-$1 - \beta < \text{limPr}_{\scriptscriptstyle \text{E}}$ can again be computed
+$1 - \beta < \mathrm{limPr}_{\scriptscriptstyle \mathrm{E}}$ can again be computed
 numerically.
 
 \subsubsection{The replication Bayes factor}
@@ -1195,10 +1206,10 @@ One may want to compute the probability of replication success only for the part
 of the success region with the same sign as the original effect estimate to
 avoid the replication paradox. As for the other methods, the
 probability~\eqref{eq:BFrpros} is bounded from above by a constant
-$\text{limPr}_{\scriptscriptstyle \BFr} = \lim_{\sigma_{r} \downarrow 0} \Pr(\that_r \in S_{\scriptscriptstyle \BFr} \given \that_{o}, \sigma_{o}, \sigma_{r})$,
+$\mathrm{limPr}_{\scriptscriptstyle \BFr} = \lim_{\sigma_{r} \downarrow 0} \Pr(\that_r \in S_{\scriptscriptstyle \BFr} \given \that_{o}, \sigma_{o}, \sigma_{r})$,
 and root finding algorithms can be used to numerically determine the required
 standard error $\sigma^{*}_{r}$ for achieving a target probability of
-replication success $1 - \beta < \text{limPr}_{\scriptscriptstyle \BFr}$.
+replication success $1 - \beta < \mathrm{limPr}_{\scriptscriptstyle \BFr}$.
 
 \subsubsection{The skeptical \textit{p}-value}
 \citet{Held2020} proposed a reverse-Bayes approach for quantifying replication
@@ -1227,10 +1238,10 @@ success at level $\alpha$ is
     \sigma^{2}_{o}/\{(z_{o}^{2}/\zalpha^{2}) - 1}\}}{\sigmathatr}\right),
 \end{align*}
 and also bounded from above by a constant
-$\text{limPr}_{\scriptscriptstyle \ps} = \lim_{\sigma_{r} \downarrow 0} \Pr(\that_r \in S_{\scriptscriptstyle \ps} \given \that_{o}, \sigma_{o}, \sigma_{r})$.
+$\mathrm{limPr}_{\scriptscriptstyle \ps} = \lim_{\sigma_{r} \downarrow 0} \Pr(\that_r \in S_{\scriptscriptstyle \ps} \given \that_{o}, \sigma_{o}, \sigma_{r})$.
 As for the two-trials rule, the required standard error $\sigma_{r}^{*}$ to
 achieve a probability of replication success
-$1 - \beta < \text{limPr}_{\scriptscriptstyle \ps}$ can be computed analytically
+$1 - \beta < \mathrm{limPr}_{\scriptscriptstyle \ps}$ can be computed analytically
 for $\alpha < \beta$:
 \begin{align*}
   \sigma_{r}^{*} = \sqrt{x^{2} - \frac{\sigma^{2}_{o}}{(z_{o}/\zalpha)^{2} - 1}}
@@ -1292,7 +1303,7 @@ evidence'' level $\gamma = 1/\Sexpr{1/levelBFr}$ from \citet{Jeffreys1961}.
 
 
 \begin{figure}[!ht]
-<< "example-applied", fig.height = 3.75 >>=
+<< "example-applied", fig.height = 4 >>=
 ## compute power curves
 cseq <- exp(seq(log(1/10), log(10), length.out = 300))
 sp <- c(0, Inf) # point mass at zero (for type I error) and flat prior
@@ -1337,13 +1348,19 @@ plotDF$method <- factor(plotDF$method,
                         levels = methodLabs)
 plotDF1 <- plotDF %>%
     filter(sp == Inf) %>%
-    mutate(facetLab = paste0("{tau ==", round(tau, 2), "} * ',' ~ mu[theta] == 0 * ',' ~ sigma[theta]^2 == infinity"),
-                                        #paste("tau ==", round(tau, 2)),
-                                        #paste("theta ~ '~ N(' ~ hat(theta)['o'] * ',' ~ sigma['o']^2 + tau^2 * '),' ~ tau ==", round(tau, 2)),
+    ## mutate(facetLab = paste0("{tau ==", round(tau, 2), "} * ',' ~ mu[theta] == 0 * ',' ~ sigma[theta]^2 == infinity"),
+    ##                                     #paste("tau ==", round(tau, 2)),
+    ##                                     #paste("theta ~ '~ N(' ~ hat(theta)['o'] * ',' ~ sigma['o']^2 + tau^2 * '),' ~ tau ==", round(tau, 2)),
+    ##        order = 1)
+    mutate(facetLab = paste0("{tau ==", round(tau, 2), "} ~ 'and flat prior for' ~ theta"),
            order = 1)
+
 plotDFH0 <- plotDF %>%
     filter(sp == 0) %>%
-    mutate(facetLab = paste("tau == 0 * ',' ~ mu[theta] == 0 * ',' ~ {sigma[theta]^2 == 0}"),
+    ## mutate(facetLab = paste("tau == 0 * ',' ~ mu[theta] == 0 * ',' ~ {sigma[theta]^2 == 0}"),
+    ##       #paste("{italic('H')[0] ~ ':' ~ theta == 0} *',' ~ tau == 0"),
+    ##        order = 2)
+    mutate(facetLab = "{tau == 0} ~ 'and' ~ theta == 0",
           #paste("{italic('H')[0] ~ ':' ~ theta == 0} *',' ~ tau == 0"),
            order = 2)
 plotDFcomb <- rbind(plotDF1, plotDFH0)
@@ -1386,29 +1403,30 @@ ssbfs2 <- ssdBFs(level = levelBFs, dprior = dprior2, power = power)
 \caption{Probability of replication success as a function of relative sample
   size $c = n_{r}/n_{o}$ for the ``\Sexpr{studyname}'' experiment with original
   effect estimate $\hat{\theta}_{o} = \Sexpr{round(study[,"dr"], 3)}$ and
-  standard error $\sigma_{o} = \Sexpr{round(sqrt(study[,"vr"]), 3)}$ for
-  different initial prior parameters ($\tau, \mutheta, \sigmatheta^{2}$). The
-  probability of replication success with the design prior
-  $\tau = 0, \mutheta = 0$, and $\sigmatheta^{2} = 0$ (right plot) corresponds
-  to the type I error rate under the fixed effects null hypothesis
-  ($H_{0}\colon \theta = 0, \tau^{2} = 0$). Replication success is defined by
-  the two-trials rule at level $\alpha = \Sexpr{levelSig}$, the replication
-  Bayes factor at level $\gamma = 1/\Sexpr{1/levelBFr}$, fixed effects-meta
-  analysis at level $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$, effect size
-  equivalence based on $\Sexpr{confLevel*100}\%$ confidence interval and with
-  margin $\Delta = \Sexpr{margin}$, skeptical $p$-value at level
+  standard error $\sigma_{o} = \Sexpr{round(sqrt(study[,"vr"]), 3)}$ under
+  different initial prior distributions. % parameters ($\tau, \mutheta, \sigmatheta^{2}$).
+  % The probability of replication success with the design prior
+  % $\tau = 0, \mutheta = 0$, and $\sigmatheta^{2} = 0$ (right plot) corresponds
+  % to the type I error rate under the fixed effect null hypothesis
+  % ($H_{0}\colon \theta = 0, \tau^{2} = 0$).
+  Replication success is defined by the two-trials rule at level
+  $\alpha = \Sexpr{levelSig}$, the replication Bayes factor at level
+  $\gamma = 1/\Sexpr{1/levelBFr}$, fixed effect meta-analysis at level
+  $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$, effect size equivalence based on
+  $\Sexpr{confLevel*100}\%$ confidence interval and with margin
+  $\Delta = \Sexpr{margin}$, skeptical $p$-value at level
   $\alpha = \Sexpr{round(levelPs, 3)}$, and skeptical Bayes factor at level
   $\gamma = 1/\Sexpr{1/levelBFs}$.}
 \label{fig:example}
 \end{figure}
 Figure~\ref{fig:example} shows the probability of replication success as a
 function of the relative sample size $c = n_{r}/n_{o}$ and for different initial
-priors. The left and middle plot are based on an uninformative prior for the
-effect size ($\sigmatheta^{2} \to \infty$) without heterogeneity ($\tau^{2} = 0$)
-and with heterogeneity ($\tau^{2} = \Sexpr{round(tauAbs, 2)}^{2}$),
-respectively. The right plot shows the prior corresponding to the ``fixed
-effects null hypothesis'' $H_{0} \colon \theta = 0, \tau^{2} =
-0$, %, i.e., the effect size
+priors. The left and middle plot are based on a flat initial prior for the
+effect size % ($\sigmatheta^{2} \to \infty$)
+without heterogeneity ($\tau^{2} = 0$) and with heterogeneity
+($\tau^{2} = \Sexpr{round(tauAbs, 2)}^{2}$), respectively. The right plot shows
+the prior corresponding to the ``fixed effect null hypothesis''
+$H_{0} \colon \theta = 0, \tau^{2} = 0$, %, i.e., the effect size
 % $\theta$ is a point mass at zero and there is no heterogeneity,
 so that the probability of replication success is the type I error rate which
 some stakeholders might require to be ``controlled'' at some adequate level.
@@ -1422,22 +1440,22 @@ sample size \citep{Micheloud2020}. The uncertainty regarding the replication
 effect estimate $\that_{r}$ may therefore even reduce the probability of
 replication success for meta-analysis if the sample size is increased. If
 heterogeneity is taken into account (middle plot) the probability of replication
-success becomes closer to 50\% for all methods but the equivalence test,
+success becomes closer to 50\% for all methods except the equivalence test,
 reflecting the larger uncertainty about the effect size $\theta$. To achieve
 $\Sexpr{round(power*100, 2)}\%$ probability of replication success the fewest
 samples are required with meta-analysis, followed by the skeptical $p$-value,
 the two-trials rule, the replication Bayes factor, the skeptical Bayes factor,
-and lastly the equivalence test. If the chosen sample size should guarantee a
+and lastly the equivalence test. If the sample size should guarantee a
 sufficiently conclusive replication study with all these methods, the
-replication sample size has to be slightly larger than the original one in the
-situation of no heterogeneity ($\tau^{2} = 0$), while it has to be increased
-more than ten-fold if there is heterogeneity
+replication sample size has to be slightly larger than the original one if no
+heterogeneity is assumed ($\tau^{2} = 0$), while it has to be increased more
+than ten-fold if heterogeneity is assumed
 ($\tau^{2} = \Sexpr{round(taus[2], 2)}^{2}$). However, this is mostly due to the
 equivalence test which requires by far the most samples. If the equivalence test
 sample size is ignored, the relative sample size
 $c = \Sexpr{round(ssbfs2[["c"]], 1)}$ ensures at least
-$\Sexpr{round(power*100, 2)}\%$ probability of replication success with the
-remaining methods.
+$\Sexpr{round(power*100, 2)}\%$ probability of replication success under
+heterogeneity with the remaining methods.
 
 
 The right plot in Figure~\ref{fig:example} shows that the type I error rate of
@@ -1535,7 +1553,7 @@ resSSD1 <- merge(resSSDt1e, resSSDsr) %>%
 \begin{figure}[!htb]
 << "ssd-protzko", fig.height = 6 >>=
 ## height 7.6 fills entire page
-## select representative studies
+## select illustrative studies
 representative <- c("Prediction", "Referrals", "FSD", "Minimal Groups",
                     "Labels", "Ostracism")
 
@@ -1633,69 +1651,72 @@ ggpubr::ggarrange(plotA, plotB, common.legend = TRUE,
   $1 - \beta = \Sexpr{round(power*100, 2)}$\% (if possible). Replication success
   is defined through the two-trials rule at level $\alpha = \Sexpr{levelSig}$,
   replication Bayes factor at level $\gamma = 1/\Sexpr{1/levelBFr}$, fixed
-  effects-meta analysis at level $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$,
+  effect meta-analysis at level $\alpha = \Sexpr{sqrt(levelSigMeta)}^{2}$,
   effect size equivalence at level $\alpha = \Sexpr{1 - confLevel}$ with margin
   $\Delta = \Sexpr{margin}$, skeptical $p$-value at level
   $\alpha = \Sexpr{round(levelPs, 3)}$, and skeptical Bayes factor at level
-  $\gamma = 1/\Sexpr{1/levelBFs}$ for representative subset of studies from the
-   \citet{Protzko2020} replication project, the supplement shows the same
-  analysis for all studies. A flat initial prior
-  ($\mutheta = 0, \sigmatheta^{2} \to \infty$) is used for the effect size
-  $\theta$ either without ($\tau = 0$) or with heterogeneity
-  ($\tau = \Sexpr{round(taus[2], 2)}$). The right plot shows the type I error
-  rate associated with the required sample size. Experiments are ordered (top to
-  bottom) by their original one-sided $p$-value
-  $p_{o} = 1 - \Phi(|\hat{\theta}_{o}|/\sigma_{o}$).}
+  $\gamma = 1/\Sexpr{1/levelBFs}$ for an illustrative subset of studies from the
+  \citet{Protzko2020} replication project, the supplement shows results for all
+  studies. A flat initial prior % ($\mutheta = 0, \sigmatheta^{2} \to \infty$)
+  is used for the effect size $\theta$ either without ($\tau = 0$) or with
+  heterogeneity ($\tau = \Sexpr{round(taus[2], 2)}$). The right plot shows the
+  type I error rate associated with the required sample size. Experiments are
+  ordered (top to bottom) by their original one-sided $p$-value.
+  % $p_{o} = 1 - \Phi(|\hat{\theta}_{o}|/\sigma_{o}$).
+}
 \label{fig:ssd-all}
 \end{figure}
 
-We now perform SSD for a representative subset of studies from the
+We now perform SSD for an illustrative subset of studies from the
 \citet{Protzko2020} replication project. Figure~\ref{fig:ssd-all} shows the
 required relative sample size and the associated type I error rates if a sample
-size can be computed for a probability of replication success of
+size can be computed for a target probability of replication success of
 $1 - \beta = \Sexpr{round(power*100, 2)}$\%. If there is no sample size for
 which a probability of $\Sexpr{round(power*100, 2)}$\% is achievable, the space
-is left blank. This is the case, for example, for the meta-analysis method for
-the ``Labels'' experiment, since the probability remains above
+is left blank. For example, in the application of the meta-analysis method to
+the ``Labels'' experiment the probability remains above
 $\Sexpr{round(power*100, 2)}$\% for any relative sample size. % for the
 % studies which were significant at level $\alpha = \Sexpr{levelSig}$ (so that
 % they can fulfill the two-trials rule).
 
 We see that for all methods except the equivalence test, the required relative
-sample size $c$ decreases as theoriginal $p$-value $p_{o}$ decreases, and
+sample size $c$ decreases as the original $p$-value $p_{o}$ decreases and
 original studies with very small $p$-values require much fewer samples in the
 replication study. For example, in the ``Ostracism'' experiment with
-$p_{o} < 0.0001$, the required sample size for all methods except the
-equivalence test is at most one-third the size of the original. For the
-equivalence test, the required sample size depends instead on the size of the
-original standard error $\sigma_{o}$, and smaller standard errors lead to
-smaller required sample sizes in the replication. For example, the ``Referrals''
-experiment with original standard error $\sigma_{o} = 0.049$ requires fewer
-samples for the equivalence test than the ``Ostracism'' experiment with original
-standard error $\sigma_{o} = 0.052$. We also see that accounting for
-heterogeneity (triangle) increases the required sample size for all methods
-compared to ignoring it (point). At the same time, a larger required sample size
-reduces the type I error rate for most methods. We see again the pattern that
+$p_{o} < 0.0001$ the required sample size for all methods except the equivalence
+test is at most one-third the size of the original. For the equivalence test the
+required sample size depends instead on the size of the original standard error
+$\sigma_{o}$ and smaller standard errors lead to smaller required sample sizes
+in the replication. For example, the ``Referrals'' experiment with original
+standard error $\sigma_{o} = 0.049$ requires fewer samples for the equivalence
+test than the ``Ostracism'' experiment with original standard error
+$\sigma_{o} = 0.052$.
+
+Figure~\ref{fig:ssd-all} also shows that accounting for heterogeneity
+(triangles) increases the required sample size for all methods compared to
+ignoring it (points). Although more costly to the researcher, larger sample
+sizes also reduce the type I error rate for most methods (right plot). Comparing
+the type I error rates of the different methods, we see again the pattern that
 the type I error rates of the equivalence test and the skeptical $p$-value are
 larger than the type I error rate of 2.5\% of the two-trials rule. However,
-while the type I error rate of the skeptical $p$-value decreases as replication
-studies require larger sample sizes, the type I error rate of the equivalence
-test may also be large if the replication requires very large sample sizes
-(e.g., for the ``FSD'' experiment), since it depends on whether the original
-effect estimate $\that_{o}$ is sufficiently different from zero. If the original
-effect estimate $\that_{o}$ is close to zero, the type I error rate of the
-equivalence test increases drastically, since equivalence can be established
+while the type I error rate of the skeptical $p$-value decreases when
+replication studies require larger samples sizes, the type I error rate of the
+equivalence test may also be large if the replication requires very large sample
+sizes (e.g., for the ``FSD'' experiment), since it depends on whether the
+original effect estimate $\that_{o}$ is sufficiently different from zero. If the
+original effect estimate $\that_{o}$ is close to zero, the type I error rate of
+the equivalence test increases drastically, since equivalence can be established
 even if the original and replication effect estimates are close to zero (as
 under the null hypothesis).
 
 The supplement shows the same analysis for all studies in the
 \citet{Protzko2020} project. For most studies, all methods except the
 equivalence test require fewer samples in the replication than in the original
-study to achieve a target probability of replication success of
-$1 - \beta = \Sexpr{round(power*100, 2)}$\%. This is still the case when
-heterogeneity is accounted for in the design prior (triangles), which generally
+study to achieve a target probability of
+$1 - \beta = \Sexpr{round(power*100, 2)}$\% for replication success. This is
+still the case when heterogeneity is accounted for (triangles), which generally
 increases the required sample size compared to when heterogeneity is not
-accounted for (point), especially for studies with large original $p$-values.
+accounted for (points), especially for studies with large original $p$-values.
 Some original studies require larger replication sample sizes, and in some cases
 these are unrealistically large (e.g., in the ``Prediction'' experiment an
 almost 30 times increase in sample size for the replication Bayes factor). In
@@ -1724,10 +1745,10 @@ becomes
 \begin{subequations}
 \label{eq:hierarch-model2}
 \begin{align}
-  \bthat_r \given \mspace{-1mu} \btheta_r &\sim \Nor_{m}\left\{\btheta_r, \text{diag}\left(\bsigma_r^2\right)\right\}
+  \bthat_r \given \mspace{-1mu} \btheta_r &\sim \Nor_{m}\left\{\btheta_r, \mathrm{diag}\left(\bsigma_r^2\right)\right\}
   \label{eq:hat_theta_k22} \\
   \btheta_r \given \theta \,\,  &\sim \Nor_{m}\left\{\theta \, \bone_{m},
-  \tau^2 \text{diag}(\bone_{m})\right\}, \label{eq:theta_k2}
+  \tau^2 \mathrm{diag}(\bone_{m})\right\}, \label{eq:theta_k2}
 \end{align}
 \end{subequations}
 where $\btheta_{r}$ is a vector of $m$ study specific effect sizes, $\bone_{m}$
@@ -1737,7 +1758,7 @@ and covariance matrix $\boldsymbol{\Sigma}$. By marginalizing over the study
 specific effect size $\btheta_{k}$, the model can alternatively be expressed by
 \begin{align}
   \bthat_r \given \theta \sim \Nor_{m}\left\{\theta \, \bone_{m},
-\text{diag}\left(\bsigma_r^2 + \tau^2 \bone_{m}\right)\right\},
+\mathrm{diag}\left(\bsigma_r^2 + \tau^2 \bone_{m}\right)\right\},
   \label{eq:margimulti}
 \end{align}
 so the predictive distribution of $\bthat_r$ based on the design
@@ -1745,7 +1766,7 @@ prior~\eqref{eq:dpnormal} is given by
 \begin{align}
   \bthat_r \given \hat{\theta}_o, \sigma^{2}_{o}, \bsigma^{2}_{r}
   \sim \Nor_{m}\left\{\muthatr \bone_{m},
-  \text{diag}\left(\bsigma_r^2 + \tau^2 \bone_{m}\right) +
+  \mathrm{diag}\left(\bsigma_r^2 + \tau^2 \bone_{m}\right) +
   \left(\frac{\tau^{2} + \sigma^{2}_{o}}{1 + 1/g}\right)
   \bone_{m} \bone_{m}^{\top} \right\}
   \label{eq:ftrmulti}
@@ -1760,7 +1781,7 @@ weighted average of the replication effect estimates
 $\hat{\theta}_{r*} = (\sum_{i = 1}^{m} w_{i} \hat{\theta}_{ri})/(\sum_{i = 1}^{m} w_{i})$
 with $w_{i}$ the weight of replication $i$. For instance, several multisite
 replication projects \citep[\eg][]{Klein2018} have defined replication success
-by the fixed or random effects meta-analytic effect estimate of the replication
+by the fixed or random effect(s) meta-analytic effect estimate of the replication
 effect estimates achieving statistical significance. Based on the predictive
 distribution of the replication effect estimate vector~\eqref{eq:ftrmulti}, the
 predictive distribution of the weighted average $\hat{\theta}_{r*}$ is given by
@@ -1843,7 +1864,7 @@ Figure~\ref{fig:multisite} illustrates multisite SSD for the
 ``\Sexpr{studyname}'' experiment from \citet{Protzko2020} for planned analyses
 based on the two-trials rule and the replication Bayes factor (see the
 supplement for details on the multisite extension of these two methods). As for
-singlesite SSD, we use the design prior based on an initial flat prior for the
+singlesite SSD, we use the design prior based on a flat initial prior for the
 effect size and taking into account heterogeneity
 ($\tau = \Sexpr{round(tauAbs, 2)}$). The top plots show the probability of
 replication success as a function of the total sample size $m \times n_{r}$ for
@@ -2000,7 +2021,7 @@ the optimal number of sites is $m = 5$ for the two-trials rule and $m = 8$ for
 the replication Bayes factor. If an additional site is more costly the optimal
 number of sites is lower, e.g., if the cost ratio is $K_{S}/K_{c} = 300$,
 % (purple),
-the optimal number of sites is $m = 2$ for the two trials rule and $m = 3$ for
+the optimal number of sites is $m = 2$ for the two-trials rule and $m = 3$ for
 the replication Bayes factor. This is similar to the actually used number of
 sites $m = 3$ (counting only external-replications), respectively, $m = 4$
 (counting also the internal-replication) from \citet{Protzko2020}.
@@ -2040,7 +2061,7 @@ priors also for the variances could better reflect the available uncertainty,
 but would come at the cost of reduced interpretability and increased
 computational complexity. We also did not consider designs in which the
 replication data are analyzed sequentially. Ideas from Bayesian sequential
-designs \citep{Schoenbrodt2017, Stefan2022} or from the adaptive trials
+designs \citep{Schoenbrodt2017, Stefan2022} or from adaptive clinical trials
 \citep{Bretz2009} could be adapted to the replication setting, as in
 \citet{Micheloud2020}. A sequential analysis of the replication data could
 possibly increase the efficiency of the replication. An additional point is that
@@ -2054,7 +2075,7 @@ resources and may not be able afford a large enough sample size to achieve their
 desired probability of replication success. In this situation, a reverse-Bayes
 approach \citep{Held2021b} could be used to determine the prior for the effect
 size required to achieve the desired probability of replication success based on
-the maximally possible sample size. Researchers can then judge whether or not
+the maximally affordable sample size. Researchers can then judge whether or not
 such prior beliefs are scientifically sensible, and decide whether to conduct
 the replication study with their limited resources.
 
