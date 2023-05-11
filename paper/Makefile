@@ -35,6 +35,8 @@ cleanfig:
 ## use texdiff to show difference to previous version
 texdiff: tex old/$(FILE).tex old/ld.cfg
 	latexdiff -c old/ld.cfg old/$(FILE).tex  $(FILE).tex > $(FILE)Changes.tex
+	# this removes the old version
+	sed -i 's/\\providecommand{\\DIFdel}\[1\]{.*/\\providecommand{\\DIFdel}\[1\]{}/' $(FILE)Changes.tex
 	-pdflatex $(FILE)Changes
 	-bibtex $(FILE)Changes
 	-pdflatex $(FILE)Changes

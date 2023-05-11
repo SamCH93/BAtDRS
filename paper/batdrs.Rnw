@@ -119,11 +119,11 @@
 library(knitr)
 opts_chunk$set(fig.height = 4,
                echo = FALSE,
+               size = "footnotesize",
                warning = FALSE,
                message = FALSE,
                cache = FALSE,
-               eval = TRUE,
-               out.width = "\\textwidth")
+               eval = TRUE)
 
 ## should sessionInfo be printed at the end?
 reproducibility <- TRUE
@@ -140,6 +140,7 @@ library(ggplot2)
 library(scales)
 library(colorspace)
 library(ggpubr)
+library(BayesRepDesign)
 
 ## non-CRAN packages
 ## -----------------------------------------------------------------------------
@@ -147,7 +148,6 @@ library(ggpubr)
 ##                         host = "gitlab.uzh.ch")
 library(BayesRep)
 ## remotes::install_github(repo = "SamCH93/BayesRepDesign")
-library(BayesRepDesign)
 
 ## function to format p-values
 formatPval. <- function(p, digits = 2) {
@@ -211,12 +211,13 @@ specifically deals with replication study power calculations and SSD
 \citep{Bayarri2002, Goodman1992, Senn2002, Anderson2017, Micheloud2020,
   vanZwet2022, Held2020, Pawel2022b, Hedges2021, Anderson2022}.
 However, most of these articles only deal with selected analysis methods and
-data models. % For
-% instance, SSD for standardized mean difference effect sizes analyzed with Bayes
-% factors \citep{Bayarri2002}, SSD for statistical significance assessment of the
-% replication \citep{Goodman1992, Senn2002, Micheloud2020, vanZwet2022}, SSD for
-% reverse-Bayes assessment of replication studies \citep{Held2020, Pawel2022b}, or
-% SSD for meta-analysis of replication studies \citep{Hedges2021}.
+data models.
+% For instance, SSD for standardized mean difference effect sizes analyzed with
+% Bayes factors \citep{Bayarri2002}, SSD for statistical significance assessment
+% of the replication \citep{Goodman1992, Senn2002, Micheloud2020, vanZwet2022},
+% SSD for reverse-Bayes assessment of replication studies \citep{Held2020,
+% Pawel2022b}, or SSD for meta-analysis of replication studies
+% \citep{Hedges2021}.
 An exception is the excellent article by \citet{Anderson2022} which discusses
 more general principles of replication SSD in the context of psychological
 research, mostly from a frequentist perspective. As they state ``the literature
@@ -228,12 +229,10 @@ of replication SSD (schematically illustrated in Figure~\ref{fig:SSDschema})
 based on principles from Bayesian design approaches \citep{Spiegelhalter1986b,
   Spiegelhalter1986c, Weiss1997, OHagan2001b, Gelfand2002, DeSantis2004,
   Spiegelhalter2004, Schoenbrodt2017, Pek2019, Kunzmann2021, Park2022,
-  Grieve2022}. % , which applies to any kind of data model
-% and analysis method.
-We aim to provide both a theoretical basis for methodologists developing new
-methods for design and analysis methods of replication studies, and also to
-illustrate how Bayesian design approaches can practically be used by researchers
-planning a replication study.
+  Grieve2022}. We aim to provide both a theoretical basis for methodologists
+developing new methods for design and analysis methods of replication studies,
+and also to illustrate how Bayesian design approaches can practically be used by
+researchers planning a replication study.
 
 \begin{figure}[!ht]
   \centering
@@ -292,8 +291,6 @@ questions. %(Section \ref{sec:discussion}).
 
 \section{General framework} \label{sec:GFW}
 
-% Figure~\ref{fig:SSDschema} schematically illustrates the process of Bayesian SSD
-% for replication studies, which we will explain in more detail in the following.
 Suppose an original study has been conducted and resulted in a data set $x_{o}$.
 These data are assumed to come from a distribution characterized by an unknown
 parameter $\theta$ and with density function $f(x_{o} \given \theta)$. To assess
@@ -528,10 +525,7 @@ replication setting: (i) expected heterogeneity between original and replication
 study due to differences in study design, execution, and population, (ii) prior
 knowledge about the effect size either from theory or from related studies,
 (iii) skepticism regarding the original study due to the possibility of
-exaggerated results. % The between-study heterogeneity variance $\tau^{2}$, the
-% effect size mean $\mutheta$, and the effect size variance
-% $\sigmatheta^2$ provide a means for incorporating these
-% information in SSD of the replication study.
+exaggerated results.
 
 << "prior-elicitation-values", fig.height = 3.5 >>=
 ## absolute approach
@@ -746,7 +740,6 @@ protzkolong %>%
                     key_glyph = "point") +
     scale_x_continuous(breaks = seq(0, 0.6, 0.3), minor_breaks = NULL) +
     coord_cartesian(xlim = c(-0.15, 0.7)) +
-    ## scale_color_brewer(palette = "Dark2") +
     scale_color_grey() +
     facet_wrap(~ Studyord) +
     labs(y = "Laboratory", x = "SMD effect estimate with 95% CI", color = "") +
@@ -1109,12 +1102,11 @@ for $\Delta \geq \zalphatwo \sqrt{\sigma_{o}^{2} + \sigma^{2}_{r}}$. For too
 small margins ($\Delta < \zalphatwo \sqrt{\sigma_{o}^{2} + \sigma^{2}_{r}}$),
 the success region~\eqref{eq:equivalence} becomes the empty set meaning that
 replication success is impossible.
-% Typically the original study is already conducted but the standard error of the
-% replication study can still be changed
-% Whether or
-% not replication success is achievable depends on the standard error of the
-% original estimate $\sigma_{o}$, and in particular when the margin is chosen too
-% small ($\Delta \leq \zalphatwo \sigma_{o}$), replication success is impossible
+% Typically the original study is already conducted but the standard error of
+% the replication study can still be changed Whether or not replication success
+% is achievable depends on the standard error of the original estimate
+% $\sigma_{o}$, and in particular when the margin is chosen too small
+% ($\Delta \leq \zalphatwo \sigma_{o}$), replication success is impossible
 % regardless of how small the replication standard error $\sigma_{r}$ will be.
 Assuming now that the margin is large enough,
 % ($\Delta \geq \zalphatwo \sqrt{\sigma_{o}^{2} + \sigma^{2}_{r}}$),
@@ -1346,20 +1338,12 @@ plotDF$method <- factor(plotDF$method,
                         levels = methodLabs)
 plotDF1 <- plotDF %>%
     filter(sp == Inf) %>%
-    ## mutate(facetLab = paste0("{tau ==", round(tau, 2), "} * ',' ~ mu[theta] == 0 * ',' ~ sigma[theta]^2 == infinity"),
-    ##                                     #paste("tau ==", round(tau, 2)),
-    ##                                     #paste("theta ~ '~ N(' ~ hat(theta)['o'] * ',' ~ sigma['o']^2 + tau^2 * '),' ~ tau ==", round(tau, 2)),
-    ##        order = 1)
     mutate(facetLab = paste0("{tau ==", round(tau, 2), "} ~ 'and flat prior for' ~ theta"),
            order = 1)
 
 plotDFH0 <- plotDF %>%
     filter(sp == 0) %>%
-    ## mutate(facetLab = paste("tau == 0 * ',' ~ mu[theta] == 0 * ',' ~ {sigma[theta]^2 == 0}"),
-    ##       #paste("{italic('H')[0] ~ ':' ~ theta == 0} *',' ~ tau == 0"),
-    ##        order = 2)
     mutate(facetLab = "{tau == 0} ~ 'and' ~ theta == 0",
-          #paste("{italic('H')[0] ~ ':' ~ theta == 0} *',' ~ tau == 0"),
            order = 2)
 plotDFcomb <- rbind(plotDF1, plotDFH0)
 plotDFcomb$facetLab <- factor(x = plotDFcomb$facetLab,
@@ -1713,16 +1697,17 @@ The supplement shows the same analysis for all studies in the
 therefore require fewer samples in the replication than in the original study to
 achieve a target probability of $1 - \beta = \Sexpr{round(power*100, 2)}$\% for
 replication success with all methods except the equivalence
-test. % This is still
-% the case when heterogeneity is accounted for (triangles), which generally
-% increases the required sample size compared to when heterogeneity is not
-% accounted for (points), especially for studies with large original $p$-values.
+test.
+% This is still the case when heterogeneity is accounted for (triangles), which
+% generally increases the required sample size compared to when heterogeneity is
+% not accounted for (points), especially for studies with large original
+% $p$-values.
 Some original studies were less convincing and therefore require larger
-replication sample sizes. % In some cases these are unrealistically large (e.g.,
-% in the ``Prediction'' experiment an almost 30 times increase in sample size for
-% the replication Bayes factor).
-% In other cases they seem more realistic and could
-% be reallocated from the other studies which require fewer samples.
+replication sample sizes.
+% In some cases these are unrealistically large (e.g., in the ``Prediction''
+% experiment an almost 30 times increase in sample size for the replication
+% Bayes factor). In other cases they seem more realistic and could be
+% reallocated from the other studies which require fewer samples.
 The additional samples needed for these studies could thus be reallocated from
 the studies that require fewer samples. The project would still use the same
 total sample size, but it would be more efficiently allocated.
@@ -2034,14 +2019,12 @@ internal-replication) from \citet{Protzko2020}.
 
 We showed how Bayesian approaches can be used to determine the sample size of
 replication studies based on all the available information and the associated
-uncertainty. % The Bayesian framework allows to make use of all the available
-% information, and to take into account the associated uncertainty.
-A key strength of the approach is that it can be applied to any type of
-replication analysis method, Bayesian or non-Bayesian, as long as there is a
-well-defined success region for the replication effect estimate. Methods for
-assessing replication success which have not yet been adapted to Bayesian design
-approaches in the normal-normal hierarchical model (or not even proposed) can
-thus benefit from our methodology. For instance, our methods could easily be
+uncertainty. A key strength of the approach is that it can be applied to any
+type of replication analysis method, Bayesian or non-Bayesian, as long as there
+is a well-defined success region for the replication effect estimate. Methods
+for assessing replication success which have not yet been adapted to Bayesian
+design approaches in the normal-normal hierarchical model (or not even proposed)
+can thus benefit from our methodology. For instance, our methods could easily be
 applied to the ``dual-criterion'' from \citet{Rosenkranz2021}, which defines
 replication success via simultaneous statistical significance and practical
 relevance of the effect estimates from the original and replication studies.
@@ -2088,18 +2071,98 @@ the replication study with their limited resources.
 
 \section{Appendix: The BayesRepDesign R package}
 \label{app:package}
+The R package BayesRepDesign can be installed from the Comprehensive R Archive
+Network (CRAN) by running the following command from an R console
 
-<< "package-illustration", echo = TRUE, size = "footnotesize", fig.height = 3.5, out.width = "0.9\\textwidth" >>=
-## install.packages("BayesRepDesign")
-library("BayesRepDesign")
-## design prior (flat initial prior for effect size + heterogeneity)
-dp <- designPrior(to = 0.2, so = 0.05, tau = 0.08)
-plot(dp)
-## compute replication standard error to achieve one-sided p-value <= 2.5%
-ssdSig(level = 0.025, dprior = dp, power = 0.8)
-## compute replication standard error to achieve replication Bayes factor <= 1/10
-ssdBFr(level = 1/10, dprior = dp, power = 0.8)
+<< eval = FALSE, echo = TRUE>>=
+install.packages("BayesRepDesign")
 @
+
+\begin{flushleft} Once the package is installed, it can be loaded with
+
+<< eval = FALSE, echo = TRUE>>=
+library("BayesRepDesign")
+@
+
+To see an overview of the functionality of the package, run
+
+<< eval = FALSE, echo = TRUE >>=
+help(package = "BayesRepDesign")
+@
+
+The first step in Bayesian design of a replication study is to create a design
+prior for the effect size $\theta$. We use the original effect estimate
+$\that_{o} = 0.205$ and standard error $\sigma_{o} = 0.051$ from the ``Labels''
+experiment along with a flat initial prior for $\theta$ (the default) and a
+heterogeneity deviation of $\tau = 0.05$ as inputs to the \texttt{designPrior}
+function
+
+<< echo = TRUE >>=
+dp <- designPrior(to = 0.205, so = 0.051, tau = 0.05)
+@
+
+The resulting design prior object can be visualized with
+
+<< "package-illustration", fig.height = 3.5, out.width = "0.9\\textwidth", echo = TRUE, fig.align = "center" >>=
+plot(dp)
+@
+
+The design prior can now be used to compute the probability of replication
+success with the \texttt{pors} functions or to compute the replication standard
+error with the \texttt{ssd} functions. Each analysis method discussed in this
+paper has dedicated \texttt{pors} and \texttt{ssd} functions. For example,
+\texttt{porsSig} can be used to compute the probability of replication success
+defined by a significant replication $p$-value for a given replication standard
+error, while \texttt{ssdSig} can be used to compute the replication standard
+error required to achieve significance for a given target probability of
+replication success. In the following, we will compute the replication standard
+error for achieving replication success with a target probability of $80\%$.
+
+<< echo = TRUE >>=
+(ssd1 <- ssdSig(level = 0.025, dprior = dp, power = 0.8))
+@
+
+The output shows the relative variance $c = \sigma_{o}/\sigma_{r}$ which,
+assuming a standard error form $\sigma_{i} = \lambda/\sqrt{n_{i}}$, is equal to
+the relative sample size $c = n_{r}/n_{o}$. The parameter $c$ thus quantifies by
+how much the replication sample size $n_{r}$ must be increased/decreased
+compared to the original sample size $n_{o}$. The replication standard error can
+also be converted to an absolute sample size using
+
+<< echo = TRUE >>=
+se2n(se = ssd1$sr, unitSD = 2)
+@
+
+By default, the function assumes a unit standard deviation of $\lambda = 2$ for
+the conversion, which is a reasonable approximation of the unit standard
+deviation for standardized mean differences and log odds/hazard/rate ratios for
+balanced group designs \citep[section 2.4]{Spiegelhalter2004}. However, more
+exact conversions can be obtained by considering the exact form of the standard
+error and solving for the sample size.
+\end{flushleft}
+
+Finally, the BayesRepDesign package can be easily extended to replication
+analysis methods other than those for which dedicated functions are provided. To
+do so, users need to define a function that returns the success region for the
+replication effect estimate for a given replication standard error. The function
+is then passed as an argument to the \texttt{ssd} function, which then
+numerically determines the required standard error. The following code
+illustrates how the significance method from earlier can be reimplemented in
+this way.
+
+
+<< echo = TRUE >>=
+sregionfunSig <- function(sr, alpha = 0.025) {
+    za <- qnorm(p = 1 - alpha)
+    sregion <- successRegion(intervals = cbind(za*sr, Inf))
+    return(sregion)
+}
+ssd2 <- ssd(sregionfun = sregionfunSig, dprior = dp, power = 0.8)
+se2n(se = ssd2$sr, unitSD = 2)
+@
+
+We see that this results in the same sample size as the \texttt{ssdSig}
+function (which uses a closed-form solution).
 
 
 
