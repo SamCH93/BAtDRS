@@ -20,7 +20,7 @@
    %    {\scriptsize $\theta \sim f(\theta \,|\, \text{original data, external
    %    knowledge})$}\\
    %       \end{tabular}};
-   \node (designPrior) [below right = 3.5em and 2em of oData]
+   \node (designPrior) [below right = 2em and 2em of oData]
    {\begin{tabular}{c} \textbf{Design prior for model parameter} \\
       {\scriptsize $f(\theta \given x_{o}, \text{external
       knowledge})$}\\
@@ -45,7 +45,7 @@
      % {\scriptsize -- other data sets $\rightarrow$ optimistic prior} \\
    \end{tabular}};
 
-   \node[rectangle, draw, rounded corners = 0.2em] (externalknowl) [below = 2em of external]
+   \node[rectangle, draw, rounded corners = 0.2em] (externalknowl) [below = 1.5em of external]
    {\begin{tabular}{l}
       \multicolumn{1}{c}{\textbf{External knowledge}} \\
      {\scriptsize -- between-study heterogeneity} \\
@@ -70,13 +70,13 @@
 % \node[rectangle, draw, fill = lightlightgray] (nr) [below = 4em of external]
 % {\begin{tabular}{c} \textbf{Replication sample size $n_{r}$}
 %    \end{tabular}};
-\node[rectangle, draw, fill = lightlightgray] (nr) [below = 2em of externalknowl]
+\node[rectangle, draw, fill = lightlightgray] (nr) [below = 1.25em of externalknowl]
 {\begin{tabular}{c} \textbf{Replication sample size} \\
    {\scriptsize $n_{r}$}
  \end{tabular}};
 
 
-\node (PRS) [below = 4.5em of rData]
+\node (PRS) [below = 4em of rData]
 {\begin{tabular}{c} \textbf{Probability of replication success} \\
    {\scriptsize $\Pr(X_r \in S \given n_{r}, x_{o}, \text{external
     knowledge})$}
@@ -91,7 +91,7 @@
 %     % {\scriptsize -- Hypothesis testing} \\
 %     % {\scriptsize -- Parameter estimation \dots}
      %    \end{tabular}};
-\node[rectangle, draw, rounded corners = 0.2em] (measureRS) [below = 15em of oData]
+\node[rectangle, draw, rounded corners = 0.2em] (measureRS) [below = 12em of oData]
 {\begin{tabular}{c} \textbf{Analysis method}  \\
     {\scriptsize success region $S$} \\
     % {\scriptsize -- Parameter estimation \dots}
@@ -106,7 +106,7 @@
 %    {\scriptsize ~~ $\dots$}
 %    \end{tabular}};
 
-\node[rectangle, draw, rounded corners = 0.2em] (sideCond) [below = 2.5em of nr]
+\node[rectangle, draw, rounded corners = 0.2em] (sideCond) [below = 1.5em of nr]
 {\begin{tabular}{l}
    \multicolumn{1}{c}{\textbf{Constraints}} \\
    {\scriptsize -- type I error rate requirements} \\
