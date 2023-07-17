@@ -10,10 +10,10 @@ tex: $(FILE).Rnw $(BIB).bib
 
 ## generate .pdf file from .tex file
 pdf: tex
-	pdflatex $(FILE)
-	bibtex $(FILE)
-	pdflatex $(FILE)
-	pdflatex $(FILE)
+	-pdflatex -interaction=nonstopmode $(FILE)
+	-bibtex $(FILE)
+	-pdflatex -interaction=nonstopmode $(FILE)
+	-pdflatex -interaction=nonstopmode $(FILE)
 
 ## generate .pdf file from .tex (without first running the tex recipe)
 pdf2:

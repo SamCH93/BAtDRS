@@ -17,7 +17,7 @@ opts_chunk$set(fig.height = 4,
                eval = TRUE)
 
 ## should sessionInfo be printed at the end?
-reproducibility <- TRUE
+reproducibility <- FALSE
 
 ## set digits printed
 options(scipen = 10)
@@ -322,7 +322,7 @@ ggplot(data = plotDF, aes(x = c, y = pow, color = method)) +
     theme(legend.position = "top", legend.text = element_text(size = 10),
           panel.grid.minor = element_blank(), legend.text.align = 0)
 @
-\caption{Probability of replication success as a function of relative sample
+\caption{Probability of replication success as a function of the relative sample
   size $c = n_{r}/n_{o}$ for ``Labels'' experiment with original effect estimate
   $\hat{\theta}_{o} = \Sexpr{round(to, 3)}$ and standard error
   $\sigma_{o} = \Sexpr{round(so, 3)}$ for uniform initial prior for effect size
@@ -638,7 +638,7 @@ with the Bayes factor
   = \sqrt{1 + \sigma^{2}_{s}/\sigma^{2}_{o}} \, \exp\left\{-
   \, \frac{z_{o}^{2}}{2(1 + \sigma^{2}_{o}/\sigma^{2}_{s})}\right\}.
 \end{align*}
-where $z_{o} = \that/\sigma^{2}_{o}$. One then determines the sufficiently
+where $z_{o} = \that_{o}/\sigma_{o}$. One then determines the sufficiently
 skeptical prior variance $\sigma^{2}_{s}$ so that the Bayes factor is fixed to a
 level $\gamma \in (0, 1)$ meaning that there is no longer evidence against the
 null hypothesis at level $\gamma$. The sufficiently skeptical prior variance can

@@ -1,10 +1,11 @@
 # Bayesian approaches to designing replication studies
 
-This repository contains code and data related to the preprint
+This repository contains code and data related to the paper
 
-Pawel, S., Consonni, G., and Held, L. (2022). Bayesian approaches to designing
-replication studies
-[doi:10.48550/arXiv.2211.02552](https://doi.org/10.48550/arXiv.2211.02552)
+Pawel, S., Consonni, G., Held, L. (2023). Bayesian approaches to designing
+replication studies. Psychological Methods.
+DOI:[10.1037/met0000604](http://doi.org/10.1037/met0000604). Preprint:
+[https://arxiv.org/abs/2211.02552][https://arxiv.org/abs/2211.02552]
 
 ## Reproducing the results
 
@@ -21,7 +22,6 @@ R -e 'install.packages(read.delim("CRANpackages.txt", header = FALSE)[,1])'
 ## requires remotes package, also available on CRAN
 R -e 'remotes::install_gitlab(repo = "samuel.pawel/BayesRep", subdir = "pkg",
                               host = "gitlab.uzh.ch")'
-R -e 'remotes::install_github(repo = "SamCH93/BayesRepDesign")'
 ```
 
 Then run
@@ -52,7 +52,4 @@ make drunpdf
 this should output the file `batdrs.pdf` in the paper directory. The Docker
 approach takes a bit longer but reruns our analyses in a Docker container which
 encapsulates the computational environment (R and R package versions) that was
-used in the original analysis. The only way this approach could become
-irreproducible is when the [rocker/verse](https://hub.docker.com/r/rocker/verse)
-base image becomes unavailable and/or the MRAN snapshot of CRAN becomes
-unavailable.
+used in the original analysis. 

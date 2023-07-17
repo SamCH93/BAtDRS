@@ -1,5 +1,6 @@
 knitr
 BayesRepDesign
+BayesRep
 ReplicationSuccess
 dplyr
 tidyr
@@ -9,3 +10,4 @@ colorspace
 ggpubr
 hypergeo
 lamW
+ggpubr
