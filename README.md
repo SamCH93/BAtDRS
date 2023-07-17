@@ -4,8 +4,7 @@ This repository contains code and data related to the paper
 
 Pawel, S., Consonni, G., Held, L. (2023). Bayesian approaches to designing
 replication studies. Psychological Methods.
-DOI:[10.1037/met0000604](http://doi.org/10.1037/met0000604). Preprint:
-[https://arxiv.org/abs/2211.02552][https://arxiv.org/abs/2211.02552]
+DOI:[10.1037/met0000604](http://doi.org/10.1037/met0000604). Preprint: <https://arxiv.org/abs/2211.02552>
 
 ## Reproducing the results
 
